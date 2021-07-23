@@ -1,4 +1,6 @@
-# habit-tracker
+# 2nd-portfolio-project - Habit Tracker
+
+## Full stack web application with an HTML/CSS/JS client and an Express server connected to <db type> database.
 
 A basic habit tracking app
 
@@ -41,4 +43,4 @@ A basic habit tracking app
 
 ## Changelog
 
-[changelog]()
+[changelog](./changelog.md)
