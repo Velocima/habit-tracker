@@ -22,6 +22,28 @@ router.post('/', verifyToken, async (req, res) => {
     } catch (err) {
         res.status(500).send({ err })
     }
-}
-)
+})
+
+router.patch('/:id', verifyToken, async (req, res) => {
+    try {
+        const habit = await Habit.findById(req.params.id);
+        const resp = habit.update();
+        res.status(200).json(resp);
+    } catch (err) {
+        res.status(404).send({ err })
+    }
+})
+
+router.delete("/:id", verifyToken, async (req, res) => {
+    try {
+      const habit = await Habit.findById(req.params.id);
+      await habit.destroy();
+      res.status(204).json("Habit deleted!");
+    } catch (err) {
+      res.status(500).json({ err });
+    }
+  });
+
+
+
 module.exports = router

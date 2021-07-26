@@ -1,3 +1,154 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const initPageBindings = require('./lib/handlers');
 
-},{}]},{},[1]);
+document.addEventListener('DOMContentLoaded', initPageBindings);
+
+},{"./lib/handlers":4}],2:[function(require,module,exports){
+function createLoginForm() {
+	const form = document.createElement('form');
+
+	const emailLabel = document.createElement('label');
+	emailLabel.setAttribute('for', 'email');
+
+	const emailInput = document.createElement('input');
+	emailInput.setAttribute('name', 'email');
+	emailInput.setAttribute('id', 'email');
+	emailInput.setAttribute('type', 'email');
+	emailInput.setAttribute('required', true);
+
+	form.append(emailLabel);
+	form.append(emailInput);
+
+	const passwordLabel = document.createElement('label');
+	passwordLabel.setAttribute('for', 'password');
+
+	const passwordInput = document.createElement('input');
+	passwordInput.setAttribute('name', 'password');
+	passwordInput.setAttribute('id', 'password');
+	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('required', true);
+
+	form.append(passwordLabel);
+	form.append(passwordInput);
+
+	const loginButton = document.createElement('input');
+	loginButton.setAttribute('type', 'submit');
+	loginButton.setAttribute('value', 'Login');
+
+	form.append(loginButton);
+
+	return form;
+}
+
+function createRegistrationForm() {
+	const form = document.createElement('form');
+
+	const nameLabel = document.createElement('label');
+	nameLabel.setAttribute('for', 'name');
+
+	const nameInput = document.createElement('input');
+	nameInput.setAttribute('name', 'name');
+	nameInput.setAttribute('id', 'name');
+	nameInput.setAttribute('type', 'text');
+	nameInput.setAttribute('required', true);
+
+	form.append(nameLabel);
+	form.append(nameInput);
+
+	const emailLabel = document.createElement('label');
+	emailLabel.setAttribute('for', 'email');
+
+	const emailInput = document.createElement('input');
+	emailInput.setAttribute('name', 'email');
+	emailInput.setAttribute('id', 'email');
+	emailInput.setAttribute('type', 'email');
+	emailInput.setAttribute('required', true);
+
+	form.append(emailLabel);
+	form.append(emailInput);
+
+	const passwordLabel = document.createElement('label');
+	passwordLabel.setAttribute('for', 'password');
+
+	const passwordInput = document.createElement('input');
+	passwordInput.setAttribute('name', 'password');
+	passwordInput.setAttribute('id', 'password');
+	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('required', true);
+
+	form.append(passwordLabel);
+	form.append(passwordInput);
+
+	const registerButton = document.createElement('input');
+	registerButton.setAttribute('type', 'submit');
+	registerButton.setAttribute('value', 'Login');
+
+	form.append(registerButton);
+
+	return form;
+}
+
+module.exports = { createLoginForm, createRegistrationForm };
+
+},{}],3:[function(require,module,exports){
+const { createLoginForm, createRegistrationForm } = require('../dom_elements');
+
+function onLoginButtonClick(e) {
+	const body = document.querySelector('body');
+	const slogan = document.querySelector('p');
+	const loginButton = document.querySelector('.login');
+	const form = createLoginForm();
+	form.addEventListener('submit', onLoginSumbit);
+	body.removeChild(slogan);
+	body.insertBefore(form, loginButton);
+	body.removeChild(loginButton);
+}
+
+function onRegistrationButtonClick(e) {}
+
+function onRegistrationSumbit(e) {}
+
+function onLoginSumbit(e) {
+	e.preventDefault();
+	// call auth function
+}
+
+module.exports = {
+	onLoginButtonClick,
+	onRegistrationButtonClick,
+	onRegistrationSumbit,
+	onLoginSumbit,
+};
+
+},{"../dom_elements":2}],4:[function(require,module,exports){
+const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
+
+function bindIndexListeners() {
+	const loginButton = document.querySelector('.login');
+	loginButton.addEventListener('click', onLoginButtonClick);
+
+	const registrationButton = document.querySelector('.register');
+	registrationButton.addEventListener('click', onRegistrationButtonClick);
+}
+
+function bindDashboardListeners() {}
+
+function bindProfileListeners() {}
+
+function renderHabits() {}
+
+function initPageBindings() {
+	const path = window.location.pathname;
+
+	if (path === '/') {
+		bindIndexListeners();
+	} else if (path === '/dashboard') {
+		bindDashboardListeners();
+	} else if (path === '/profile') {
+		bindProfileListeners();
+	}
+}
+
+module.exports = initPageBindings;
+
+},{"./event_handlers/index":3}]},{},[1]);
