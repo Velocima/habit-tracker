@@ -7,7 +7,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE habits (
-    email PRIMARY KEY varchar(100) NOT NULL UNIQUE,
+    id serial PRIMARY KEY,
+    email varchar(100) NOT NULL UNIQUE,
     habit_name varchar(255) NOT NULL UNIQUE,
     habit_description varchar(255) NOT NULL UNIQUE,
     habit_frequency varchar(255) NOT NULL UNIQUE,
