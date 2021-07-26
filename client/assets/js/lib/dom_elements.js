@@ -8,6 +8,7 @@ function createLoginForm() {
 	emailInput.setAttribute('name', 'email');
 	emailInput.setAttribute('id', 'email');
 	emailInput.setAttribute('type', 'email');
+	emailInput.setAttribute('required', true);
 
 	form.append(emailLabel);
 	form.append(emailInput);
@@ -19,6 +20,7 @@ function createLoginForm() {
 	passwordInput.setAttribute('name', 'password');
 	passwordInput.setAttribute('id', 'password');
 	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('required', true);
 
 	form.append(passwordLabel);
 	form.append(passwordInput);
@@ -42,6 +44,7 @@ function createRegistrationForm() {
 	nameInput.setAttribute('name', 'name');
 	nameInput.setAttribute('id', 'name');
 	nameInput.setAttribute('type', 'text');
+	nameInput.setAttribute('required', true);
 
 	form.append(nameLabel);
 	form.append(nameInput);
@@ -53,6 +56,7 @@ function createRegistrationForm() {
 	emailInput.setAttribute('name', 'email');
 	emailInput.setAttribute('id', 'email');
 	emailInput.setAttribute('type', 'email');
+	emailInput.setAttribute('required', true);
 
 	form.append(emailLabel);
 	form.append(emailInput);
@@ -64,15 +68,16 @@ function createRegistrationForm() {
 	passwordInput.setAttribute('name', 'password');
 	passwordInput.setAttribute('id', 'password');
 	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('required', true);
 
 	form.append(passwordLabel);
 	form.append(passwordInput);
 
-	const loginButton = document.createElement('input');
-	loginButton.setAttribute('type', 'submit');
-	loginButton.setAttribute('value', 'Login');
+	const registerButton = document.createElement('input');
+	registerButton.setAttribute('type', 'submit');
+	registerButton.setAttribute('value', 'Login');
 
-	form.append(loginButton);
+	form.append(registerButton);
 
 	return form;
 }
