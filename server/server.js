@@ -5,7 +5,7 @@ const cors = require('cors');
 app.use(cors('*'));
 app.use(express.json());
 
-const authRoutes = require('./controllers/user_auth');
+const authRoutes = require('./controllers/auth');
 app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => res.json({ message: 'Welcome' }));
