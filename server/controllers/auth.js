@@ -7,6 +7,10 @@ const jwt = require("jsonwebtoken");
 
 const User = require('../models/User');
 
+
+/**
+ * Upon registration, the password is hashed and a new User is created.
+ */
 router.post('/register', async (req, res) => {
     try {
         const salt = await bcrypt.genSalt();
@@ -18,6 +22,10 @@ router.post('/register', async (req, res) => {
     }
 })
 
+/**
+ * Upon login, the database is checked for the e-mail.
+ * A token is generated if the password is correct.
+ */
 router.post('/login', async (req, res) => {
     try {
         const user = await User.findByEmail(req.body.email);

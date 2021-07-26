@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard</title>
+		<link rel="stylesheet" href="../assets/css/style.css" />
+		<script defer src="../assets/js/bundle.js"></script>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li>
+					<a href="./profile.html">profile</a>
+				</li>
+				<li>
+					<button class="add-habit">Add a habit</button>
+				</li>
+				<li><button>logout</button></li>
+			</ul>
+		</nav>
+		<main>
+			<h1>Welcome,</h1>
+			<section class="habits">
+				<button class="add-habit">Add a habit</button>
+			</section>
+		</main>
+		<section class="habit-modal hidden">
+			<form>
+				<label for="name">Habit name</label>
+				<input type="text" id="name" required placeholder="Habit" autocomplete="off" />
+				<label for="description">Habit description</label>
+				<textarea id="description" required placeholder="Description"></textarea>
+				<label for="frequency">Frequency</label>
+				<select id="frequency" required>
+					<option value="hourly">More than daily</option>
+					<option value="daily">Daily</option>
+					<option value="weekly">Weekly</option>
+				</select>
+				<label for="goal">Habbit goal</label>
+				<input type="number" id="goal" required placeholder="Habit" min="1" max="7" />
+				<input type="submit" value="Add habit" />
+			</form>
+		</section>
+	</body>
+</html>

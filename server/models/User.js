@@ -1,5 +1,11 @@
 const db = require('../db_config/config');
 
+
+/**
+ * User class.
+ * Contains the e-mail, name, and password for a particular user,
+ * Can filter by e-mail to find a particular user.
+ */
 class User {
     constructor(data){
         this.email = data.email
