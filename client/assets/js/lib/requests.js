@@ -98,7 +98,7 @@ async function putUserInfo(data) {
       headers: new Headers({ Authorization: localStorage.getItem("token") }),
       body: JSON.stringify(data),
     };
-    const response = await fetch(`${devURL}/habits/${data.id}`, options);
+    const response = await fetch(`${devURL}/users/${data.email}`, options);
     const responseJson = await response.json();
     if (responseJson.err) {
       throw Error(err);
