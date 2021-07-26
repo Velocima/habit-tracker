@@ -98,6 +98,11 @@ function createRegistrationForm() {
 	return form;
 }
 
+function createHabit(data) {
+	const section = document.createElement('section');
+	return section;
+}
+
 module.exports = { createLoginForm, createRegistrationForm };
 
 },{}],3:[function(require,module,exports){
