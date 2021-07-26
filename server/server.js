@@ -5,6 +5,9 @@ const cors = require('cors');
 app.use(cors('*'));
 app.use(express.json());
 
+/**
+ * Routes specified for authentication, habits, and users.
+ */
 const authRoutes = require('./controllers/auth');
 const habitsRoutes = require('./controllers/habits');
 const userRoutes = require('./controllers/user');

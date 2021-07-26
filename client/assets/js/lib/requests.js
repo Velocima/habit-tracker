@@ -1,30 +1,15 @@
+const { logout } = require("./auth");
+
 const devURL = "http://localhost:3000";
 
-async function getAllUserHabits() {
+async function getAllUserHabits(email) {
   try {
     const options = { headers: new Headers({ Authorization: localStorage.getItem("token") }) };
-    const response = await fetch(`${devURL}/habits/${userId}`, options);
+    const response = await fetch(`${devURL}/habits/${email}`, options);
     const data = await response.json();
     if (data.err) {
       console.warn(data.err);
-      // require logout function from auth.js
-      // logout();
-    }
-    return data;
-  } catch (err) {
-    console.warn(err);
-  }
-}
-
-async function getUserInfo(userId) {
-  try {
-    const options = { headers: new Headers({ Authorization: localStorage.getItem("token") }) };
-    const response = await fetch(`${devURL}/users/${userId}`, options);
-    const data = await response.json();
-    if (data.err) {
-      console.warn(data.err);
-      // require logout function from auth.js
-      // logout();
+      logout();
     }
     return data;
   } catch (err) {
@@ -98,7 +83,7 @@ async function putUserInfo(data) {
       headers: new Headers({ Authorization: localStorage.getItem("token") }),
       body: JSON.stringify(data),
     };
-    const response = await fetch(`${devURL}/habits/${data.id}`, options);
+    const response = await fetch(`${devURL}/user/${data.email}`, options);
     const responseJson = await response.json();
     if (responseJson.err) {
       throw Error(err);
@@ -109,6 +94,7 @@ async function putUserInfo(data) {
   } catch (err) {
     console.warn(err);
   }
+  return responseJson;
 }
 
-modules.exports = { getAllUserHabits, getUserInfo, postHabit, deleteHabit, putHabit, putUserInfo };
+module.exports = { getAllUserHabits, postHabit, deleteHabit, putHabit, putUserInfo };

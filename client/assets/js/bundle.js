@@ -3,17 +3,21 @@ const initPageBindings = require('./lib/handlers');
 
 document.addEventListener('DOMContentLoaded', initPageBindings);
 
-},{"./lib/handlers":4}],2:[function(require,module,exports){
+
+},{"./lib/handlers":5}],2:[function(require,module,exports){
+
 function createLoginForm() {
 	const form = document.createElement('form');
 
 	const emailLabel = document.createElement('label');
 	emailLabel.setAttribute('for', 'email');
+	emailLabel.innerText = 'Email';
 
 	const emailInput = document.createElement('input');
 	emailInput.setAttribute('name', 'email');
 	emailInput.setAttribute('id', 'email');
 	emailInput.setAttribute('type', 'email');
+	emailInput.setAttribute('placeholder', 'Email');
 	emailInput.setAttribute('required', true);
 
 	form.append(emailLabel);
@@ -21,11 +25,13 @@ function createLoginForm() {
 
 	const passwordLabel = document.createElement('label');
 	passwordLabel.setAttribute('for', 'password');
+	passwordLabel.innerText = 'Password';
 
 	const passwordInput = document.createElement('input');
 	passwordInput.setAttribute('name', 'password');
 	passwordInput.setAttribute('id', 'password');
 	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('placeholder', 'Password');
 	passwordInput.setAttribute('required', true);
 
 	form.append(passwordLabel);
@@ -45,11 +51,13 @@ function createRegistrationForm() {
 
 	const nameLabel = document.createElement('label');
 	nameLabel.setAttribute('for', 'name');
+	nameLabel.innerText = 'Name';
 
 	const nameInput = document.createElement('input');
 	nameInput.setAttribute('name', 'name');
 	nameInput.setAttribute('id', 'name');
 	nameInput.setAttribute('type', 'text');
+	nameInput.setAttribute('placeholder', 'name');
 	nameInput.setAttribute('required', true);
 
 	form.append(nameLabel);
@@ -57,11 +65,13 @@ function createRegistrationForm() {
 
 	const emailLabel = document.createElement('label');
 	emailLabel.setAttribute('for', 'email');
+	emailLabel.innerText = 'Email';
 
 	const emailInput = document.createElement('input');
 	emailInput.setAttribute('name', 'email');
 	emailInput.setAttribute('id', 'email');
 	emailInput.setAttribute('type', 'email');
+	emailInput.setAttribute('placeholder', 'Email');
 	emailInput.setAttribute('required', true);
 
 	form.append(emailLabel);
@@ -69,11 +79,13 @@ function createRegistrationForm() {
 
 	const passwordLabel = document.createElement('label');
 	passwordLabel.setAttribute('for', 'password');
+	passwordLabel.innerText = 'Password';
 
 	const passwordInput = document.createElement('input');
 	passwordInput.setAttribute('name', 'password');
 	passwordInput.setAttribute('id', 'password');
 	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('placeholder', 'Password');
 	passwordInput.setAttribute('required', true);
 
 	form.append(passwordLabel);
@@ -88,25 +100,60 @@ function createRegistrationForm() {
 	return form;
 }
 
-module.exports = { createLoginForm, createRegistrationForm };
-
-},{}],3:[function(require,module,exports){
-const { createLoginForm, createRegistrationForm } = require('../dom_elements');
-
-function onLoginButtonClick(e) {
-	const body = document.querySelector('body');
-	const slogan = document.querySelector('p');
-	const loginButton = document.querySelector('.login');
-	const form = createLoginForm();
-	form.addEventListener('submit', onLoginSumbit);
-	body.removeChild(slogan);
-	body.insertBefore(form, loginButton);
-	body.removeChild(loginButton);
+function createHabit(data) {
+	const section = document.createElement('section');
+	return section;
 }
 
-function onRegistrationButtonClick(e) {}
+module.exports = { createLoginForm, createRegistrationForm };
 
-function onRegistrationSumbit(e) {}
+
+},{}],4:[function(require,module,exports){
+const { createLoginForm, createRegistrationForm } = require('../dom_elements');
+const body = document.querySelector('body');
+const loginButton = document.querySelector('.login');
+const registerButton = document.querySelector('.register');
+
+function onLoginButtonClick(e) {
+	const form = createLoginForm();
+	form.addEventListener('submit', onLoginSumbit);
+
+	const registerForm = document.querySelector('form');
+	if (registerForm) {
+		body.removeChild(registerForm);
+		registerButton.classList.remove('hidden');
+	}
+
+	const slogan = document.querySelector('p');
+	if (slogan) {
+		body.removeChild(slogan);
+	}
+	body.insertBefore(form, loginButton);
+	loginButton.classList.add('hidden');
+}
+
+function onRegistrationButtonClick(e) {
+	const form = createRegistrationForm();
+	form.addEventListener('submit', onRegistrationSumbit);
+
+	const loginForm = document.querySelector('form');
+	if (loginForm) {
+		body.removeChild(loginForm);
+		loginButton.classList.remove('hidden');
+	}
+
+	const slogan = document.querySelector('p');
+	if (slogan) {
+		body.removeChild(slogan);
+	}
+	body.insertBefore(form, loginButton);
+	registerButton.classList.add('hidden');
+}
+
+function onRegistrationSumbit(e) {
+	e.preventDefault();
+	// call auth function
+}
 
 function onLoginSumbit(e) {
 	e.preventDefault();
@@ -120,29 +167,42 @@ module.exports = {
 	onLoginSumbit,
 };
 
-},{"../dom_elements":2}],4:[function(require,module,exports){
+
+},{"../dom_elements":2}],5:[function(require,module,exports){
 const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
+const { onAddHabitButtonClick } = require('./event_handlers/dashboard');
+
 
 function bindIndexListeners() {
-	const loginButton = document.querySelector('.login');
-	loginButton.addEventListener('click', onLoginButtonClick);
+  const loginButton = document.querySelector(".login");
+  loginButton.addEventListener("click", onLoginButtonClick);
 
-	const registrationButton = document.querySelector('.register');
-	registrationButton.addEventListener('click', onRegistrationButtonClick);
+  const registrationButton = document.querySelector(".register");
+  registrationButton.addEventListener("click", onRegistrationButtonClick);
 }
 
-function bindDashboardListeners() {}
+function bindDashboardListeners() {
+	const addHabbitButtons = document.querySelectorAll('.add-habit');
+	addHabbitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
+}
 
-function bindProfileListeners() {}
+function bindProfileListeners() {
+  const changeUserInfoSubmitButton = document.getElementById("user-info-form");
+  changeUserInfoSubmitButton.addEventListener("submit", onUpdateUserInfoSumbit);
+
+  const changePasswordSubmitButton = document.getElementById("change-password-form");
+  changePasswordSubmitButton.addEventListener("submit", onChangePasswordSumbit);
+}
 
 function renderHabits() {}
 
 function initPageBindings() {
+
 	const path = window.location.pathname;
 
 	if (path === '/') {
 		bindIndexListeners();
-	} else if (path === '/dashboard') {
+	} else if (path === '/dashboard.html') {
 		bindDashboardListeners();
 	} else if (path === '/profile') {
 		bindProfileListeners();
@@ -151,4 +211,6 @@ function initPageBindings() {
 
 module.exports = initPageBindings;
 
-},{"./event_handlers/index":3}]},{},[1]);
+
+},{"./event_handlers/dashboard":3,"./event_handlers/index":4}]},{},[1]);
+

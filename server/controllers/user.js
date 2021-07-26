@@ -15,16 +15,4 @@ router.get('/', verifyToken, async (req, res) => {
     }
 })
 
-router.get('/:email', verifyToken, async (req, res) => {
-    try {
-    const user = await User.findByEmail(req.params.email)
-    res.json(user)
-    } catch (err) {
-        res.status(404).send({err});
-    }
-})
-
-
-
-
 module.exports = router
