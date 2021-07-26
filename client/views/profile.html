@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile</title>
-</head>
-<body>
-    
-</body>
+  </head>
+  <body>
+    <h1>Profile</h1>
+    <form>
+      <label for="profile-name">Name</label>
+      <input type="text" id="profile-name" value="their name" />
+
+      <label for="profile-email">email</label>
+      <input type="email" id="profile-email" value="their email" />
+
+      <input type="submit" value="Update profile" />
+    </form>
+
+    <form>
+      <label for="profile-current-password">Current password</label>
+      <input type="password" id="profile-current-password" />
+
+      <label for="profile-new-password">New password</label>
+      <input type="password" id="profile-new-password" />
+
+      <label for="profile-confirm-password">Confirm new password</label>
+      <input type="password" id="profile-confirm-password" />
+
+      <input type="submit" value="Update password" />
+    </form>
+  </body>
 </html>
