@@ -49,4 +49,4 @@ function logout() {
   window.location.pathname = "/index.html";
 }
 
-modules.exports = { requestLogin, requestRegistration, login, logout };
+module.exports = { requestLogin, requestRegistration, login, logout };
