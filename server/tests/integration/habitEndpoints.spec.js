@@ -31,7 +31,7 @@ describe('habit endpoints', () => {
 
     }); 
 
-    it('should retrive a habit', async () => {
+    it('should retrieve a habit', async () => {
     });
 
 
