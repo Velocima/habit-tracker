@@ -3,7 +3,9 @@ const initPageBindings = require('./lib/handlers');
 
 document.addEventListener('DOMContentLoaded', initPageBindings);
 
+
 },{"./lib/handlers":5}],2:[function(require,module,exports){
+
 function createLoginForm() {
 	const form = document.createElement('form');
 
@@ -105,24 +107,6 @@ function createHabit(data) {
 
 module.exports = { createLoginForm, createRegistrationForm };
 
-},{}],3:[function(require,module,exports){
-function onAddHabitButtonClick(e) {
-	const modal = document.querySelector('.habit-modal');
-	modal.classList.remove('hidden');
-}
-
-function onAddHabitSumbit(e) {}
-
-function onFrequencyChange(e) {}
-
-function onAddHabitFormChange(e) {}
-
-module.exports = {
-	onAddHabitButtonClick,
-	onAddHabitSumbit,
-	onFrequencyChange,
-	onAddHabitFormChange,
-};
 
 },{}],4:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
@@ -183,16 +167,18 @@ module.exports = {
 	onLoginSumbit,
 };
 
+
 },{"../dom_elements":2}],5:[function(require,module,exports){
 const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
 const { onAddHabitButtonClick } = require('./event_handlers/dashboard');
 
-function bindIndexListeners() {
-	const loginButton = document.querySelector('.login');
-	loginButton.addEventListener('click', onLoginButtonClick);
 
-	const registrationButton = document.querySelector('.register');
-	registrationButton.addEventListener('click', onRegistrationButtonClick);
+function bindIndexListeners() {
+  const loginButton = document.querySelector(".login");
+  loginButton.addEventListener("click", onLoginButtonClick);
+
+  const registrationButton = document.querySelector(".register");
+  registrationButton.addEventListener("click", onRegistrationButtonClick);
 }
 
 function bindDashboardListeners() {
@@ -200,11 +186,18 @@ function bindDashboardListeners() {
 	addHabbitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
 }
 
-function bindProfileListeners() {}
+function bindProfileListeners() {
+  const changeUserInfoSubmitButton = document.getElementById("user-info-form");
+  changeUserInfoSubmitButton.addEventListener("submit", onUpdateUserInfoSumbit);
+
+  const changePasswordSubmitButton = document.getElementById("change-password-form");
+  changePasswordSubmitButton.addEventListener("submit", onChangePasswordSumbit);
+}
 
 function renderHabits() {}
 
 function initPageBindings() {
+
 	const path = window.location.pathname;
 
 	if (path === '/') {
@@ -218,4 +211,6 @@ function initPageBindings() {
 
 module.exports = initPageBindings;
 
+
 },{"./event_handlers/dashboard":3,"./event_handlers/index":4}]},{},[1]);
+
