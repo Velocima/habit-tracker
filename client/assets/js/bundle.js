@@ -92,21 +92,50 @@ module.exports = { createLoginForm, createRegistrationForm };
 
 },{}],3:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
+const body = document.querySelector('body');
+const loginButton = document.querySelector('.login');
+const registerButton = document.querySelector('.register');
 
 function onLoginButtonClick(e) {
-	const body = document.querySelector('body');
-	const slogan = document.querySelector('p');
-	const loginButton = document.querySelector('.login');
 	const form = createLoginForm();
 	form.addEventListener('submit', onLoginSumbit);
-	body.removeChild(slogan);
+
+	const registerForm = document.querySelector('form');
+	if (registerForm) {
+		body.removeChild(registerForm);
+		registerButton.classList.remove('hidden');
+	}
+
+	const slogan = document.querySelector('p');
+	if (slogan) {
+		body.removeChild(slogan);
+	}
 	body.insertBefore(form, loginButton);
-	body.removeChild(loginButton);
+	loginButton.classList.add('hidden');
 }
 
-function onRegistrationButtonClick(e) {}
+function onRegistrationButtonClick(e) {
+	const form = createRegistrationForm();
+	form.addEventListener('submit', onRegistrationSumbit);
 
-function onRegistrationSumbit(e) {}
+	const loginForm = document.querySelector('form');
+	if (loginForm) {
+		body.removeChild(loginForm);
+		loginButton.classList.remove('hidden');
+	}
+
+	const slogan = document.querySelector('p');
+	if (slogan) {
+		body.removeChild(slogan);
+	}
+	body.insertBefore(form, loginButton);
+	registerButton.classList.add('hidden');
+}
+
+function onRegistrationSumbit(e) {
+	e.preventDefault();
+	// call auth function
+}
 
 function onLoginSumbit(e) {
 	e.preventDefault();
