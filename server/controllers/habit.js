@@ -6,6 +6,15 @@ const { verifyToken } = require('../middleware/auth');
 const Habit = require('../models/Habit');
 const User = require('../models/User');
 
+
+/**
+ * CRUD operation.
+ * Create: A habit is created for a particular user.
+ * Read: An array of habits is read in.
+ * Update: Streaks are patched in.
+ * Delete: A habit is deleted.
+ */
+// Read
 router.get('/:email', verifyToken, async (req, res) => {
     try {
         const habits = await Habit.filterByEmail(req.params.email)
@@ -15,6 +24,7 @@ router.get('/:email', verifyToken, async (req, res) => {
     }
 })
 
+// Create
 router.post('/', verifyToken, async (req, res) => {
     try {
         const habit = await Habit.create(req.body)
@@ -24,6 +34,7 @@ router.post('/', verifyToken, async (req, res) => {
     }
 })
 
+// Update
 router.patch('/:id', verifyToken, async (req, res) => {
     try {
         const habit = await Habit.findById(req.params.id);
@@ -34,6 +45,7 @@ router.patch('/:id', verifyToken, async (req, res) => {
     }
 })
 
+// Delete
 router.delete("/:id", verifyToken, async (req, res) => {
     try {
       const habit = await Habit.findById(req.params.id);
