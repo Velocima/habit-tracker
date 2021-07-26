@@ -34,6 +34,18 @@ class Habit {
             }
         })
     }
+
+    static get all() {
+        return new Promise(async (res, rej) => {
+            try {
+                let result = await db.query(`SELECT * FROM habits;`);
+                let habits = result.rows.map(r => new Habit(r))
+                res(users)
+            } catch (err) {
+                rej(`Error retrieving habits: ${err}`)
+            }
+        })
+    }
 }
 
 module.exports = User

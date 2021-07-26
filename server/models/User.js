@@ -39,7 +39,7 @@ class User {
                 let users = result.rows.map(r => new User(r))
                 res(users)
             } catch (err) {
-                rej(`Error retrieving user: ${err}`)
+                rej(`Error retrieving users: ${err}`)
             }
         })
     }
