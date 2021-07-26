@@ -17,21 +17,6 @@ async function getAllUserHabits(email) {
   }
 }
 
-async function getAllUsers() {
-  try {
-    const options = { headers: new Headers({ Authorization: localStorage.getItem("token") }) };
-    const response = await fetch(`${devURL}/users`, options);
-    const data = await response.json();
-    if (data.err) {
-      console.warn(data.err);
-      logout();
-    }
-    return data;
-  } catch (err) {
-    console.warn(err);
-  }
-}
-
 async function postHabit(data) {
   try {
     const options = {
@@ -98,7 +83,7 @@ async function putUserInfo(data) {
       headers: new Headers({ Authorization: localStorage.getItem("token") }),
       body: JSON.stringify(data),
     };
-    const response = await fetch(`${devURL}/users/${data.email}`, options);
+    const response = await fetch(`${devURL}/user/${data.email}`, options);
     const responseJson = await response.json();
     if (responseJson.err) {
       throw Error(err);
@@ -109,6 +94,7 @@ async function putUserInfo(data) {
   } catch (err) {
     console.warn(err);
   }
+  return responseJson;
 }
 
-modules.exports = { getAllUserHabits, getAllUsers, postHabit, deleteHabit, putHabit, putUserInfo };
+module.exports = { getAllUserHabits, getAllUsers, postHabit, deleteHabit, putHabit, putUserInfo };
