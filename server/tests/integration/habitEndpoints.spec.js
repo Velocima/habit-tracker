@@ -1,5 +1,4 @@
 
-
 describe('habit endpoints', () => {
     let api;
     beforeEach(async () => {
@@ -15,31 +14,38 @@ describe('habit endpoints', () => {
         await api.close()
     })
 
+    it('should retrieve list of habits in user database', async () => {
+        const res = await request(api).get('/:email/habits');
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.length).toEqual(3);
+    }); 
+
     it('should create a new habit', async () => {
         const res = await request(api)
-        .post('/')
-        .send({
-            habit: 'Test habit',
-            frequency: 'daily',
-            streak: '3 days'
-        })
+            .post('/')
+            .send({
+                habitName: 'Test habit',
+                description: 'test habit description',
+                frequency: 'daily',
+                frequencyTarget: '',
+                streak: 'test 3 days'
+            })
         expect(res.statusCode).toEqual(201)
-        expect(res.body).toHaveProperty("id");
+        expect(res.body).toHaveProperty("email"); //?
     });
 
-    it('should retrieve a list of habits', async () => {
+    // it('should update a habit', async () => {
+    //     const res= await request(api)
+            
+    // });
 
-    }); 
+    // it('should delete a habit', async () => {
+    //     const res = await request(api)
+    //         .delete('/:email/habit/1')
+    //     expect(res.statusCode).toEqual(204);
 
-    it('should retrieve a habit', async () => {
-    });
-
-
-    it('should update a habit', async () => {
-
-    });
-
-    it('should delete a habit', async () => {
-
-    }); 
+    //     const habitRes = await request(api).get('/:email/habit/1');
+    //     expect(habitRes.statusCode).toEqual(404);
+    //     expect(habitRes.body).toHaveProperty('err');
+    // }); 
 })
