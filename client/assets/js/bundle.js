@@ -3,7 +3,7 @@ const initPageBindings = require('./lib/handlers');
 
 document.addEventListener('DOMContentLoaded', initPageBindings);
 
-},{"./lib/handlers":4}],2:[function(require,module,exports){
+},{"./lib/handlers":5}],2:[function(require,module,exports){
 function createLoginForm() {
 	const form = document.createElement('form');
 
@@ -106,6 +106,25 @@ function createHabit(data) {
 module.exports = { createLoginForm, createRegistrationForm };
 
 },{}],3:[function(require,module,exports){
+function onAddHabitButtonClick(e) {
+	const modal = document.querySelector('.habit-modal');
+	modal.classList.remove('hidden');
+}
+
+function onAddHabitSumbit(e) {}
+
+function onFrequencyChange(e) {}
+
+function onAddHabitFormChange(e) {}
+
+module.exports = {
+	onAddHabitButtonClick,
+	onAddHabitSumbit,
+	onFrequencyChange,
+	onAddHabitFormChange,
+};
+
+},{}],4:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
 const body = document.querySelector('body');
 const loginButton = document.querySelector('.login');
@@ -164,8 +183,9 @@ module.exports = {
 	onLoginSumbit,
 };
 
-},{"../dom_elements":2}],4:[function(require,module,exports){
+},{"../dom_elements":2}],5:[function(require,module,exports){
 const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
+const { onAddHabitButtonClick } = require('./event_handlers/dashboard');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -175,7 +195,10 @@ function bindIndexListeners() {
 	registrationButton.addEventListener('click', onRegistrationButtonClick);
 }
 
-function bindDashboardListeners() {}
+function bindDashboardListeners() {
+	const addHabbitButtons = document.querySelectorAll('.add-habit');
+	addHabbitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
+}
 
 function bindProfileListeners() {}
 
@@ -186,7 +209,7 @@ function initPageBindings() {
 
 	if (path === '/') {
 		bindIndexListeners();
-	} else if (path === '/dashboard') {
+	} else if (path === '/dashboard.html') {
 		bindDashboardListeners();
 	} else if (path === '/profile') {
 		bindProfileListeners();
@@ -195,4 +218,4 @@ function initPageBindings() {
 
 module.exports = initPageBindings;
 
-},{"./event_handlers/index":3}]},{},[1]);
+},{"./event_handlers/dashboard":3,"./event_handlers/index":4}]},{},[1]);
