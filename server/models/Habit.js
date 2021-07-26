@@ -1,5 +1,11 @@
 const db = require('../db_config/config');
 
+
+/**
+ * Habit class.
+ * Contains create, update, and delete functionality.
+ * Can filter by e-mail and ID.
+ */
 class Habit {
     constructor(data){
         this.id = data.id
