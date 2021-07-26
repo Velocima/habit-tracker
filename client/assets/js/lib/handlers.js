@@ -1,5 +1,15 @@
-function bindIndexListeners() {}
+const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
+
+function bindIndexListeners() {
+	const loginButton = document.querySelector('.login');
+	loginButton.addEventListener('click', onLoginButtonClick);
+
+	const registrationButton = document.querySelector('.register');
+	registrationButton.addEventListener('click', onRegistrationButtonClick);
+}
+
 function bindDashboardListeners() {}
+
 function bindProfileListeners() {}
 
 function renderHabits() {}

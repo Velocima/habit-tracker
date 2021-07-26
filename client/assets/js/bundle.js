@@ -3,9 +3,136 @@ const initPageBindings = require('./lib/handlers');
 
 document.addEventListener('DOMContentLoaded', initPageBindings);
 
-},{"./lib/handlers":2}],2:[function(require,module,exports){
-function bindIndexListeners() {}
+},{"./lib/handlers":4}],2:[function(require,module,exports){
+function createLoginForm() {
+	const form = document.createElement('form');
+
+	const emailLabel = document.createElement('label');
+	emailLabel.setAttribute('for', 'email');
+
+	const emailInput = document.createElement('input');
+	emailInput.setAttribute('name', 'email');
+	emailInput.setAttribute('id', 'email');
+	emailInput.setAttribute('type', 'email');
+	emailInput.setAttribute('required', true);
+
+	form.append(emailLabel);
+	form.append(emailInput);
+
+	const passwordLabel = document.createElement('label');
+	passwordLabel.setAttribute('for', 'password');
+
+	const passwordInput = document.createElement('input');
+	passwordInput.setAttribute('name', 'password');
+	passwordInput.setAttribute('id', 'password');
+	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('required', true);
+
+	form.append(passwordLabel);
+	form.append(passwordInput);
+
+	const loginButton = document.createElement('input');
+	loginButton.setAttribute('type', 'submit');
+	loginButton.setAttribute('value', 'Login');
+
+	form.append(loginButton);
+
+	return form;
+}
+
+function createRegistrationForm() {
+	const form = document.createElement('form');
+
+	const nameLabel = document.createElement('label');
+	nameLabel.setAttribute('for', 'name');
+
+	const nameInput = document.createElement('input');
+	nameInput.setAttribute('name', 'name');
+	nameInput.setAttribute('id', 'name');
+	nameInput.setAttribute('type', 'text');
+	nameInput.setAttribute('required', true);
+
+	form.append(nameLabel);
+	form.append(nameInput);
+
+	const emailLabel = document.createElement('label');
+	emailLabel.setAttribute('for', 'email');
+
+	const emailInput = document.createElement('input');
+	emailInput.setAttribute('name', 'email');
+	emailInput.setAttribute('id', 'email');
+	emailInput.setAttribute('type', 'email');
+	emailInput.setAttribute('required', true);
+
+	form.append(emailLabel);
+	form.append(emailInput);
+
+	const passwordLabel = document.createElement('label');
+	passwordLabel.setAttribute('for', 'password');
+
+	const passwordInput = document.createElement('input');
+	passwordInput.setAttribute('name', 'password');
+	passwordInput.setAttribute('id', 'password');
+	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('required', true);
+
+	form.append(passwordLabel);
+	form.append(passwordInput);
+
+	const registerButton = document.createElement('input');
+	registerButton.setAttribute('type', 'submit');
+	registerButton.setAttribute('value', 'Login');
+
+	form.append(registerButton);
+
+	return form;
+}
+
+module.exports = { createLoginForm, createRegistrationForm };
+
+},{}],3:[function(require,module,exports){
+const { createLoginForm, createRegistrationForm } = require('../dom_elements');
+
+function onLoginButtonClick(e) {
+	const body = document.querySelector('body');
+	const slogan = document.querySelector('p');
+	const loginButton = document.querySelector('.login');
+	const form = createLoginForm();
+	form.addEventListener('submit', onLoginSumbit);
+	body.removeChild(slogan);
+	body.insertBefore(form, loginButton);
+	body.removeChild(loginButton);
+}
+
+function onRegistrationButtonClick(e) {}
+
+function onRegistrationSumbit(e) {}
+
+function onLoginSumbit(e) {
+	e.preventDefault();
+	// call auth function
+}
+
+module.exports = {
+	onLoginButtonClick,
+	onRegistrationButtonClick,
+	onRegistrationSumbit,
+	onLoginSumbit,
+};
+
+},{"../dom_elements":2}],4:[function(require,module,exports){
+const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
+
+function bindIndexListeners() {
+	const loginButton = document.querySelector('.login');
+	loginButton.addEventListener('click', onLoginButtonClick);
+
+	const registrationButton = document.querySelector('.register');
+	registrationButton.addEventListener('click', onRegistrationButtonClick);
+}
+
 function bindDashboardListeners() {}
+
 function bindProfileListeners() {}
 
 function renderHabits() {}
@@ -24,4 +151,4 @@ function initPageBindings() {
 
 module.exports = initPageBindings;
 
-},{}]},{},[1]);
+},{"./event_handlers/index":3}]},{},[1]);
