@@ -15,10 +15,11 @@ async function onChangePasswordSumbit(e) {
   }
 }
 
-function onUpdateUserInfoSumbit(e) {
+async function onUpdateUserInfoSumbit(e) {
   e.preventDefault();
   const formData = Object.fromEntries(new FormData(e.target));
   let response;
+
   try {
     response = await putUserInfo(formData);
   } catch (error) {

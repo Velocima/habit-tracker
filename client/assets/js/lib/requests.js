@@ -97,4 +97,4 @@ async function putUserInfo(data) {
   return responseJson;
 }
 
-module.exports = { getAllUserHabits, getAllUsers, postHabit, deleteHabit, putHabit, putUserInfo };
+module.exports = { getAllUserHabits, postHabit, deleteHabit, putHabit, putUserInfo };
