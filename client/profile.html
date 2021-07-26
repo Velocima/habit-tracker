@@ -4,29 +4,30 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script defer src="../assets/js/bundle.js"></script>
     <title>Profile</title>
   </head>
   <body>
     <h1>Profile</h1>
-    <form>
+    <form id="user-info-form">
       <label for="name">Name</label>
-      <input type="text" id="name" value="their name" />
+      <input type="text" id="name" name="name" value="their name" />
 
       <label for="email">email</label>
-      <input type="email" id="email" value="their email" />
+      <input type="email" id="email" name="email" value="their_email@gmail.commail" />
 
       <input type="submit" value="Update profile" />
     </form>
 
-    <form>
+    <form id="change-password-form">
       <label for="password">Current password</label>
-      <input type="password" id="password" />
+      <input type="password" id="password" name="password" />
 
       <label for="new-password">New password</label>
-      <input type="password" id="new-password" />
+      <input type="password" id="new-password" name="new-password" />
 
       <label for="confirm-password">Confirm new password</label>
-      <input type="password" id="confirm-password" />
+      <input type="password" id="confirm-password" name="confirm-password" />
 
       <input type="submit" value="Update password" />
     </form>
