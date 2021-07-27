@@ -85,7 +85,7 @@ function createRegistrationForm() {
 
 	const registerButton = document.createElement('input');
 	registerButton.setAttribute('type', 'submit');
-	registerButton.setAttribute('value', 'Login');
+	registerButton.setAttribute('value', 'Register');
 
 	form.append(registerButton);
 
