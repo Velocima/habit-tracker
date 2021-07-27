@@ -15,6 +15,7 @@ class Habit {
         this.frequency = data.frequency
         this.frequencyTarget= data.frequencyTarget
         this.streak = data.streak
+        this.completedOn = data.completedOn // unix timestamp (bigint in db)
     }
 
     static create({ email, habitName, description, frequency, frequencyTarget, streak }){
@@ -78,4 +79,4 @@ class Habit {
       }
 }
 
-module.exports = User
+module.exports = Habit

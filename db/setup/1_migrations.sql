@@ -6,7 +6,6 @@ CREATE TABLE users (
     password_digest varchar(500) NOT NULL
 );
 
-
 DROP TABLE IF EXISTS habits;
 
 CREATE TABLE habits (
