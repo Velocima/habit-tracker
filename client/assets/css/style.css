@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #eeeeee;
+    --secondary: #ff3f00;
+    --tertiary: #8e2657;   
+}
+
+a, ul, li {
+    text-decoration: none;
+    list-style-type: none;
+}
+
+body {
+    background: var(--primary);
+}
+
+button {
+    background: none;
+    border: 2px solid var(--secondary);
+    color: var(--secondary);
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.6);
+    display: inline-block;
+}
+
+button:hover {
+    color: #222;
+    background: var(--secondary);
+}
+
+input, textarea {
+    padding: 10px 16px;
+    border-radius:  20px;
+    border: 2px solid #ff3f00;
+}
+
+/* font */
+
+
+
+/* @media screen and  (min-width: 620px){
+
+}
+
+
+@media screen and  (min-width: 960px){
+
+}
+
+@media screen and  (min-width: 1200px){
+
+} */
