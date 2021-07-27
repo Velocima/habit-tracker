@@ -7,10 +7,13 @@
 :root {
     --primary: #eeeeee;
     --secondary: #ff3f00;
-    --tertiary: #8e2657;
+    --tertiary: #4e112e; /*#8e2657*/
     --bs: 1px 2px 3px rgba(0, 0, 0, 0.6);   
 }
 
+h1 {
+    color: var(--tertiary);
+}
 
 
 a, ul, li {
