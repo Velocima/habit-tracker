@@ -28,6 +28,9 @@
 - Corrected syntax error in Primary Key in the table "users"
 - Corrected path error in Docker-Compose, so it works now
 - Extra patch request in auth.js controller to allow user to change password
+
+[2.0.0] - 2021-07-27 - Poligera & Ridwan Axmed
+### Added
 - Updated dependencies in package.json
 - Extra table "completions" for habit tracking
 - Fixed syntax error in migrations.sql
