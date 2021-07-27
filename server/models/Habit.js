@@ -21,10 +21,10 @@ class Habit {
     static create({ email, habitName, description, frequency, frequencyTarget, streak }){
         return new Promise(async (res, rej) => {
             try {
-                let result = await db.query(`INSERT INTO habits (email, habit_name, habit_description, habit_frequency, frequency_target, streak, completed_) VALUES $1, $2, $3, $4, $5, $6 RETURNING *;`, [email, habitName, description, frequency, frequencyTarget, streak]);
+                let result = await db.query(`INSERT INTO habits (email, habit_name, habit_description, habit_frequency, frequency_target, streak) VALUES $1, $2, $3, $4, $5, $6 RETURNING *;`, [email, habitName, description, frequency, frequencyTarget, streak]);
 
-                // Using ARRAY function of PostgreSQL which turns a set of rows into an array (using a subselect) while ordering by date:
-                let completionDates = await db.query('SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $7 ORDER BY completion_date);', [result.id])
+                // Initially completion dates are an empty array:
+                let completionDates = [];
 
                 let habit = new Habit(...result.rows[0], completionDates);
                 res(habit)
@@ -39,7 +39,9 @@ class Habit {
             try {
                 let result = await db.query(`SELECT * FROM habits
                                                 WHERE email = $1;`, [email]);
-                let habits = result.rows.map(habit => new Habit(habit))
+                                                                // Using ARRAY function of PostgreSQL which turns a set of rows into an array (using a subselect) while ordering by date:
+                let dates = await db.query('SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $2 ORDER BY completion_date);', [result.id])
+                let habits = result.rows.map(habit => new Habit(habit, dates));
                 res(habits) // Returns an array of habits for a particular user
             } catch (err) {
                 rej(`Error retrieving user: ${err}`)
@@ -47,12 +49,14 @@ class Habit {
         })
     }
 
+    // Addressing a particular habit:
     static findById (id) {         
     return new Promise(async (res, rej) => {
         try {
             let result = await db.query(`SELECT * FROM habits WHERE id = $1;`, [id]);
-            let habits = result.rows.map(habit => new Habit(habit))
-            res(users)
+            let dates = await db.query('SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $2 ORDER BY completion_date);', [result.id])
+            let habits = result.rows.map(habit => new Habit(habit, dates))
+            res(habits)
         } catch (err) {
             rej(`Error retrieving habits: ${err}`)
         }
@@ -62,8 +66,10 @@ class Habit {
     update() {
         return new Promise(async (res, rej) => {
             try {
-                const updatedStreak = this.streak + 1;
-                const result = await db.query('UPDATE habits SET streak = $1 WHERE id = $2 RETURNING id, streak;', [ updatedStreak, this.id]);
+                const today = Date.now(); // Milliseconds UNIX time
+                let completedDate = (Math.floor(today/ 1000)); // Seconds UNIX time
+                // const updatedStreak = this.streak + 1;
+                const result = await db.query('INSERT into completions (completion_date, habit_id) VALUES $1, $2 WHERE id = $3 RETURNING id;', [ completedDate, this.id]);
                 res(result.rows[0])
             } catch (err) {
                 rej(`Error updating habits: ${err}`)
