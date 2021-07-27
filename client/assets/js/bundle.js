@@ -160,16 +160,34 @@ function createHabit(data) {
 module.exports = { createLoginForm, createRegistrationForm };
 
 },{}],4:[function(require,module,exports){
+const { postHabit } = require('../requests');
+
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
 	modal.classList.remove('hidden');
 }
 
-function onAddHabitSumbit(e) {}
+async function onAddHabitSumbit(e) {
+	e.preventDefault();
+	const data = Object.fromEntries(new FormData(e.target));
+	const newHabit = await postHabit(data);
+	if (newHabit.success) {
+		const form = document.querySelector('form');
+		form.reset();
+		const modal = document.querySelector('.habit-modal');
+		modal.classList.add('hidden');
+		addNewHabitToDOM(newHabit);
+	} else {
+		console.log(newHabit);
+		// add error handling
+	}
+}
 
 function onFrequencyChange(e) {}
 
-function onAddHabitFormChange(e) {}
+function onAddHabitFormChange(e) {
+	console.log(e.target);
+}
 
 module.exports = {
 	onAddHabitButtonClick,
@@ -178,7 +196,7 @@ module.exports = {
 	onAddHabitFormChange,
 };
 
-},{}],5:[function(require,module,exports){
+},{"../requests":8}],5:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
 const { requestLogin, requestRegistration } = require('../auth');
 const body = document.querySelector('body');
@@ -275,43 +293,45 @@ async function onUpdateUserInfoSumbit(e) {
 module.exports = { onChangePasswordSumbit, onUpdateUserInfoSumbit };
 
 },{"../requests":8}],7:[function(require,module,exports){
-const { onLoginButtonClick, onRegistrationButtonClick } = require("./event_handlers/index");
-const { onChangePasswordSumbit, onUpdateUserInfoSumbit } = require("./event_handlers/profile");
-const { onAddHabitButtonClick } = require('./event_handlers/dashboard');
-
+const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
+const { onChangePasswordSumbit, onUpdateUserInfoSumbit } = require('./event_handlers/profile');
+const { onAddHabitButtonClick, onAddHabitSumbit } = require('./event_handlers/dashboard');
 
 function bindIndexListeners() {
-  const loginButton = document.querySelector(".login");
-  loginButton.addEventListener("click", onLoginButtonClick);
+	const loginButton = document.querySelector('.login');
+	loginButton.addEventListener('click', onLoginButtonClick);
 
-  const registrationButton = document.querySelector(".register");
-  registrationButton.addEventListener("click", onRegistrationButtonClick);
+	const registrationButton = document.querySelector('.register');
+	registrationButton.addEventListener('click', onRegistrationButtonClick);
 }
 
 function bindDashboardListeners() {
 	const addHabbitButtons = document.querySelectorAll('.add-habit');
 	addHabbitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
+
+	const addHabitForm = document.querySelector('form');
+	addHabitForm.addEventListener('submit', onAddHabitSumbit);
 }
 
 function bindProfileListeners() {
-  const changeUserInfoSubmitButton = document.getElementById("user-info-form");
-  changeUserInfoSubmitButton.addEventListener("submit", onUpdateUserInfoSumbit);
+	const changeUserInfoSubmitButton = document.getElementById('user-info-form');
+	changeUserInfoSubmitButton.addEventListener('submit', onUpdateUserInfoSumbit);
 
-  const changePasswordSubmitButton = document.getElementById("change-password-form");
-  changePasswordSubmitButton.addEventListener("submit", onChangePasswordSumbit);
+	const changePasswordSubmitButton = document.getElementById('change-password-form');
+	changePasswordSubmitButton.addEventListener('submit', onChangePasswordSumbit);
 }
 
 function renderHabits() {}
 
 function initPageBindings() {
-  const path = window.location.pathname;
-  if (path === "/") {
-    bindIndexListeners();
-  } else if (path === "/dashboard.html") {
-    bindDashboardListeners();
-  } else if (path === "/profile.html") {
-    bindProfileListeners();
-  }
+	const path = window.location.pathname;
+	if (path === '/') {
+		bindIndexListeners();
+	} else if (path === '/dashboard.html') {
+		bindDashboardListeners();
+	} else if (path === '/profile.html') {
+		bindProfileListeners();
+	}
 }
 
 module.exports = initPageBindings;
