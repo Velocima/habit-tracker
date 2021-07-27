@@ -145,7 +145,7 @@ function createRegistrationForm() {
 
 	const registerButton = document.createElement('input');
 	registerButton.setAttribute('type', 'submit');
-	registerButton.setAttribute('value', 'Login');
+	registerButton.setAttribute('value', 'Register');
 
 	form.append(registerButton);
 
@@ -180,6 +180,7 @@ module.exports = {
 
 },{}],5:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
+const { requestLogin, requestRegistration } = require('../auth');
 const body = document.querySelector('body');
 const loginButton = document.querySelector('.login');
 const registerButton = document.querySelector('.register');
@@ -222,12 +223,16 @@ function onRegistrationButtonClick(e) {
 
 function onRegistrationSumbit(e) {
 	e.preventDefault();
-	// call auth function
+	let data = Object.fromEntries(new FormData(e.target));
+	console.log(data);
+	// requestRegistration(data);
 }
 
 function onLoginSumbit(e) {
 	e.preventDefault();
-	// call auth function
+	let data = Object.fromEntries(new FormData(e.target));
+	console.log(data);
+	// requestLogin(data);
 }
 
 module.exports = {
@@ -237,7 +242,7 @@ module.exports = {
 	onLoginSumbit,
 };
 
-},{"../dom_elements":3}],6:[function(require,module,exports){
+},{"../auth":2,"../dom_elements":3}],6:[function(require,module,exports){
 const { putUserInfo } = require("../requests");
 
 async function onChangePasswordSumbit(e) {
