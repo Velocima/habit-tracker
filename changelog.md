@@ -37,6 +37,8 @@
 - Added seed data for "completions" table
 - Fixed a typo in Habit model (module.exports)
 - Added missing module.exports for Router
+- Added "completionDates" property to Habit model (an array of unix timestamps, in seconds) complete with an extra db query to extract those values from "completions" table based on habit_id foreign key
+- 
 
 
 
