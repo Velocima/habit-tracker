@@ -14,9 +14,9 @@ const User = require('../models/User');
  * Delete: A habit is deleted.
  */
 // Read
-router.get('/:email', verifyToken, async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
 	try {
-		const habits = await Habit.filterByEmail(req.params.email);
+		const habits = await Habit.filterByEmail(req.email);
 		res.status(200).json(habits); // Sending an array of habbits for this user
 	} catch (err) {
 		res.status(500).send({ err });
