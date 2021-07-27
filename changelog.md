@@ -30,5 +30,9 @@
 - Extra patch request in auth.js controller to allow user to change password
 - Updated dependencies in package.json
 
+### Testing
+- Created test suite for habit end routes 
+- Created test database
+- 
 
 ## Misc
