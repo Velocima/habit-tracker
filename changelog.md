@@ -21,5 +21,9 @@
 - .env file with SECRET environment variable used with token verification process
 - package.json file with aproppriate dependencies
 
+### Testing
+- Created test suite for habit end routes 
+- Created test database
+- 
 
 ## Misc
