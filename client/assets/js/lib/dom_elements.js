@@ -96,11 +96,11 @@ function createHabit(data) {
 	const div = document.createElement('div');
 
 	const habitTitle = document.createElement('h2');
-	habitTitle.textContent = data.habit_name;
+	habitTitle.textContent = data.habitName;
 
 	const viewButton = document.createElement('button');
 	viewButton.textContent = 'View';
-	viewButton.setAttribute('id', data.habit_name);
+	viewButton.setAttribute('id', data.habitName);
 	viewButton.setAttribute('class', 'view-button');
 
 	div.append(habitTitle);

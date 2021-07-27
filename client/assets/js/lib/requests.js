@@ -5,7 +5,9 @@ const devURL = 'http://localhost:3000';
 async function getAllUserHabits(email) {
 	try {
 		const options = { headers: new Headers({ Authorization: localStorage.getItem('token') }) };
-		const response = await fetch(`${devURL}/habits/${email}`, options);
+		const email = localStorage.getItem('email');
+		const url = `${devURL}/user/${email}/habits`;
+		const response = await fetch(url, options);
 		const data = await response.json();
 		if (data.err) {
 			console.warn(data.err);
