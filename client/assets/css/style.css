@@ -33,13 +33,15 @@ button {
 
 button:hover {
     color: #222;
+    font-weight: bold;
     background: var(--secondary);
 }
 
 input, textarea {
     padding: 10px 16px;
+    margin: 10px 10px;
     border-radius:  20px;
-    border: 2px solid #ff3f00;
+    border: 1px solid #ff3f00;
 }
 
 /* font */

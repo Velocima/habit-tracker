@@ -15,13 +15,31 @@ p {
 form {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 80%;
     margin: 20px auto;
 }
 
-.hidden {
+label[for="name"] {
     display: none;
 }
+
+label[for="email"] {
+    display: none;
+}
+
+label[for="password"] {
+    display: none;
+}
+
+/* input[value="login"] {
+
+    } */
+
+.hidden {
+    display: none;
+
+}
+
 
 
 @media screen and  (min-width: 620px){
