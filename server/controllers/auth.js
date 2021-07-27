@@ -26,6 +26,7 @@ router.post('/register', async (req, res) => {
  * Upon login, the database is checked for the e-mail.
  * A token is generated if the password is correct.
  */
+
 router.patch('/password/:email', async (req, res) => {
     try {
         const salt = await bcrypt.genSalt();

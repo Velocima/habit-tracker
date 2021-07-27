@@ -2,6 +2,12 @@
 
 ## Frontend
 
+- Create initial filestructure
+- Create html for pages:
+  - index
+  - dashboard
+  - profile
+
 ## Backend
 [1.0.0] - 2021-07-26 - Poligera & Ridwan Axmed
 ### Added
