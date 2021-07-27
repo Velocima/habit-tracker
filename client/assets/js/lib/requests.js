@@ -83,7 +83,10 @@ async function putUserInfo(data) {
 	try {
 		const options = {
 			method: 'PUT',
-			headers: new Headers({ Authorization: localStorage.getItem('token') }),
+			headers: new Headers({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+			}),
 			body: JSON.stringify(data),
 		};
 		const response = await fetch(`${devURL}/user/${data.email}`, options);
