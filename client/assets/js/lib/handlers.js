@@ -4,6 +4,7 @@ const {
 	onAddHabitButtonClick,
 	onAddHabitSumbit,
 	onAddHabitFormChange,
+	onFrequencyChange,
 } = require('./event_handlers/dashboard');
 
 function bindIndexListeners() {
@@ -26,6 +27,9 @@ function bindDashboardListeners() {
 		field.addEventListener('keyup', onAddHabitFormChange);
 		field.addEventListener('change', onAddHabitFormChange);
 	});
+
+	const habitFrequency = document.getElementById('frequency');
+	habitFrequency.addEventListener('change', onFrequencyChange);
 }
 
 function bindProfileListeners() {

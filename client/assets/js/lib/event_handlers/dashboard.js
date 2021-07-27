@@ -1,5 +1,5 @@
 const { postHabit } = require('../requests');
-const { updateHabitDescription } = require('../utils');
+const { updateHabitDescription, addDailyCountField } = require('../utils');
 
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
@@ -22,7 +22,16 @@ async function onAddHabitSumbit(e) {
 	}
 }
 
-function onFrequencyChange(e) {}
+function onFrequencyChange(e) {
+	const form = document.querySelector('form');
+
+	if (form.frequency.value === 'hourly') {
+		addDailyCountField(onAddHabitFormChange);
+	} else if (form.occurences) {
+		form.removeChild(form.childNodes[13]);
+		form.removeChild(form.childNodes[13]);
+	}
+}
 
 function onAddHabitFormChange(e) {
 	updateHabitDescription();
