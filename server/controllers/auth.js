@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
 					token: 'Bearer ' + token,
 				});
 			};
-			jwt.sign(payload, process.env.SECRET, { expiresIn: 60 }, sendToken);
+			jwt.sign(payload, process.env.SECRET, { expiresIn: 18000 }, sendToken);
 		} else {
 			throw new Error('User could not be authenticated');
 		}
