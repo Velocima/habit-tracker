@@ -3,7 +3,7 @@ function createLoginForm() {
 
 	const emailLabel = document.createElement('label');
 	emailLabel.setAttribute('for', 'email');
-	emailLabel.innerText = 'Email';
+	// emailLabel.innerText = 'Email';
 
 	const emailInput = document.createElement('input');
 	emailInput.setAttribute('name', 'email');
@@ -17,7 +17,7 @@ function createLoginForm() {
 
 	const passwordLabel = document.createElement('label');
 	passwordLabel.setAttribute('for', 'password');
-	passwordLabel.innerText = 'Password';
+	// passwordLabel.innerText = 'Password';
 
 	const passwordInput = document.createElement('input');
 	passwordInput.setAttribute('name', 'password');
@@ -35,6 +35,10 @@ function createLoginForm() {
 
 	form.append(loginButton);
 
+	const hasNoAccount = document.createElement('p');
+	hasNoAccount.innerText = "Don't have an account?";
+	form.append(hasNoAccount);
+
 	return form;
 }
 
@@ -43,13 +47,13 @@ function createRegistrationForm() {
 
 	const nameLabel = document.createElement('label');
 	nameLabel.setAttribute('for', 'name');
-	nameLabel.innerText = 'Name';
+	// nameLabel.innerText = 'Name';
 
 	const nameInput = document.createElement('input');
 	nameInput.setAttribute('name', 'name');
 	nameInput.setAttribute('id', 'name');
 	nameInput.setAttribute('type', 'text');
-	nameInput.setAttribute('placeholder', 'name');
+	nameInput.setAttribute('placeholder', 'Name');
 	nameInput.setAttribute('required', true);
 
 	form.append(nameLabel);
@@ -57,7 +61,7 @@ function createRegistrationForm() {
 
 	const emailLabel = document.createElement('label');
 	emailLabel.setAttribute('for', 'email');
-	emailLabel.innerText = 'Email';
+	// emailLabel.innerText = 'Email';
 
 	const emailInput = document.createElement('input');
 	emailInput.setAttribute('name', 'email');
@@ -71,7 +75,7 @@ function createRegistrationForm() {
 
 	const passwordLabel = document.createElement('label');
 	passwordLabel.setAttribute('for', 'password');
-	passwordLabel.innerText = 'Password';
+	// passwordLabel.innerText = 'Password';
 
 	const passwordInput = document.createElement('input');
 	passwordInput.setAttribute('name', 'password');
@@ -89,12 +93,60 @@ function createRegistrationForm() {
 
 	form.append(registerButton);
 
+	const hasAccount = document.createElement('p');
+	hasAccount.innerText = "Already have an account?";
+	form.append(hasAccount);
+
 	return form;
 }
 
 function createHabit(data) {
+	const div = document.createElement('div');
+
+	const habitTitle = document.createElement('h2');
+	habitTitle.textContent = data.habitName;
+
+	const viewButton = document.createElement('button');
+	viewButton.textContent = 'View';
+	viewButton.setAttribute('id', data.habitName);
+	viewButton.setAttribute('class', 'view-button');
+
+	div.append(habitTitle);
+	div.append(viewButton);
+
+	return div;
+}
+
+function createViewHabit(data) {
 	const section = document.createElement('section');
+
+	const goHomeButton = document.createElement('button');
+	goHomeButton.textContent = 'Return to Dashboard';
+	// can change this to be more elegant
+	goHomeButton.addEventListener('click', () => (window.location.pathname = '/dashboard.html'));
+
+	const checkbox = document.createElement('input');
+	checkbox.setAttribute('id', 'checkbox');
+	checkbox.setAttribute('type', 'checkbox');
+	checkbox.setAttribute('name', 'checkbox');
+
+	const description = document.createElement('p');
+	description.textContent = data.habit_description;
+
+	const editButton = document.createElement('button');
+	editButton.textContent = 'Edit';
+	editButton.addEventListener('click', () =>
+		console.log('this should redirect to the edit page...')
+	);
+
+	//add in chart generation and streaks
+
+	section.append(goHomeButton);
+	section.append(checkbox);
+	section.append(description);
+	section.append(editButton);
+
 	return section;
 }
 
-module.exports = { createLoginForm, createRegistrationForm };
+module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };

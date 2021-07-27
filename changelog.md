@@ -7,10 +7,14 @@
   - index
   - dashboard
   - profile
+- Add dynamic habit description to add habit form
 
 ## Backend
+
 [1.0.0] - 2021-07-26 - Poligera & Ridwan Axmed
+
 ### Added
+
 - PostgreSQL database setup with defined tables (users and habits) and seed data
 - Docker-Compose.yaml file
 - Models for User and Habit with crud functionality, complete with db queries
@@ -44,5 +48,9 @@
 - Updated patch request logic with date conversion and comparison
 
 
+### Testing
+- Created test suite for habit end routes 
+- Created test database
+- 
 
 ## Misc
