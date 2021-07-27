@@ -1,3 +1,3 @@
-const initPageBindings = require('./lib/handlers');
+const { initPageBindings } = require('./lib/handlers');
 
 document.addEventListener('DOMContentLoaded', initPageBindings);
