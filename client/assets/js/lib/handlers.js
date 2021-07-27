@@ -1,6 +1,10 @@
 const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
 const { onChangePasswordSumbit, onUpdateUserInfoSumbit } = require('./event_handlers/profile');
-const { onAddHabitButtonClick, onAddHabitSumbit } = require('./event_handlers/dashboard');
+const {
+	onAddHabitButtonClick,
+	onAddHabitSumbit,
+	onAddHabitFormChange,
+} = require('./event_handlers/dashboard');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -16,6 +20,12 @@ function bindDashboardListeners() {
 
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
+
+	const addHabitFormFields = document.querySelectorAll('input, textarea, select');
+	addHabitFormFields.forEach((field) => {
+		field.addEventListener('keyup', onAddHabitFormChange);
+		field.addEventListener('change', onAddHabitFormChange);
+	});
 }
 
 function bindProfileListeners() {

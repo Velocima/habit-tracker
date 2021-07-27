@@ -1,4 +1,5 @@
 const { postHabit } = require('../requests');
+const { updateHabitDescription } = require('../utils');
 
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
@@ -23,7 +24,9 @@ async function onAddHabitSumbit(e) {
 
 function onFrequencyChange(e) {}
 
-function onAddHabitFormChange(e) {}
+function onAddHabitFormChange(e) {
+	updateHabitDescription();
+}
 
 module.exports = {
 	onAddHabitButtonClick,
