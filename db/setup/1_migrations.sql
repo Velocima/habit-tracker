@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-    email PRIMARY KEY varchar(100) NOT NULL UNIQUE,
+    email varchar(100) UNIQUE PRIMARY KEY,
     name varchar(100) NOT NULL UNIQUE,
     password_digest varchar(500) NOT NULL UNIQUE
 );
