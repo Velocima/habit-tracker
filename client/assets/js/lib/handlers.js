@@ -40,13 +40,13 @@ async function renderHabits() {
 	habitSections.forEach((habit) => main.append(habit));
 }
 
-function initPageBindings() {
+async function initPageBindings() {
 	const path = window.location.pathname;
 	if (path === '/') {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
+		await renderHabits();
 		bindDashboardListeners();
-		renderHabits();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
 	}
