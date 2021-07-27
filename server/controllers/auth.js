@@ -26,6 +26,24 @@ router.post('/register', async (req, res) => {
  * Upon login, the database is checked for the e-mail.
  * A token is generated if the password is correct.
  */
+
+router.patch('/password/:email', async (req, res) => {
+    try {
+        const salt = await bcrypt.genSalt();
+        const hashed = await bcrypt.hash(req.body.password, salt);
+        const user = await User.findByEmail(req.params.email);
+        const matched = user.passwordDigest === req.body.password;
+        if (!!matched) {
+        await user.updatePassword(hashed);
+        res.status(201).json({msg: 'Password successfully changed'});
+        } else {
+            throw new Error ("Passwords don't match")
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
+
 router.post('/login', async (req, res) => {
     try {
         const user = await User.findByEmail(req.body.email);

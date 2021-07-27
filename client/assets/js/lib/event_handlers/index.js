@@ -1,4 +1,5 @@
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
+const { requestLogin, requestRegistration } = require('../auth');
 const body = document.querySelector('body');
 const loginButton = document.querySelector('.login');
 const registerButton = document.querySelector('.register');
@@ -41,12 +42,15 @@ function onRegistrationButtonClick(e) {
 
 function onRegistrationSumbit(e) {
 	e.preventDefault();
-	// call auth function
+	let data = Object.fromEntries(new FormData(e.target));
+	requestRegistration(data);
 }
 
 function onLoginSumbit(e) {
 	e.preventDefault();
-	// call auth function
+	let data = Object.fromEntries(new FormData(e.target));
+	console.log(data);
+	requestLogin(data);
 }
 
 module.exports = {
