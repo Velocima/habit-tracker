@@ -25,4 +25,14 @@ router.patch('/:email', verifyToken, async (req, res) => {
     }
 })
 
+router.put('/:email', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findByEmail(req.params.email);
+        const resp = await user.updatePassword(req.body.password);
+        res.status(200).json(resp);
+    } catch (err) {
+        res.status(404).send({ err })
+    }
+})
+
 module.exports = router
