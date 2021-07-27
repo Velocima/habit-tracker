@@ -43,15 +43,14 @@ function onRegistrationButtonClick(e) {
 function onRegistrationSumbit(e) {
 	e.preventDefault();
 	let data = Object.fromEntries(new FormData(e.target));
-	console.log(data);
-	// requestRegistration(data);
+	requestRegistration(data);
 }
 
 function onLoginSumbit(e) {
 	e.preventDefault();
 	let data = Object.fromEntries(new FormData(e.target));
 	console.log(data);
-	// requestLogin(data);
+	requestLogin(data);
 }
 
 module.exports = {
