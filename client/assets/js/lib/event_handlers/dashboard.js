@@ -1,3 +1,4 @@
+const { createViewHabit } = require('../dom_elements');
 const { postHabit } = require('../requests');
 
 function onAddHabitButtonClick(e) {
@@ -25,9 +26,17 @@ function onFrequencyChange(e) {}
 
 function onAddHabitFormChange(e) {}
 
+function onClickViewHabit(e) {
+	e.preventDefault();
+	const habitName = e.target.id;
+	//create a new request function that retreives all info for this users habit, and call this here
+	const habitSection = createViewHabit('data');
+}
+
 module.exports = {
 	onAddHabitButtonClick,
 	onAddHabitSumbit,
 	onFrequencyChange,
 	onAddHabitFormChange,
+	onClickViewHabit,
 };
