@@ -94,7 +94,17 @@ function createRegistrationForm() {
 
 function createHabit(data) {
 	const section = document.createElement('section');
+
+	const habitTitle = document.createElement('h2');
+	habitTitle.textContent = data.habit_name;
+
+	const viewButton = document.createElement('button');
+	viewButton.textContent = 'View';
+
+	section.append(habitTitle);
+	section.append(viewButton);
+
 	return section;
 }
 
-module.exports = { createLoginForm, createRegistrationForm };
+module.exports = { createLoginForm, createRegistrationForm, createHabit };

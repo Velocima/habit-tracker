@@ -154,10 +154,20 @@ function createRegistrationForm() {
 
 function createHabit(data) {
 	const section = document.createElement('section');
+
+	const habitTitle = document.createElement('h2');
+	habitTitle.textContent = data.habit_name;
+
+	const viewButton = document.createElement('button');
+	viewButton.textContent = 'View';
+
+	section.append(habitTitle);
+	section.append(viewButton);
+
 	return section;
 }
 
-module.exports = { createLoginForm, createRegistrationForm };
+module.exports = { createLoginForm, createRegistrationForm, createHabit };
 
 },{}],4:[function(require,module,exports){
 const { postHabit } = require('../requests');
@@ -185,9 +195,7 @@ async function onAddHabitSumbit(e) {
 
 function onFrequencyChange(e) {}
 
-function onAddHabitFormChange(e) {
-	console.log(e.target);
-}
+function onAddHabitFormChange(e) {}
 
 module.exports = {
 	onAddHabitButtonClick,
@@ -296,6 +304,8 @@ module.exports = { onChangePasswordSumbit, onUpdateUserInfoSumbit };
 const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
 const { onChangePasswordSumbit, onUpdateUserInfoSumbit } = require('./event_handlers/profile');
 const { onAddHabitButtonClick, onAddHabitSumbit } = require('./event_handlers/dashboard');
+const { createHabit } = require('./dom_elements');
+const { getAllUserHabits } = require('./requests');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -308,7 +318,6 @@ function bindIndexListeners() {
 function bindDashboardListeners() {
 	const addHabbitButtons = document.querySelectorAll('.add-habit');
 	addHabbitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
-
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
 }
@@ -321,7 +330,12 @@ function bindProfileListeners() {
 	changePasswordSubmitButton.addEventListener('submit', onChangePasswordSumbit);
 }
 
-function renderHabits() {}
+function renderHabits() {
+	const main = document.querySelector('main');
+	const userHabitData = getAllUserHabits(localStorage.getItem('email'));
+	let habitSections = userHabitData.map((habit) => createHabit(habit));
+	habitSections.forEach((habit) => main.append(habit));
+}
 
 function initPageBindings() {
 	const path = window.location.pathname;
@@ -336,7 +350,7 @@ function initPageBindings() {
 
 module.exports = initPageBindings;
 
-},{"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6}],8:[function(require,module,exports){
+},{"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8}],8:[function(require,module,exports){
 const { logout } = require("./auth");
 
 const devURL = "http://localhost:3000";
