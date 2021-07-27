@@ -185,9 +185,7 @@ async function onAddHabitSumbit(e) {
 
 function onFrequencyChange(e) {}
 
-function onAddHabitFormChange(e) {
-	console.log(e.target);
-}
+function onAddHabitFormChange(e) {}
 
 module.exports = {
 	onAddHabitButtonClick,

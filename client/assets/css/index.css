@@ -1,0 +1,38 @@
+
+body {
+    text-align: center;
+    margin-top: 150px;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+p {
+    padding: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 20px auto;
+}
+
+.hidden {
+    display: none;
+}
+
+
+@media screen and  (min-width: 620px){
+
+}
+
+
+@media screen and  (min-width: 960px){
+
+}
+
+@media screen and  (min-width: 1200px){
+
+}
