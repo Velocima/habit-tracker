@@ -137,6 +137,8 @@ function createViewHabit(data) {
 	section.append(checkbox);
 	section.append(description);
 	section.append(editButton);
+
+	return section;
 }
 
 module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };

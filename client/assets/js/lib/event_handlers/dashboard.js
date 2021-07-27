@@ -28,9 +28,12 @@ function onAddHabitFormChange(e) {}
 
 function onClickViewHabit(e) {
 	e.preventDefault();
+	const main = document.querySelector('main');
+	main.textContent = '';
 	const habitName = e.target.id;
 	//create a new request function that retreives all info for this users habit, and call this here
 	const habitSection = createViewHabit('data');
+	main.append(habitSection);
 }
 
 module.exports = {
