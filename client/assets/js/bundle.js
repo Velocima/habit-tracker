@@ -382,9 +382,9 @@ function bindProfileListeners() {
 	changePasswordSubmitButton.addEventListener('submit', onChangePasswordSumbit);
 }
 
-function renderHabits() {
+async function renderHabits() {
 	const main = document.querySelector('main');
-	const userHabitData = getAllUserHabits(localStorage.getItem('email'));
+	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
 	let habitSections = userHabitData.map((habit) => createHabit(habit));
 	habitSections.forEach((habit) => main.append(habit));
 }
