@@ -14,11 +14,18 @@ describe('habit endpoints', () => {
         await api.close()
     })
 
-    it('should retrieve list of habits in user database', async () => {
+    it('should retrieve all of a users habits', async () => {
         const res = await request(api).get('/habits/:email');
         expect(res.statusCode).toEqual(200);
         expect(res.body.length).toEqual(1);
     }); 
+
+    it('should retrieve one habit', async () => {
+        const res = await request(api).get('/habits/:id');
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.length).toEqual(1);
+    }); 
+
 
     it('should create a new habit', async () => {
         const res = await request(api)
@@ -31,23 +38,24 @@ describe('habit endpoints', () => {
                 streak: 'test 3 days'
             })
             expect(res.statusCode).toEqual(201)
-            expect(res.body).toHaveProperty("id"); //?
+            expect(res.body).toHaveProperty("id"); //is id correct here?
     });
 
     it('should update a streak on a particular habit', async () => {
+        const updatedStreak = streak + 1
         const res= await request(api)
-            .post('/habits/:id')
-            .send({
-                streak: 'test 3 days'
-                })
-            expect(res.statusCode).toEqual(201)
-            expect(res.body).toHaveProperty("id");
+        .patch('/habits/:id') 
+        .send({
+            streak: updatedStreak
+            })
+        expect(res.statusCode).toEqual(201)
+        expect(res.body).toHaveProperty("id");
            
     });
 
     it('should delete a habit', async () => {
         const res = await request(api)
-            .delete('/habits/1')
+        .delete('/habits/1')
         expect(res.statusCode).toEqual(204);
 
         const habitRes = await request(api).get('habits/1');
