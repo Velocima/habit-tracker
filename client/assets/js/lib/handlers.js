@@ -4,6 +4,8 @@ const {
 	onAddHabitButtonClick,
 	onAddHabitSumbit,
 	onClickViewHabit,
+	onAddHabitFormChange,
+  onFrequencyChange,
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
@@ -21,8 +23,18 @@ function bindDashboardListeners() {
 	addHabitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
+
 	const viewHabitButtons = document.querySelectorAll('.view-button');
 	viewHabitButtons.forEach((button) => button.addEventListener('click', onClickViewHabit));
+
+	const addHabitFormFields = document.querySelectorAll('input, textarea, select');
+	addHabitFormFields.forEach((field) => {
+		field.addEventListener('keyup', onAddHabitFormChange);
+		field.addEventListener('change', onAddHabitFormChange);
+	});
+
+	const habitFrequency = document.getElementById('frequency');
+	habitFrequency.addEventListener('change', onFrequencyChange);
 }
 
 function bindProfileListeners() {
@@ -40,13 +52,13 @@ async function renderHabits() {
 	habitSections.forEach((habit) => main.append(habit));
 }
 
-function initPageBindings() {
+async function initPageBindings() {
 	const path = window.location.pathname;
 	if (path === '/') {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
+		await renderHabits();
 		bindDashboardListeners();
-		renderHabits();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
 	}

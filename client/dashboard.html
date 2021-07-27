@@ -35,13 +35,14 @@
 				<label for="frequency">Frequency</label>
 				<select id="frequency" required>
 					<option value="hourly">More than daily</option>
-					<option value="daily">Daily</option>
+					<option value="daily" selected="selected">Daily</option>
 					<option value="weekly">Weekly</option>
 				</select>
 				<label for="goal">Habbit goal</label>
 				<input type="number" id="goal" required placeholder="Habit" min="1" max="7" />
 				<input type="submit" value="Add habit" />
 			</form>
+			<p class="description">I am going to *habit* *goal* times per day</p>
 		</section>
 	</body>
 </html>
