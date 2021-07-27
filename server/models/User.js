@@ -28,8 +28,7 @@ class User {
     static findByEmail(email){
         return new Promise(async (res, rej) => {
             try {
-                let result = await db.query(`SELECT * FROM users
-                                                WHERE email = $1;`, [email]);
+                let result = await db.query(`SELECT * FROM users WHERE email = $1;`, [email]);
                 let user = new User(result.rows[0])
                 res(user)
             } catch (err) {
@@ -38,14 +37,25 @@ class User {
         })
     }
 
-    static get all() {
+    updatePassword(updatedPassword) {
         return new Promise(async (res, rej) => {
             try {
-                let result = await db.query(`SELECT * FROM users;`);
-                let users = result.rows.map(r => new User(r))
-                res(users)
+                const result = await db.query('UPDATE users SET password_digest = $1 WHERE email = $2 RETURNING email;', [ updatedPassword, this.email]);
+                res(result.rows[0])
             } catch (err) {
-                rej(`Error retrieving users: ${err}`)
+                rej(`Error retrieving habits: ${err}`)
+            }
+        })
+    }
+
+    updateDetails(data) {
+        return new Promise(async (res, rej) => {
+            try {
+
+                const result = await db.query('UPDATE users SET name = $1, email = $2 WHERE email = $3 RETURNING *;', [ data.name, data.email, this.email]);
+                res(result.rows[0])
+            } catch (err) {
+                rej(`Error updating: ${err}`);
             }
         })
     }

@@ -16,7 +16,7 @@ services:
       - db
     volumes:
       - type: bind
-        source: ./api
+        source: ./server
         target: /server
     command: bash -c "npm install && npm start"
   db:
