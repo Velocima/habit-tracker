@@ -1,5 +1,5 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-const initPageBindings = require('./lib/handlers');
+const { initPageBindings } = require('./lib/handlers');
 
 document.addEventListener('DOMContentLoaded', initPageBindings);
 
@@ -153,13 +153,58 @@ function createRegistrationForm() {
 }
 
 function createHabit(data) {
+	const div = document.createElement('div');
+
+	const habitTitle = document.createElement('h2');
+	habitTitle.textContent = data.habit_name;
+
+	const viewButton = document.createElement('button');
+	viewButton.textContent = 'View';
+	viewButton.setAttribute('id', data.habit_name);
+	viewButton.setAttribute('class', 'view-button');
+
+	div.append(habitTitle);
+	div.append(viewButton);
+
+	return div;
+}
+
+function createViewHabit(data) {
 	const section = document.createElement('section');
+
+	const goHomeButton = document.createElement('button');
+	goHomeButton.textContent = 'Return to Dashboard';
+	// can change this to be more elegant
+	goHomeButton.addEventListener('click', () => (window.location.pathname = '/dashboard.html'));
+
+	const checkbox = document.createElement('input');
+	checkbox.setAttribute('id', 'checkbox');
+	checkbox.setAttribute('type', 'checkbox');
+	checkbox.setAttribute('name', 'checkbox');
+
+	const description = document.createElement('p');
+	description.textContent = data.habit_description;
+
+	const editButton = document.createElement('button');
+	editButton.textContent = 'Edit';
+	editButton.addEventListener('click', () =>
+		console.log('this should redirect to the edit page...')
+	);
+
+	//add in chart generation and streaks
+
+	section.append(goHomeButton);
+	section.append(checkbox);
+	section.append(description);
+	section.append(editButton);
+
 	return section;
 }
 
-module.exports = { createLoginForm, createRegistrationForm };
+module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };
 
 },{}],4:[function(require,module,exports){
+const { createViewHabit } = require('../dom_elements');
 const { postHabit } = require('../requests');
 
 function onAddHabitButtonClick(e) {
@@ -185,8 +230,16 @@ async function onAddHabitSumbit(e) {
 
 function onFrequencyChange(e) {}
 
-function onAddHabitFormChange(e) {
-	console.log(e.target);
+function onAddHabitFormChange(e) {}
+
+function onClickViewHabit(e) {
+	e.preventDefault();
+	const main = document.querySelector('main');
+	main.textContent = '';
+	const habitName = e.target.id;
+	//create a new request function that retreives all info for this users habit, and call this here
+	const habitSection = createViewHabit('data');
+	main.append(habitSection);
 }
 
 module.exports = {
@@ -194,9 +247,10 @@ module.exports = {
 	onAddHabitSumbit,
 	onFrequencyChange,
 	onAddHabitFormChange,
+	onClickViewHabit,
 };
 
-},{"../requests":8}],5:[function(require,module,exports){
+},{"../dom_elements":3,"../requests":8}],5:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
 const { requestLogin, requestRegistration } = require('../auth');
 const body = document.querySelector('body');
@@ -295,7 +349,13 @@ module.exports = { onChangePasswordSumbit, onUpdateUserInfoSumbit };
 },{"../requests":8}],7:[function(require,module,exports){
 const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
 const { onChangePasswordSumbit, onUpdateUserInfoSumbit } = require('./event_handlers/profile');
-const { onAddHabitButtonClick, onAddHabitSumbit } = require('./event_handlers/dashboard');
+const {
+	onAddHabitButtonClick,
+	onAddHabitSumbit,
+	onClickViewHabit,
+} = require('./event_handlers/dashboard');
+const { createHabit } = require('./dom_elements');
+const { getAllUserHabits } = require('./requests');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -306,11 +366,12 @@ function bindIndexListeners() {
 }
 
 function bindDashboardListeners() {
-	const addHabbitButtons = document.querySelectorAll('.add-habit');
-	addHabbitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
-
+	const addHabitButtons = document.querySelectorAll('.add-habit');
+	addHabitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
+	const viewHabitButtons = document.querySelectorAll('.view-button');
+	viewHabitButtons.forEach((button) => button.addEventListener('click', onClickViewHabit));
 }
 
 function bindProfileListeners() {
@@ -321,7 +382,12 @@ function bindProfileListeners() {
 	changePasswordSubmitButton.addEventListener('submit', onChangePasswordSumbit);
 }
 
-function renderHabits() {}
+async function renderHabits() {
+	const main = document.querySelector('main');
+	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
+	let habitSections = userHabitData.map((habit) => createHabit(habit));
+	habitSections.forEach((habit) => main.append(habit));
+}
 
 function initPageBindings() {
 	const path = window.location.pathname;
@@ -329,14 +395,15 @@ function initPageBindings() {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
 		bindDashboardListeners();
+		renderHabits();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
 	}
 }
 
-module.exports = initPageBindings;
+module.exports = { initPageBindings, renderHabits };
 
-},{"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6}],8:[function(require,module,exports){
+},{"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8}],8:[function(require,module,exports){
 const { logout } = require("./auth");
 
 const devURL = "http://localhost:3000";
