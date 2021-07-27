@@ -15,14 +15,18 @@ class Habit {
         this.frequency = data.frequency
         this.frequencyTarget= data.frequencyTarget
         this.streak = data.streak
-        this.completedOn = data.completedOn // unix timestamp (bigint in db)
+        this.completionDates = data.completionDates // an array of unix timestamps
     }
 
     static create({ email, habitName, description, frequency, frequencyTarget, streak }){
         return new Promise(async (res, rej) => {
             try {
-                let result = await db.query(`INSERT INTO habits (email, habit_name, habit_description, habit_frequency, frequency_target, streak) VALUES $1, $2, $3, $4, $5, $6 RETURNING *;`, [email, habitName, description, frequency, frequencyTarget, streak]);
-                let habit = new Habit(result.rows[0]);
+                let result = await db.query(`INSERT INTO habits (email, habit_name, habit_description, habit_frequency, frequency_target, streak, completed_) VALUES $1, $2, $3, $4, $5, $6 RETURNING *;`, [email, habitName, description, frequency, frequencyTarget, streak]);
+
+                // Using ARRAY function of PostgreSQL which turns a set of rows into an array (using a subselect) while ordering by date:
+                let completionDates = await db.query('SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $7 ORDER BY completion_date);', [result.id])
+
+                let habit = new Habit(...result.rows[0], completionDates);
                 res(habit)
             } catch (err) {
                 rej(`Error creating habit: ${err}`)
