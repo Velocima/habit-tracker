@@ -132,6 +132,11 @@ function createViewHabit(data) {
 	);
 
 	//add in chart generation and streaks
+
+	section.append(goHomeButton);
+	section.append(checkbox);
+	section.append(description);
+	section.append(editButton);
 }
 
 module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };
