@@ -38,7 +38,7 @@ router.post('/', verifyToken, async (req, res) => {
 router.patch('/:id', verifyToken, async (req, res) => {
     try {
         const habit = await Habit.findById(req.params.id);
-        const resp = habit.update();
+        const resp = await habit.update();
         res.status(200).json(resp);
     } catch (err) {
         res.status(404).send({ err })

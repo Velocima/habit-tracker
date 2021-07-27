@@ -61,7 +61,7 @@ class Habit {
                 const result = await db.query('UPDATE habits SET streak = $1 WHERE id = $2 RETURNING id, streak;', [ updatedStreak, this.id]);
                 res(result.rows[0])
             } catch (err) {
-                rej(`Error retrieving habits: ${err}`)
+                rej(`Error updating habits: ${err}`)
             }
         })
     }
