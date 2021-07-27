@@ -29,6 +29,13 @@
 - Corrected path error in Docker-Compose, so it works now
 - Extra patch request in auth.js controller to allow user to change password
 - Updated dependencies in package.json
+- Extra table "completions" for habit tracking
+- Fixed syntax error in migrations.sql
+- Added seed data for "completions" table
+- Fixed a typo in Habit model (module.exports)
+- Added missing module.exports for Router
+
+
 
 
 ## Misc
