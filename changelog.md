@@ -42,8 +42,8 @@
 - Fixed a typo in Habit model (module.exports)
 - Added missing module.exports for Router
 - Added "completionDates" property to Habit model (an array of unix timestamps, in seconds) complete with an extra db query to extract those values from "completions" table based on habit_id foreign key
-- 
-
+- Added the above to other Habit methods
+- Fixed a typo in findById method (returning correct data)
 
 
 ### Testing
