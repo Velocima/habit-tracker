@@ -93,8 +93,52 @@ function createRegistrationForm() {
 }
 
 function createHabit(data) {
+	const div = document.createElement('div');
+
+	const habitTitle = document.createElement('h2');
+	habitTitle.textContent = data.habit_name;
+
+	const viewButton = document.createElement('button');
+	viewButton.textContent = 'View';
+	viewButton.setAttribute('id', data.habit_name);
+	viewButton.setAttribute('class', 'view-button');
+
+	div.append(habitTitle);
+	div.append(viewButton);
+
+	return div;
+}
+
+function createViewHabit(data) {
 	const section = document.createElement('section');
+
+	const goHomeButton = document.createElement('button');
+	goHomeButton.textContent = 'Return to Dashboard';
+	// can change this to be more elegant
+	goHomeButton.addEventListener('click', () => (window.location.pathname = '/dashboard.html'));
+
+	const checkbox = document.createElement('input');
+	checkbox.setAttribute('id', 'checkbox');
+	checkbox.setAttribute('type', 'checkbox');
+	checkbox.setAttribute('name', 'checkbox');
+
+	const description = document.createElement('p');
+	description.textContent = data.habit_description;
+
+	const editButton = document.createElement('button');
+	editButton.textContent = 'Edit';
+	editButton.addEventListener('click', () =>
+		console.log('this should redirect to the edit page...')
+	);
+
+	//add in chart generation and streaks
+
+	section.append(goHomeButton);
+	section.append(checkbox);
+	section.append(description);
+	section.append(editButton);
+
 	return section;
 }
 
-module.exports = { createLoginForm, createRegistrationForm };
+module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };

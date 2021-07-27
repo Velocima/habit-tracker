@@ -3,9 +3,12 @@ const { onChangePasswordSumbit, onUpdateUserInfoSumbit } = require('./event_hand
 const {
 	onAddHabitButtonClick,
 	onAddHabitSumbit,
+	onClickViewHabit,
 	onAddHabitFormChange,
-	onFrequencyChange,
+  onFrequencyChange,
 } = require('./event_handlers/dashboard');
+const { createHabit } = require('./dom_elements');
+const { getAllUserHabits } = require('./requests');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -16,11 +19,13 @@ function bindIndexListeners() {
 }
 
 function bindDashboardListeners() {
-	const addHabbitButtons = document.querySelectorAll('.add-habit');
-	addHabbitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
-
+	const addHabitButtons = document.querySelectorAll('.add-habit');
+	addHabitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
+
+	const viewHabitButtons = document.querySelectorAll('.view-button');
+	viewHabitButtons.forEach((button) => button.addEventListener('click', onClickViewHabit));
 
 	const addHabitFormFields = document.querySelectorAll('input, textarea, select');
 	addHabitFormFields.forEach((field) => {
@@ -40,17 +45,23 @@ function bindProfileListeners() {
 	changePasswordSubmitButton.addEventListener('submit', onChangePasswordSumbit);
 }
 
-function renderHabits() {}
+async function renderHabits() {
+	const main = document.querySelector('main');
+	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
+	let habitSections = userHabitData.map((habit) => createHabit(habit));
+	habitSections.forEach((habit) => main.append(habit));
+}
 
-function initPageBindings() {
+async function initPageBindings() {
 	const path = window.location.pathname;
 	if (path === '/') {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
+		await renderHabits();
 		bindDashboardListeners();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
 	}
 }
 
-module.exports = initPageBindings;
+module.exports = { initPageBindings, renderHabits };

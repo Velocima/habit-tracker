@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon -L index.js",
     "coverage": "jest --coverage --watchAll",
-    "dev": "concurrently \"watchify -o ./static/bundle.js ./static/js/index.js\" \"lite-server\""
+    "test": "jest --watchAll"
   },
   "jest": {
     "testEnvironment": "node",
@@ -31,6 +31,7 @@
     "nodemon": "^2.0.9",
     "dotenv": "^10.0.0",
     "supertest": "^6.1.3",
-    "watchify": "^4.0.0"
+    "watchify": "^4.0.0",
+    "jsonwebtoken": "^8.5.1"
   }
 }

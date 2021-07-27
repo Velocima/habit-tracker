@@ -1,3 +1,4 @@
+const { createViewHabit } = require('../dom_elements');
 const { postHabit } = require('../requests');
 const { updateHabitDescription, addDailyCountField } = require('../utils');
 
@@ -37,9 +38,20 @@ function onAddHabitFormChange(e) {
 	updateHabitDescription();
 }
 
+function onClickViewHabit(e) {
+	e.preventDefault();
+	const main = document.querySelector('main');
+	main.textContent = '';
+	const habitName = e.target.id;
+	//create a new request function that retreives all info for this users habit, and call this here
+	const habitSection = createViewHabit('data');
+	main.append(habitSection);
+}
+
 module.exports = {
 	onAddHabitButtonClick,
 	onAddHabitSumbit,
 	onFrequencyChange,
 	onAddHabitFormChange,
+	onClickViewHabit,
 };
