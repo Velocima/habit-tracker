@@ -1,9 +1,25 @@
+const { postHabit } = require('../requests');
+
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
 	modal.classList.remove('hidden');
 }
 
-function onAddHabitSumbit(e) {}
+async function onAddHabitSumbit(e) {
+	e.preventDefault();
+	const data = Object.fromEntries(new FormData(e.target));
+	const newHabit = await postHabit(data);
+	if (newHabit.success) {
+		const form = document.querySelector('form');
+		form.reset();
+		const modal = document.querySelector('.habit-modal');
+		modal.classList.add('hidden');
+		addNewHabitToDOM(newHabit);
+	} else {
+		console.log(newHabit);
+		// add error handling
+	}
+}
 
 function onFrequencyChange(e) {}
 
