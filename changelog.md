@@ -7,10 +7,14 @@
   - index
   - dashboard
   - profile
+- Add dynamic habit description to add habit form
 
 ## Backend
+
 [1.0.0] - 2021-07-26 - Poligera & Ridwan Axmed
+
 ### Added
+
 - PostgreSQL database setup with defined tables (users and habits) and seed data
 - Docker-Compose.yaml file
 - Models for User and Habit with crud functionality, complete with db queries
@@ -28,7 +32,19 @@
 - Corrected syntax error in Primary Key in the table "users"
 - Corrected path error in Docker-Compose, so it works now
 - Extra patch request in auth.js controller to allow user to change password
+
+[2.0.0] - 2021-07-27 - Poligera & Ridwan Axmed
+### Added
 - Updated dependencies in package.json
+- Extra table "completions" for habit tracking
+- Fixed syntax error in migrations.sql
+- Added seed data for "completions" table
+- Fixed a typo in Habit model (module.exports)
+- Added missing module.exports for Router
+- Added "completionDates" property to Habit model (an array of unix timestamps, in seconds) complete with an extra db query to extract those values from "completions" table based on habit_id foreign key
+- Added the above to other Habit methods
+- Fixed a typo in findById method (returning correct data)
+
 
 ### Testing
 - Created test suite for habit end routes 

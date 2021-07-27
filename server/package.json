@@ -1,36 +1,34 @@
 {
-  "name": "2nd-portfolio-project",
-  "version": "1.0.0",
-  "description": "LAP 2 project",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon -L index.js",
-    "coverage": "jest --coverage --watchAll",
-    "test": "jest --watchAll"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ]
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^2.0.9",
-    "dotenv": "^10.0.0",
-    "concurrently": "^6.2.0",
-    "jest": "^27.0.6"
-  },
-  "dependencies": {
-    "bcrypt": "^5.0.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "pg": "^8.5.1",
-    "nodemon": "^2.0.9",
-    "dotenv": "^10.0.0",
-    "supertest": "^6.1.3",
-    "watchify": "^4.0.0"
-  }
+	"name": "2nd-portfolio-project",
+	"version": "1.0.0",
+	"description": "LAP 2 project",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon -L index.js",
+		"coverage": "jest --coverage --watchAll",
+		"test": "jest --watchAll"
+	},
+	"jest": {
+		"testEnvironment": "node",
+		"coveragePathIgnorePatterns": [
+			"/node_modules/"
+		]
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.0.1",
+		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1",
+		"jsonwebtoken": "^8.5.1",
+		"morgan": "^1.10.0",
+		"pg": "^8.6.0"
+	},
+	"devDependencies": {
+		"jest": "^27.0.6",
+		"nodemon": "^2.0.12",
+		"supertest": "^6.1.4"
+	}
 }

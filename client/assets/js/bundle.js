@@ -57,7 +57,7 @@ function logout() {
 
 module.exports = { requestLogin, requestRegistration, login, logout };
 
-},{"jwt-decode":9}],3:[function(require,module,exports){
+},{"jwt-decode":10}],3:[function(require,module,exports){
 function createLoginForm() {
 	const form = document.createElement('form');
 
@@ -169,6 +169,7 @@ module.exports = { createLoginForm, createRegistrationForm };
 
 },{}],4:[function(require,module,exports){
 const { postHabit } = require('../requests');
+const { updateHabitDescription, addDailyCountField } = require('../utils');
 
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
@@ -191,9 +192,21 @@ async function onAddHabitSumbit(e) {
 	}
 }
 
-function onFrequencyChange(e) {}
+function onFrequencyChange(e) {
+	const form = document.querySelector('form');
 
-function onAddHabitFormChange(e) {}
+	if (form.frequency.value === 'hourly') {
+		addDailyCountField(onAddHabitFormChange);
+	} else if (form.occurences) {
+		form.removeChild(form.childNodes[13]);
+		form.removeChild(form.childNodes[13]);
+	}
+}
+
+
+function onAddHabitFormChange(e) {
+	updateHabitDescription();
+}
 
 module.exports = {
 	onAddHabitButtonClick,
@@ -202,7 +215,7 @@ module.exports = {
 	onAddHabitFormChange,
 };
 
-},{"../requests":8}],5:[function(require,module,exports){
+},{"../requests":8,"../utils":9}],5:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
 const { requestLogin, requestRegistration } = require('../auth');
 const body = document.querySelector('body');
@@ -301,7 +314,12 @@ module.exports = { onChangePasswordSumbit, onUpdateUserInfoSumbit };
 },{"../requests":8}],7:[function(require,module,exports){
 const { onLoginButtonClick, onRegistrationButtonClick } = require('./event_handlers/index');
 const { onChangePasswordSumbit, onUpdateUserInfoSumbit } = require('./event_handlers/profile');
-const { onAddHabitButtonClick, onAddHabitSumbit } = require('./event_handlers/dashboard');
+const {
+	onAddHabitButtonClick,
+	onAddHabitSumbit,
+	onAddHabitFormChange,
+	onFrequencyChange,
+} = require('./event_handlers/dashboard');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -317,6 +335,15 @@ function bindDashboardListeners() {
 
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
+
+	const addHabitFormFields = document.querySelectorAll('input, textarea, select');
+	addHabitFormFields.forEach((field) => {
+		field.addEventListener('keyup', onAddHabitFormChange);
+		field.addEventListener('change', onAddHabitFormChange);
+	});
+
+	const habitFrequency = document.getElementById('frequency');
+	habitFrequency.addEventListener('change', onFrequencyChange);
 }
 
 function bindProfileListeners() {
@@ -445,6 +472,54 @@ async function putUserInfo(data) {
 module.exports = { getAllUserHabits, postHabit, deleteHabit, putHabit, putUserInfo };
 
 },{"./auth":2}],9:[function(require,module,exports){
+const { createHabit } = require('./dom_elements');
+
+function toggleNav() {}
+
+function addNewHabitToDOM(data) {
+	const habits = document.querySelector('habits');
+	const habit = createHabit(data);
+	habits.insertBefore(habit, habits.firstChild);
+}
+
+function updateHabitDescription() {
+	const form = document.querySelector('form');
+	const description = document.querySelector('.description');
+
+	const name = form.name.value || '*habit*';
+	const goal = form.goal.value || '*goal*';
+
+	description.innerText = `I am going to ${name} ${goal} times per day`;
+}
+
+function addDailyCountField(eventHandler) {
+	const form = document.querySelector('form');
+
+	if (form.occurences) return;
+
+	const dailyCountLabel = document.createElement('label');
+	dailyCountLabel.setAttribute('for', 'occurences');
+	dailyCountLabel.innerText = 'Times per day:';
+
+	const dailyCountInput = document.createElement('input');
+	dailyCountInput.setAttribute('name', 'occurences');
+	dailyCountInput.setAttribute('id', 'occurences');
+	dailyCountInput.setAttribute('type', 'number');
+	dailyCountInput.setAttribute('min', 1);
+	dailyCountInput.setAttribute('max', 30);
+	dailyCountInput.setAttribute('placeholder', 'How many times?');
+	dailyCountInput.setAttribute('required', true);
+
+	dailyCountInput.addEventListener('keyup', eventHandler);
+	dailyCountInput.addEventListener('change', eventHandler);
+
+	form.insertBefore(dailyCountInput, form.childNodes[13]);
+	form.insertBefore(dailyCountLabel, form.childNodes[13]);
+}
+
+module.exports = { toggleNav, addNewHabitToDOM, updateHabitDescription, addDailyCountField };
+
+},{"./dom_elements":3}],10:[function(require,module,exports){
 "use strict";function e(e){this.message=e}e.prototype=new Error,e.prototype.name="InvalidCharacterError";var r="undefined"!=typeof window&&window.atob&&window.atob.bind(window)||function(r){var t=String(r).replace(/=+$/,"");if(t.length%4==1)throw new e("'atob' failed: The string to be decoded is not correctly encoded.");for(var n,o,a=0,i=0,c="";o=t.charAt(i++);~o&&(n=a%4?64*n+o:o,a++%4)?c+=String.fromCharCode(255&n>>(-2*a&6)):0)o="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(o);return c};function t(e){var t=e.replace(/-/g,"+").replace(/_/g,"/");switch(t.length%4){case 0:break;case 2:t+="==";break;case 3:t+="=";break;default:throw"Illegal base64url string!"}try{return function(e){return decodeURIComponent(r(e).replace(/(.)/g,(function(e,r){var t=r.charCodeAt(0).toString(16).toUpperCase();return t.length<2&&(t="0"+t),"%"+t})))}(t)}catch(e){return r(t)}}function n(e){this.message=e}function o(e,r){if("string"!=typeof e)throw new n("Invalid token specified");var o=!0===(r=r||{}).header?0:1;try{return JSON.parse(t(e.split(".")[o]))}catch(e){throw new n("Invalid token specified: "+e.message)}}n.prototype=new Error,n.prototype.name="InvalidTokenError";const a=o;a.default=o,a.InvalidTokenError=n,module.exports=a;
 
 
