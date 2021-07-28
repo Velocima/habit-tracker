@@ -446,7 +446,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav } = require('./utils');
+const { toggleNav, addNameToDashboard } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -503,6 +503,7 @@ async function initPageBindings() {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
 		await renderHabits();
+		addNameToDashboard();
 		bindDashboardListeners();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
@@ -709,7 +710,12 @@ function addNewHabitToDOM(data) {
 	return habit;
 }
 
-module.exports = { toggleNav, addNewHabitToDOM };
+function addNameToDashboard() {
+	const welcomeMessage = document.getElementById('welcome');
+	welcomeMessage.textContent = `Welcome, ${localStorage.getItem('name')}`;
+}
+
+module.exports = { toggleNav, addNewHabitToDOM, addNameToDashboard };
 
 },{"./dom_elements":3}],10:[function(require,module,exports){
 async function createChart(data = true) {
