@@ -61,12 +61,13 @@ class Habit {
 		return new Promise(async (res, rej) => {
 			try {
 				let result = await db.query(`SELECT * FROM habits WHERE id = $1;`, [id]);
-				let dates = await db.query(
-					'SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $2 ORDER BY completion_date);',
-					[result.id]
+				let datesResult = await db.query(
+					'SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $1 ORDER BY completion_date);',
+					[result.rows[0].id]
 				);
-				let habits = result.rows.map((habit) => new Habit(habit, dates));
-				res(habits);
+				const completionDates = datesResult.rows[0].array;
+				let habit = new Habit({ ...result.rows[0], completionDates });
+				res(habit);
 			} catch (err) {
 				rej(`Error retrieving habits: ${err}`);
 			}
