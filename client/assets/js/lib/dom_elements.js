@@ -1,3 +1,5 @@
+const { deleteHabit, postCompletion, deleteCompletion } = require('./requests');
+
 function createLoginForm() {
 	const form = document.createElement('form');
 
@@ -120,6 +122,7 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
+	console.log(data);
 
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
@@ -135,13 +138,33 @@ function createViewHabit(data) {
 		viewContainer.textContent = '';
 	});
 
+	const habitTitle = document.createElement('h1');
+	habitTitle.textContent = data.habitName;
+
 	const checkbox = document.createElement('input');
 	checkbox.setAttribute('id', 'checkbox');
 	checkbox.setAttribute('type', 'checkbox');
 	checkbox.setAttribute('name', 'checkbox');
+	checkbox.addEventListener('change', () => {
+		if (this.checked) {
+			console.log('Checkbox is checked..');
+			// const response = await deleteCompletion(data.id, 6);
+			// const responseJson = await response.json();
+			// console.log(responseJson);
+		} else {
+			console.log('Checkbox is not checked..');
+			// need to add some logic to determine the completion ids
+			// const response = await postCompletion(data.id);
+			// const responseJson = await response.json();
+			// console.log(responseJson);
+		}
+		if (!this.checked) {
+			console.log('not checked');
+		}
+	});
 
 	const description = document.createElement('p');
-	description.textContent = data.habit_description;
+	description.textContent = data.description;
 
 	const editButton = document.createElement('button');
 	editButton.textContent = 'Edit';
@@ -149,16 +172,26 @@ function createViewHabit(data) {
 		console.log('this should redirect to the edit page...')
 	);
 
+	const deleteButton = document.createElement('button');
+	deleteButton.textContent = 'Delete';
+	deleteButton.addEventListener('click', async () => {
+		const response = await deleteHabit(data.id);
+		const responseJson = await response.json();
+		console.log(responseJson);
+	});
+
 	const chartContainer = document.createElement('div');
 	chartContainer.setAttribute('id', 'myChart');
 
 	//add in chart generation and streaks
 
 	section.append(goHomeButton);
-	section.append(checkbox);
+	section.append(habitTitle);
 	section.append(description);
-	section.append(editButton);
+	section.append(checkbox);
 	section.append(chartContainer);
+	section.append(editButton);
+	section.append(deleteButton);
 
 	return section;
 }

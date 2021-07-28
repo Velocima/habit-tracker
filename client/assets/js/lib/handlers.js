@@ -40,8 +40,8 @@ function bindDashboardListeners() {
 	const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
 
-	closeNavButton.addEventListener("click", toggleNav);
-	openNavButton.addEventListener("click", toggleNav);
+	closeNavButton.addEventListener('click', toggleNav);
+	openNavButton.addEventListener('click', toggleNav);
 }
 
 function bindProfileListeners() {
@@ -55,6 +55,7 @@ function bindProfileListeners() {
 async function renderHabits() {
 	const habitsContainer = document.querySelector('.habits-container');
 	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
+	userHabitData.reverse();
 	let habitSections = userHabitData.map((habit) => createHabit(habit));
 	habitSections.forEach((habit) => habitsContainer.append(habit));
 }

@@ -1,5 +1,5 @@
 const { createViewHabit } = require('../dom_elements');
-const { postHabit } = require('../requests');
+const { postHabit, getHabitData } = require('../requests');
 const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require('../utils');
 const { createChart } = require('../zing_chart');
 
@@ -18,7 +18,8 @@ async function onAddHabitSumbit(e) {
 		form.reset();
 		const modal = document.querySelector('.habit-modal');
 		modal.classList.add('hidden');
-		addNewHabitToDOM(newHabit);
+		const habitElement = addNewHabitToDOM(newHabit);
+		habitElement.querySelector('button').addEventListener('click', onClickViewHabit);
 	} else {
 		console.log(newHabit);
 		// add error handling
@@ -61,10 +62,11 @@ async function onClickViewHabit(e) {
 	viewContainer.setAttribute('style', 'display:block');
 
 	//create a new request function that retreives all info for this users habit, and call this here
-	// const data = await getHabitInfo(localStorage.getItem('email', e.target.id));
-	const habitSection = createViewHabit('data');
+	const data = await getHabitData(e.target.id);
+	console.log(data);
+	const habitSection = createViewHabit(data.habit);
 	viewContainer.append(habitSection);
-	createChart();
+	createChart(data.habit);
 }
 
 module.exports = {

@@ -7,15 +7,14 @@ function toggleNav() {
 	} else {
 		nav.classList.add('hide-nav');
 	}
-	console.log('toggling')
-
-	
+	console.log('toggling');
 }
 
 function addNewHabitToDOM(data) {
 	const habits = document.querySelector('.habits-container');
 	const habit = createHabit(data);
 	habits.insertBefore(habit, habits.firstChild);
+	return habit;
 }
 
 module.exports = { toggleNav, addNewHabitToDOM };
