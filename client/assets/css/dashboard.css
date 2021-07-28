@@ -19,7 +19,7 @@
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--primary);
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
@@ -50,10 +50,14 @@ nav ul li button {
 	font-weight: bold;
 	box-shadow: none;
 	padding: 0;
+    background: var(--tertiary);
+    color: var(--secondary);
 }
 
 nav ul li button:hover {
-	background: var(--tertiary);
+    background: none;
+    color: var(--secondary);
+    box-shadow: none;
 }
 
 a {
@@ -86,14 +90,6 @@ main {
 	padding-top: 50px;
 }
 
-
-/* form {
-	display: flex;
-	flex-direction: column;
-	width: 80%;
-	align-items: center;
-	margin: 20px auto;
-} */
 
 .description {
 	text-align: center;

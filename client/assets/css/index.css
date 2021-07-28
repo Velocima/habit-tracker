@@ -4,30 +4,15 @@ body {
     margin-top: 150px;
 }
 
-h1 {
-    position: relative;
-    font-size: 50px;
-}
-
-p {
-    position: relative;
-    padding: 20px;
-}
-
 button {
     position: relative;
 }
 
 
-label[for="name"] {
-    display: none;
-}
-
-label[for="email"] {
-    display: none;
-}
-
-label[for="password"] {
+label[for="name"],
+label[for="password"],
+label[for="email"]
+ {
     display: none;
 }
 
