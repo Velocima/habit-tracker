@@ -12,6 +12,10 @@
   - index
   - dashboard
   - profile
+- Style pages cohesively
+  - pick colour theme
+  - add background image
+- Create responsive navigation  
 
 ## Backend
 
@@ -58,9 +62,14 @@
 - Add `GET /users/:email/habit/:id` endpoint
 
 ### Testing
+<<<<<<< HEAD
+- Created test suite for habit end routes 
+- Created test database 
+=======
 
 - Created test suite for habit end routes
 - Created test database
 -
+>>>>>>> 251ac19693d656a6f3439d08fd556a5ae584e2cf
 
 ## Misc

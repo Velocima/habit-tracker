@@ -13,6 +13,7 @@
 
 h1 {
     color: var(--tertiary);
+    position: relative;
 }
 
 
@@ -30,14 +31,25 @@ a, ul, li {
 } */
 
 body {
+    position: relative;
     background: var(--primary);
+    font-family: 'Rubik', sans-serif;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    height: 100vh;
     background-image: url("../img/geo-img-2.png");
     background-size: 100vh; 
     background-repeat: no-repeat;
     background-position: fixed;
-    font-family: 'Rubik', sans-serif;
+    opacity: 0.5;
 }
-
 
 button {
     background: none;
@@ -61,4 +73,8 @@ input, textarea {
     margin: 10px 10px;
     border-radius:  20px;
     border: 1px solid #ff3f00;
+}
+
+.hide-nav {
+    display: none;
 }
