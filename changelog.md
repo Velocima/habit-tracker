@@ -42,7 +42,9 @@
 - Extra patch request in auth.js controller to allow user to change password
 
 [2.0.0] - 2021-07-27 - Poligera & Ridwan Axmed
+
 ### Added
+
 - Updated dependencies in package.json
 - Extra table "completions" for habit tracking
 - Fixed syntax error in migrations.sql
@@ -55,9 +57,19 @@
 - Removed "streak" attribute from Habit and associated variables
 - Updated patch request logic with date conversion and comparison
 
+[2.0.0] - 2021-07-28 - Poligera & Velocima
+
+- Add `GET /users/:email/habit/:id` endpoint
 
 ### Testing
+<<<<<<< HEAD
 - Created test suite for habit end routes 
 - Created test database 
+=======
+
+- Created test suite for habit end routes
+- Created test database
+-
+>>>>>>> 251ac19693d656a6f3439d08fd556a5ae584e2cf
 
 ## Misc

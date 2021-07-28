@@ -57,7 +57,7 @@ function logout() {
 
 module.exports = { requestLogin, requestRegistration, login, logout };
 
-},{"jwt-decode":10}],3:[function(require,module,exports){
+},{"jwt-decode":11}],3:[function(require,module,exports){
 function createLoginForm() {
 	const form = document.createElement('form');
 
@@ -169,7 +169,7 @@ function createHabit(data) {
 
 	const viewButton = document.createElement('button');
 	viewButton.textContent = 'View';
-	viewButton.setAttribute('id', data.habitName);
+	viewButton.setAttribute('id', data.id);
 	viewButton.setAttribute('class', 'view-button');
 
 	div.append(habitTitle);
@@ -179,12 +179,21 @@ function createHabit(data) {
 }
 
 function createViewHabit(data) {
-	const section = document.createElement('section');
+	const section = document.createElement('div');
 
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
 	// can change this to be more elegant
-	goHomeButton.addEventListener('click', () => (window.location.pathname = '/dashboard.html'));
+	goHomeButton.addEventListener('click', () => {
+		const main = document.querySelector('main');
+		const viewContainer = document.getElementById('habit-view');
+		const habitsModal = document.querySelector('.habit-modal');
+
+		//hide the current page content, other than nav
+		main.removeAttribute('style');
+		habitsModal.removeAttribute('style');
+		viewContainer.textContent = '';
+	});
 
 	const checkbox = document.createElement('input');
 	checkbox.setAttribute('id', 'checkbox');
@@ -200,12 +209,16 @@ function createViewHabit(data) {
 		console.log('this should redirect to the edit page...')
 	);
 
+	const chartContainer = document.createElement('div');
+	chartContainer.setAttribute('id', 'myChart');
+
 	//add in chart generation and streaks
 
 	section.append(goHomeButton);
 	section.append(checkbox);
 	section.append(description);
 	section.append(editButton);
+	section.append(chartContainer);
 
 	return section;
 }
@@ -216,6 +229,7 @@ module.exports = { createLoginForm, createRegistrationForm, createHabit, createV
 const { createViewHabit } = require('../dom_elements');
 const { postHabit } = require('../requests');
 const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require('../utils');
+const { createChart } = require('../zing_chart');
 
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
@@ -263,14 +277,22 @@ function onAddHabitFormChange(e) {
 	description.innerText = `I am going to ${name} ${goal} time${plurality} per ${frequency}`;
 }
 
-function onClickViewHabit(e) {
+async function onClickViewHabit(e) {
 	e.preventDefault();
 	const main = document.querySelector('main');
-	main.textContent = '';
-	const habitName = e.target.id;
+	const viewContainer = document.getElementById('habit-view');
+	const habitsModal = document.querySelector('.habit-modal');
+
+	//hide the current page content, other than nav
+	main.setAttribute('style', 'display:none');
+	habitsModal.setAttribute('style', 'display:none');
+	viewContainer.setAttribute('style', 'display:block');
+
 	//create a new request function that retreives all info for this users habit, and call this here
+	// const data = await getHabitInfo(localStorage.getItem('email', e.target.id));
 	const habitSection = createViewHabit('data');
-	main.append(habitSection);
+	viewContainer.append(habitSection);
+	createChart();
 }
 
 module.exports = {
@@ -281,7 +303,7 @@ module.exports = {
 	onClickViewHabit,
 };
 
-},{"../dom_elements":3,"../requests":8,"../utils":9}],5:[function(require,module,exports){
+},{"../dom_elements":3,"../requests":8,"../utils":9,"../zing_chart":10}],5:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
 const { requestLogin, requestRegistration } = require('../auth');
 const body = document.querySelector('body');
@@ -585,6 +607,149 @@ function addNewHabitToDOM(data) {
 module.exports = { toggleNav, addNewHabitToDOM };
 
 },{"./dom_elements":3}],10:[function(require,module,exports){
+async function createChart(data = true) {
+	let chartData = (size, values, color, text) => {
+		return {
+			size: size,
+			values: values,
+			backgroundColor: color,
+			borderWidth: '46px',
+			borderColor: color,
+			text: text,
+			tooltip: {
+				text: "<span style='color:%color'>%plot-text</span><br><span style='font-size:31px;font-weight:bold;color:%color;'>%node-percent-value%</span>",
+				align: 'left',
+				padding: '30px',
+				anchor: 'c',
+				backgroundColor: 'none',
+				borderWidth: '0px',
+				fontFamily: 'Lucida Sans Unicode',
+				fontSize: '19px',
+				width: '120px',
+				x: '365px',
+				y: '243px',
+			},
+		};
+	};
+
+	let chartConfig = {
+		type: 'pie',
+		backgroundColor: '#222',
+		plot: {
+			valueBox: {
+				visible: false,
+			},
+			angleStart: 270,
+			detach: false,
+			slice: '100%',
+			totals: [100],
+			animation: {
+				effect: 'ANIMATION_EXPAND_VERTICAL',
+				method: 'ANIMATION_LINEAR',
+				speed: 'ANIMATION_SLOW',
+			},
+			hoverState: {
+				visible: false,
+			},
+			refAngle: 270,
+		},
+		plotarea: {
+			margin: '40px',
+		},
+		scale: {
+			sizeFactor: 1,
+		},
+		shapes: [
+			{
+				type: 'pie',
+				alpha: 0.25,
+				backgroundColor: '#F61F64',
+				flat: true,
+				placement: 'bottom',
+				size: '234px',
+				slice: 187,
+				x: '362px',
+				y: '250px',
+			},
+			{
+				type: 'pie', // green done
+				alpha: 0.25,
+				backgroundColor: '#78ff1b',
+				flat: true,
+				placement: 'bottom',
+				size: '182px',
+				slice: 134,
+				x: '362px',
+				y: '250px',
+			},
+			{
+				type: 'pie', // blue done
+				alpha: 0.25,
+				backgroundColor: '#0efbe1',
+				flat: true,
+				placement: 'bottom',
+				size: '129px',
+				slice: 82,
+				x: '362px',
+				y: '250px',
+			},
+			{
+				type: 'line',
+				lineCap: 'round',
+				lineColor: '#000',
+				lineWidth: '3px',
+				offsetX: '350px',
+				offsetY: '42px',
+				points: [[0, 0], [22, 0], null, [10, -10], [22, 0], [10, 10]],
+			},
+			{
+				type: 'line',
+				lineCap: 'round',
+				lineColor: '#000',
+				lineWidth: '3px',
+				offsetX: '350px',
+				offsetY: '95px',
+				points: [
+					[0, 0],
+					[22, 0],
+					null,
+					[10, -10],
+					[22, 0],
+					[10, 10],
+					null,
+					[20, -10],
+					[32, 0],
+					[20, 10],
+				],
+			},
+			{
+				type: 'line',
+				lineCap: 'round',
+				lineColor: '#000',
+				lineWidth: '3px',
+				offsetX: '360px',
+				offsetY: '135px',
+				points: [[0, 0], [0, 22], null, [-10, 12], [0, 0], [10, 12]],
+			},
+		],
+		series: [
+			chartData('100%', [84], '#F61F64', 'Move'),
+			chartData('75%', [76], '#6fe71c', 'Exercise'),
+			chartData('50%', [55], '#19ecd5', 'Stand'),
+		],
+	};
+
+	zingchart.render({
+		id: 'myChart',
+		data: chartConfig,
+		width: '725px',
+		height: '500px',
+	});
+}
+
+module.exports = { createChart };
+
+},{}],11:[function(require,module,exports){
 "use strict";function e(e){this.message=e}e.prototype=new Error,e.prototype.name="InvalidCharacterError";var r="undefined"!=typeof window&&window.atob&&window.atob.bind(window)||function(r){var t=String(r).replace(/=+$/,"");if(t.length%4==1)throw new e("'atob' failed: The string to be decoded is not correctly encoded.");for(var n,o,a=0,i=0,c="";o=t.charAt(i++);~o&&(n=a%4?64*n+o:o,a++%4)?c+=String.fromCharCode(255&n>>(-2*a&6)):0)o="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(o);return c};function t(e){var t=e.replace(/-/g,"+").replace(/_/g,"/");switch(t.length%4){case 0:break;case 2:t+="==";break;case 3:t+="=";break;default:throw"Illegal base64url string!"}try{return function(e){return decodeURIComponent(r(e).replace(/(.)/g,(function(e,r){var t=r.charCodeAt(0).toString(16).toUpperCase();return t.length<2&&(t="0"+t),"%"+t})))}(t)}catch(e){return r(t)}}function n(e){this.message=e}function o(e,r){if("string"!=typeof e)throw new n("Invalid token specified");var o=!0===(r=r||{}).header?0:1;try{return JSON.parse(t(e.split(".")[o]))}catch(e){throw new n("Invalid token specified: "+e.message)}}n.prototype=new Error,n.prototype.name="InvalidTokenError";const a=o;a.default=o,a.InvalidTokenError=n,module.exports=a;
 
 

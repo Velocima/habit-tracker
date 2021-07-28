@@ -1,6 +1,7 @@
 const { createViewHabit } = require('../dom_elements');
 const { postHabit } = require('../requests');
 const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require('../utils');
+const { createChart } = require('../zing_chart');
 
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
@@ -48,14 +49,22 @@ function onAddHabitFormChange(e) {
 	description.innerText = `I am going to ${name} ${goal} time${plurality} per ${frequency}`;
 }
 
-function onClickViewHabit(e) {
+async function onClickViewHabit(e) {
 	e.preventDefault();
 	const main = document.querySelector('main');
-	main.textContent = '';
-	const habitName = e.target.id;
+	const viewContainer = document.getElementById('habit-view');
+	const habitsModal = document.querySelector('.habit-modal');
+
+	//hide the current page content, other than nav
+	main.setAttribute('style', 'display:none');
+	habitsModal.setAttribute('style', 'display:none');
+	viewContainer.setAttribute('style', 'display:block');
+
 	//create a new request function that retreives all info for this users habit, and call this here
+	// const data = await getHabitInfo(localStorage.getItem('email', e.target.id));
 	const habitSection = createViewHabit('data');
-	main.append(habitSection);
+	viewContainer.append(habitSection);
+	createChart();
 }
 
 module.exports = {
