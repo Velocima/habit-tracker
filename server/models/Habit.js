@@ -129,10 +129,13 @@ class Habit {
 	static destroyCompletionDate(id) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				await db.query(`DELETE FROM completions WHERE habit_id = $1 RETURNING habit_id;`, [id]);
+				const result = await db.query(`DELETE FROM completions WHERE id = $1 RETURNING *;`, [id]);
+				if (result.rowCount === 0) {
+					throw new Error('Completion record not found.');
+				}
 				resolve({ habit_id: 'Completion date was deleted' });
 			} catch (err) {
-				reject('Completion date could not be deleted');
+				reject(err);
 			}
 		});
 	}
