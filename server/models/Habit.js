@@ -1,3 +1,4 @@
+const e = require('express');
 const db = require('../db_config/config');
 
 /**
@@ -14,6 +15,8 @@ class Habit {
 		this.frequency = data.habit_frequency;
 		this.frequencyTarget = data.frequency_target;
 		this.completionDates = data.completionDates; // an array of unix timestamps
+		this.currentStreak = data.currentStreak;
+		this.bestStreak = data.bestStreak;
 	}
 
 	static create({ email, name, description, frequency, goal }) {
@@ -27,7 +30,12 @@ class Habit {
 				// Initially completion dates are an empty array:
 				let completionDates = [];
 
-				let habit = new Habit({ ...result.rows[0], completionDates });
+				let habit = new Habit({
+					...result.rows[0],
+					completionDates,
+					currentStreak: 0,
+					bestStreak: 0,
+				});
 				res(habit);
 			} catch (err) {
 				rej(`Error creating habit: ${err}`);
@@ -40,16 +48,22 @@ class Habit {
 			try {
 				let result = await db.query(
 					`SELECT * FROM habits
-                    WHERE email = $1;`,
+          	WHERE email = $1;`,
 					[email]
 				);
-				// Using ARRAY function of PostgreSQL which turns a set of rows into an array (using a subselect) while ordering by date:
-				let dates = await db.query(
-					'SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $1 ORDER BY completion_date);',
-					[result.id]
-				);
-				let habits = result.rows.map((habit) => new Habit(habit, dates));
-				res(habits); // Returns an array of habits for a particular user
+
+				let data = result.rows.map(async (habit) => {
+					let completions = await db.query(
+						'SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $1 ORDER BY completion_date);',
+						[habit.id]
+					);
+					const completionDates = completions.rows[0].array;
+					const currentStreak = Habit.getCurrentStreak(completionDates);
+					const bestStreak = Habit.getBestStreak(completionDates);
+					return new Habit({ ...habit, completionDates, currentStreak, bestStreak });
+				});
+				const habits = await Promise.all(data);
+				res(habits);
 			} catch (err) {
 				rej(`Error retrieving user: ${err}`);
 			}
@@ -69,7 +83,9 @@ class Habit {
 					[result.rows[0].id]
 				);
 				const completionDates = datesResult.rows[0].array;
-				let habit = new Habit({ ...result.rows[0], completionDates });
+				const currentStreak = Habit.getCurrentStreak(completionDates);
+				const bestStreak = Habit.getBestStreak(completionDates);
+				let habit = new Habit({ ...result.rows[0], completionDates, currentStreak, bestStreak });
 				res(habit);
 			} catch (err) {
 				rej(err);
@@ -85,7 +101,7 @@ class Habit {
 				const dates = this.completionDates.map((unix) => {
 					const date = new Date(Number(unix));
 					return {
-						day: date.getDay(),
+						day: date.getDate(),
 						month: date.getMonth(),
 						year: date.getFullYear(),
 					};
@@ -94,7 +110,7 @@ class Habit {
 				const todaysUnixDate = new Date(todayUnix);
 
 				const today = {
-					day: todaysUnixDate.getDay(),
+					day: todaysUnixDate.getDate(),
 					month: todaysUnixDate.getMonth(),
 					year: todaysUnixDate.getFullYear(),
 				};
@@ -122,7 +138,7 @@ class Habit {
 				const dates = this.completionDates.map((unix) => {
 					const date = new Date(Number(unix));
 					return {
-						day: date.getDay(),
+						day: date.getDate(),
 						month: date.getMonth(),
 						year: date.getFullYear(),
 					};
@@ -131,7 +147,7 @@ class Habit {
 				const todaysUnixDate = new Date(todayUnix);
 
 				const today = {
-					day: todaysUnixDate.getDay(),
+					day: todaysUnixDate.getDate(),
 					month: todaysUnixDate.getMonth(),
 					year: todaysUnixDate.getFullYear(),
 				};
@@ -178,6 +194,60 @@ class Habit {
 				reject(err);
 			}
 		});
+	}
+
+	static getCurrentStreak(completionDates) {
+		if (completionDates.length === 0) {
+			return 0;
+		}
+		const todaysDayCount = Math.floor(Date.now() / 1000 / 60 / 60 / 24);
+		const completedDays = completionDates
+			.map((str) => Math.floor(Number(str) / 1000 / 60 / 60 / 24))
+			.sort();
+
+		let currentStreak = 0;
+		let previousDay = todaysDayCount;
+
+		if (Math.abs(todaysDayCount - completedDays[completedDays.length - 1]) > 1) {
+			return currentStreak;
+		}
+
+		for (let i = completedDays.length - 1; i >= 0; i--) {
+			if (Math.abs(completedDays[i] - previousDay) <= 1) {
+				currentStreak++;
+				previousDay = completedDays[i];
+			} else {
+				return currentStreak;
+			}
+		}
+		return currentStreak;
+	}
+
+	static getBestStreak(completionDates) {
+		if (completionDates.length === 0) {
+			return 0;
+		}
+		const todaysDayCount = Math.floor(Date.now() / 1000 / 60 / 60 / 24);
+		const completedDays = completionDates
+			.map((str) => Math.floor(Number(str) / 1000 / 60 / 60 / 24))
+			.sort();
+
+		let currentStreak = 0;
+		let bestStreak = 0;
+		let previousDay = todaysDayCount;
+
+		for (let i = completedDays.length - 1; i >= 0; i--) {
+			if (Math.abs(completedDays[i] - previousDay) <= 1) {
+				currentStreak++;
+				previousDay = completedDays[i];
+				if (currentStreak > bestStreak) {
+					bestStreak = currentStreak;
+				}
+			} else {
+				currentStreak = 1;
+			}
+		}
+		return bestStreak;
 	}
 }
 

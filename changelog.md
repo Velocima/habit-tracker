@@ -66,6 +66,7 @@
 - Fix `PATCH /user/:email` endpoint
 - Fix `DELETE /user/:email/habit/:id` endpoint
 - Add `GET /user/:email/habit/:id/complete` endpoint
+- Add current and best streaks to habit constructor
 
 ### Testing
 
