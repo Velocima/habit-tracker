@@ -9,7 +9,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav, addNameToDashboard } = require('./utils');
+const { toggleNav, addNameToDashboard, addNameToProfileInput } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -70,6 +70,7 @@ async function initPageBindings() {
 		bindDashboardListeners();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
+		addNameToProfileInput();
 	}
 }
 

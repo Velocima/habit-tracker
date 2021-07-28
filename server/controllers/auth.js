@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
+const { verifyToken } = require('../middleware/auth');
 /**
  * Upon registration, the password is hashed and a new User is created.
  */
@@ -26,20 +27,24 @@ router.post('/register', async (req, res) => {
  * A token is generated if the password is correct.
  */
 
-router.patch('/password/:email', async (req, res) => {
+router.patch('/:email/password', verifyToken, async (req, res) => {
 	try {
-		const salt = await bcrypt.genSalt();
-		const hashed = await bcrypt.hash(req.body.password, salt);
 		const user = await User.findByEmail(req.params.email);
-		const matched = user.passwordDigest === req.body.password;
-		if (!!matched) {
-			await user.updatePassword(hashed);
-			res.status(201).json({ msg: 'Password successfully changed' });
+		if (!user) {
+			throw new Error('No user with this email');
+		}
+		const authed = await bcrypt.compare(req.body.password, user.passwordDigest);
+
+		if (!!authed) {
+			const salt = await bcrypt.genSalt();
+			const hashed = await bcrypt.hash(req.body['new-password'], salt);
+			const result = await user.updatePassword(hashed);
+			res.status(201).json({ result });
 		} else {
-			throw new Error("Passwords don't match");
+			throw new Error('Incorrect password');
 		}
 	} catch (err) {
-		res.status(500).json(err);
+		res.status(500).json({ err: err.message });
 	}
 });
 
@@ -49,7 +54,7 @@ router.post('/login', async (req, res) => {
 		if (!user) {
 			throw new Error('No user with this email');
 		}
-		const authed = bcrypt.compare(req.body.password, user.passwordDigest);
+		const authed = await bcrypt.compare(req.body.password, user.passwordDigest);
 		if (!!authed) {
 			const payload = { email: user.email, name: user.name };
 			const sendToken = (err, token) => {
