@@ -51,11 +51,17 @@ function onAddHabitFormChange(e) {
 function onClickViewHabit(e) {
 	e.preventDefault();
 	const main = document.querySelector('main');
-	main.textContent = '';
-	const habitName = e.target.id;
+	const viewContainer = document.getElementById('habit-view');
+	const habitsModal = document.querySelector('.habit-modal');
+
+	//hide the current page content, other than nav
+	main.setAttribute('style', 'display:none');
+	habitsModal.setAttribute('style', 'display:none');
+	viewContainer.setAttribute('style', 'display:block');
+
 	//create a new request function that retreives all info for this users habit, and call this here
 	const habitSection = createViewHabit('data');
-	main.append(habitSection);
+	viewContainer.append(habitSection);
 }
 
 module.exports = {

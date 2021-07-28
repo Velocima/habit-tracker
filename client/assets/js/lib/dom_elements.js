@@ -109,7 +109,7 @@ function createHabit(data) {
 
 	const viewButton = document.createElement('button');
 	viewButton.textContent = 'View';
-	viewButton.setAttribute('id', data.habitName);
+	viewButton.setAttribute('id', data.id);
 	viewButton.setAttribute('class', 'view-button');
 
 	div.append(habitTitle);
@@ -124,7 +124,16 @@ function createViewHabit(data) {
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
 	// can change this to be more elegant
-	goHomeButton.addEventListener('click', () => (window.location.pathname = '/dashboard.html'));
+	goHomeButton.addEventListener('click', () => {
+		const main = document.querySelector('main');
+		const viewContainer = document.getElementById('habit-view');
+		const habitsModal = document.querySelector('.habit-modal');
+
+		//hide the current page content, other than nav
+		main.removeAttribute('style');
+		habitsModal.removeAttribute('style');
+		viewContainer.textContent = '';
+	});
 
 	const checkbox = document.createElement('input');
 	checkbox.setAttribute('id', 'checkbox');
