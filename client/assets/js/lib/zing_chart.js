@@ -1,140 +1,123 @@
 async function createChart(data = true) {
-	let chartData = (size, values, color, text) => {
-		return {
-			size: size,
-			values: values,
-			backgroundColor: color,
-			borderWidth: '46px',
-			borderColor: color,
-			text: text,
-			tooltip: {
-				text: "<span style='color:%color'>%plot-text</span><br><span style='font-size:31px;font-weight:bold;color:%color;'>%node-percent-value%</span>",
-				align: 'left',
-				padding: '30px',
-				anchor: 'c',
-				backgroundColor: 'none',
-				borderWidth: '0px',
-				fontFamily: 'Lucida Sans Unicode',
-				fontSize: '19px',
-				width: '120px',
-				x: '365px',
-				y: '243px',
-			},
-		};
-	};
+	// DEFINE CHART LOCATIONS (IDS)
+	// -----------------------------
+	// Main chart render location
+	const chart1Id = 'chart1';
+	const chart2Id = 'chart2';
 
-	let chartConfig = {
-		type: 'pie',
-		backgroundColor: '#222',
+	// CHART CONFIG
+	// -----------------------------
+
+	// Chart 1
+	const chart1Data = {
+		type: 'ring',
+		globals: {
+			fontFamily: 'Poppins',
+			color: 'purple',
+		},
 		plot: {
+			slice: '80%',
 			valueBox: {
-				visible: false,
+				placement: 'center',
+				text: '75 %',
+				fontSize: '32px',
+				fontWeight: 'normal',
 			},
-			angleStart: 270,
-			detach: false,
-			slice: '100%',
-			totals: [100],
 			animation: {
-				effect: 'ANIMATION_EXPAND_VERTICAL',
-				method: 'ANIMATION_LINEAR',
-				speed: 'ANIMATION_SLOW',
+				effect: 'ANIMATION_EXPAND_LEFT',
+				sequence: 'ANIMATION_BY_PLOT_AND_NODE',
+				speed: '200',
 			},
-			hoverState: {
-				visible: false,
+		},
+		gui: {
+			contextMenu: {
+				button: {
+					visible: false,
+				},
 			},
-			refAngle: 270,
 		},
 		plotarea: {
-			margin: '40px',
+			margin: '0px 0px 0px 0px',
 		},
-		scale: {
-			sizeFactor: 1,
-		},
-		shapes: [
-			{
-				type: 'pie',
-				alpha: 0.25,
-				backgroundColor: '#F61F64',
-				flat: true,
-				placement: 'bottom',
-				size: '234px',
-				slice: 187,
-				x: '362px',
-				y: '250px',
-			},
-			{
-				type: 'pie', // green done
-				alpha: 0.25,
-				backgroundColor: '#78ff1b',
-				flat: true,
-				placement: 'bottom',
-				size: '182px',
-				slice: 134,
-				x: '362px',
-				y: '250px',
-			},
-			{
-				type: 'pie', // blue done
-				alpha: 0.25,
-				backgroundColor: '#0efbe1',
-				flat: true,
-				placement: 'bottom',
-				size: '129px',
-				slice: 82,
-				x: '362px',
-				y: '250px',
-			},
-			{
-				type: 'line',
-				lineCap: 'round',
-				lineColor: '#000',
-				lineWidth: '3px',
-				offsetX: '350px',
-				offsetY: '42px',
-				points: [[0, 0], [22, 0], null, [10, -10], [22, 0], [10, 10]],
-			},
-			{
-				type: 'line',
-				lineCap: 'round',
-				lineColor: '#000',
-				lineWidth: '3px',
-				offsetX: '350px',
-				offsetY: '95px',
-				points: [
-					[0, 0],
-					[22, 0],
-					null,
-					[10, -10],
-					[22, 0],
-					[10, 10],
-					null,
-					[20, -10],
-					[32, 0],
-					[20, 10],
-				],
-			},
-			{
-				type: 'line',
-				lineCap: 'round',
-				lineColor: '#000',
-				lineWidth: '3px',
-				offsetX: '360px',
-				offsetY: '135px',
-				points: [[0, 0], [0, 22], null, [-10, 12], [0, 0], [10, 12]],
-			},
-		],
+		backgroundColor: 'transparent',
 		series: [
-			chartData('100%', [84], '#F61F64', 'Move'),
-			chartData('75%', [76], '#6fe71c', 'Exercise'),
-			chartData('50%', [55], '#19ecd5', 'Stand'),
+			{
+				values: [25],
+				backgroundColor: 'transparent',
+				borderWidth: 0,
+				shadow: 0,
+			},
+			{
+				values: [75],
+				backgroundColor: '#8e2657',
+				borderWidth: 0,
+				shadow: 0,
+				slice: 90,
+			},
 		],
 	};
 
+	// Chart 2
+	const chart2Data = {
+		type: 'hbar',
+		backgroundColor: 'transparent',
+		globals: {
+			fontSize: '16px',
+		},
+		plot: {
+			animation: {
+				delay: 300,
+				effect: 'ANIMATION_EXPAND_TOP',
+				method: 'ANIMATION_LINEAR',
+				sequence: 'ANIMATION_BY_PLOT_AND_NODE',
+				speed: '500',
+			},
+			'value-box': {
+				//Displays all data values by default.
+			},
+			styles: ['#ff3f00', '#8e2657'],
+		},
+		gui: {
+			contextMenu: {
+				button: {
+					visible: false,
+				},
+			},
+		},
+		plotarea: {
+			margin: '10px 40px 10px 60px',
+		},
+		'scale-x': {
+			labels: ['Current', 'Best'],
+			guide: {
+				visible: false,
+			},
+		},
+		scaleY: {
+			guide: {
+				visible: false,
+			},
+			visible: false,
+		},
+		series: [{ values: [5, 8] }],
+	};
+	// RENDER CHARTS
+	// -----------------------------
+
+	// Chart 1
 	zingchart.render({
-		id: 'myChart',
-		data: chartConfig,
-		width: '725px',
-		height: '500px',
+		id: chart1Id,
+		data: chart1Data,
+		height: '50%',
+		width: '100%',
+	});
+
+	// Chart 2
+	zingchart.render({
+		id: chart2Id,
+		data: chart2Data,
+		height: '10%',
+		width: '100%',
 	});
 }
 
