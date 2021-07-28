@@ -53,12 +53,12 @@ class User {
 		});
 	}
 
-	updateDetails(data) {
+	updateName(email, newName) {
 		return new Promise(async (res, rej) => {
 			try {
 				const result = await db.query(
-					'UPDATE users SET name = $1, email = $2 WHERE email = $3 RETURNING *;',
-					[data.name, data.email, this.email]
+					'UPDATE users SET name = $2 WHERE email = $1 RETURNING name, email;',
+					[email, newName]
 				);
 				res(result.rows[0]);
 			} catch (err) {

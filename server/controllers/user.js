@@ -18,22 +18,19 @@ router.get('/:email', verifyToken, async (req, res) => {
 router.patch('/:email', verifyToken, async (req, res) => {
 	try {
 		const user = await User.findByEmail(req.params.email);
-		const resp = await user.updateDetails(req.body.name, req.body.email);
+		if (user.name === req.body.name) {
+			throw new Error('Must provide a different name to current in order to update');
+		}
+		const resp = await user.updateName(req.params.email, req.body.name);
 		res.status(200).json(resp);
 	} catch (err) {
-		res.status(404).send({ err });
+		if (err.message === 'Must provide a different name to current in order to update') {
+			res.status(400).send({ err: err.message });
+		} else {
+			res.status(404).send({ err: err.message });
+		}
 	}
 });
-
-router.put('/:email', verifyToken, async (req, res) => {
-    try {
-        const user = await User.findByEmail(req.params.email);
-        const resp = await user.updatePassword(req.body.password);
-        res.status(200).json(resp);
-    } catch (err) {
-        res.status(404).send({ err })
-    }
-})
 
 router.use('/:email', (req, res, next) => {
 	const { email } = req.params;
