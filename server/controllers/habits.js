@@ -23,6 +23,16 @@ router.get('/', verifyToken, async (req, res) => {
 	}
 });
 
+router.get('/:id', verifyToken, async (req, res) => {
+	try {
+		const { id } = req.params;
+		const habit = await Habit.findById(id);
+		res.status(200).send({ habit });
+	} catch (err) {
+		res.status(500).send({ err });
+	}
+});
+
 // Create
 router.post('/', verifyToken, async (req, res) => {
 	try {
@@ -35,47 +45,44 @@ router.post('/', verifyToken, async (req, res) => {
 
 // Update
 router.patch('/:id', verifyToken, async (req, res) => {
-    try {
-        const habit = await Habit.findById(req.params.id);
+	try {
+		const habit = await Habit.findById(req.params.id);
 
-        // Converting unix datestamps into strings because we only want the dates:
-        const dateStrings = habit.completionDates.map(date => date.toLocaleString());
+		// Converting unix datestamps into strings because we only want the dates:
+		const dateStrings = habit.completionDates.map((date) => date.toLocaleString());
 
-        // Checking for duplicate dates:
-        if (
-            dateStrings.indexOf(today) === -1
-         ) {
-            const resp = await habit.update();
-            res.status(200).json(resp);
-        } else {
-            const resp = "You cannot double-complete a habit"
-            res.status(404).json(resp);
-        }
-    } catch (err) {
-        res.status(404).send({ err })
-    }
-})
+		// Checking for duplicate dates:
+		if (dateStrings.indexOf(today) === -1) {
+			const resp = await habit.update();
+			res.status(200).json(resp);
+		} else {
+			const resp = 'You cannot double-complete a habit';
+			res.status(404).json(resp);
+		}
+	} catch (err) {
+		res.status(404).send({ err });
+	}
+});
 
-// Delete a habit 
-router.delete("/:id", verifyToken, async (req, res) => {
-    try {
-      const habit = await Habit.findById(req.params.id);
-      await habit.destroy();
-      res.status(204).json();
-    } catch (err) {
-      res.status(500).json({ err });
-    }
-  });
+// Delete a habit
+router.delete('/:id', verifyToken, async (req, res) => {
+	try {
+		const habit = await Habit.findById(req.params.id);
+		await habit.destroy();
+		res.status(204).json();
+	} catch (err) {
+		res.status(500).json({ err });
+	}
+});
 
+// Delete a completion date (if user made a mistake)
+router.delete('/completions/:id', verifyToken, async (req, res) => {
+	try {
+		await Habit.destroyCompletionDate(req.params.id);
+		res.status(204).json();
+	} catch (err) {
+		res.status(500).json({ err });
+	}
+});
 
-// Delete a completion date (if user made a mistake) 
-router.delete("/completions/:id", verifyToken, async (req, res) => {
-    try {
-      await Habit.destroyCompletionDate(req.params.id);
-      res.status(204).json();
-    } catch (err) {
-      res.status(500).json({ err });
-    }
-  });
-
-module.exports = router
+module.exports = router;
