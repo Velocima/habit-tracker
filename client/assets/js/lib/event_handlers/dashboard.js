@@ -24,13 +24,13 @@ async function onAddHabitSumbit(e) {
 }
 
 function onFrequencyChange(e) {
-	const form = document.querySelector('form');
-
-	if (form.frequency.value === 'hourly') {
-		addDailyCountField(onAddHabitFormChange);
-	} else if (form.occurences) {
-		form.removeChild(form.childNodes[13]);
-		form.removeChild(form.childNodes[13]);
+	const goal = document.getElementById('goal');
+	if (e.target.value === 'hourly') {
+		goal.setAttribute('max', 15);
+	} else if (e.target.value === 'daily') {
+		goal.setAttribute('max', 7);
+	} else if (e.target.value === 'weekly') {
+		goal.setAttribute('max', 4);
 	}
 }
 

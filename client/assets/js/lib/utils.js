@@ -18,29 +18,4 @@ function updateHabitDescription() {
 	description.innerText = `I am going to ${name} ${goal} times per day`;
 }
 
-function addDailyCountField(eventHandler) {
-	const form = document.querySelector('form');
-
-	if (form.occurences) return;
-
-	const dailyCountLabel = document.createElement('label');
-	dailyCountLabel.setAttribute('for', 'occurences');
-	dailyCountLabel.innerText = 'Times per day:';
-
-	const dailyCountInput = document.createElement('input');
-	dailyCountInput.setAttribute('name', 'occurences');
-	dailyCountInput.setAttribute('id', 'occurences');
-	dailyCountInput.setAttribute('type', 'number');
-	dailyCountInput.setAttribute('min', 1);
-	dailyCountInput.setAttribute('max', 30);
-	dailyCountInput.setAttribute('placeholder', 'How many times?');
-	dailyCountInput.setAttribute('required', true);
-
-	dailyCountInput.addEventListener('keyup', eventHandler);
-	dailyCountInput.addEventListener('change', eventHandler);
-
-	form.insertBefore(dailyCountInput, form.childNodes[13]);
-	form.insertBefore(dailyCountLabel, form.childNodes[13]);
-}
-
-module.exports = { toggleNav, addNewHabitToDOM, updateHabitDescription, addDailyCountField };
+module.exports = { toggleNav, addNewHabitToDOM, updateHabitDescription };
