@@ -109,7 +109,7 @@ function createHabit(data) {
 
 	const viewButton = document.createElement('button');
 	viewButton.textContent = 'View';
-	viewButton.setAttribute('id', data.habitName);
+	viewButton.setAttribute('id', data.id);
 	viewButton.setAttribute('class', 'view-button');
 
 	div.append(habitTitle);
@@ -119,12 +119,21 @@ function createHabit(data) {
 }
 
 function createViewHabit(data) {
-	const section = document.createElement('section');
+	const section = document.createElement('div');
 
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
 	// can change this to be more elegant
-	goHomeButton.addEventListener('click', () => (window.location.pathname = '/dashboard.html'));
+	goHomeButton.addEventListener('click', () => {
+		const main = document.querySelector('main');
+		const viewContainer = document.getElementById('habit-view');
+		const habitsModal = document.querySelector('.habit-modal');
+
+		//hide the current page content, other than nav
+		main.removeAttribute('style');
+		habitsModal.removeAttribute('style');
+		viewContainer.textContent = '';
+	});
 
 	const checkbox = document.createElement('input');
 	checkbox.setAttribute('id', 'checkbox');
@@ -140,12 +149,16 @@ function createViewHabit(data) {
 		console.log('this should redirect to the edit page...')
 	);
 
+	const chartContainer = document.createElement('div');
+	chartContainer.setAttribute('id', 'myChart');
+
 	//add in chart generation and streaks
 
 	section.append(goHomeButton);
 	section.append(checkbox);
 	section.append(description);
 	section.append(editButton);
+	section.append(chartContainer);
 
 	return section;
 }
