@@ -92,6 +92,63 @@ label {
     margin-bottom: -7px;
 }
 
+nav {
+	position: absolute;
+	flex-direction: column;
+	width: 75%;
+	height: 100%;
+	background: var(--tertiary);
+	z-index: 1000;
+}
+
+ul {
+	text-align: center;
+	padding-top: 30px;
+	height: 100%;
+}
+
+nav ul li button {
+	border: none;
+	border-style: none;
+	text-transform: capitalize;
+	font-family: 'Rubik', sans-serif;
+	font-size: 32px;
+	font-weight: bold;
+	box-shadow: none;
+	padding: 0;
+    background: var(--tertiary);
+    color: var(--secondary);
+}
+
+nav ul li button:hover {
+    background: none;
+    color: var(--secondary);
+    box-shadow: none;
+}
+
+a {
+	color: var(--secondary);
+	font-size: 32px;
+	font-weight: bold;
+	text-transform: capitalize;
+}
+
+/* nav p {
+	color: var(--secondary);
+	padding-left: 5px;
+} */
+
+.menu-btn {
+	padding: 5px 0 0 10px;
+	color: var(--secondary);
+	font-size: 24px;
+	cursor: pointer;
+}
+
+.close-btn {
+	padding-left: 10px;
+}
+
 .hide-nav {
 	display: none;
 }
