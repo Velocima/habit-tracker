@@ -62,7 +62,7 @@ async function renderHabits() {
 
 async function initPageBindings() {
 	const path = window.location.pathname;
-	if (path === '/') {
+	if (path === '/' || path === '/index.html') {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
 		await renderHabits();

@@ -198,30 +198,24 @@ function createViewHabit(data) {
 		viewContainer.textContent = '';
 	});
 
+	const markAsComplete = document.createElement('button');
+	markAsComplete.textContent = 'Mark as complete';
+	markAsComplete.addEventListener('click', async () => {
+		const response = await postCompletion(data.id);
+		const responseJson = await response.json();
+		console.log(responseJson);
+	});
+
+	const removeCompletion = document.createElement('button');
+	removeCompletion.textContent = 'Remove completion';
+	removeCompletion.addEventListener('click', async () => {
+		const response = await deleteCompletion(data.id, 1);
+		const responseJson = await response.json();
+		console.log(responseJson);
+	});
+
 	const habitTitle = document.createElement('h1');
 	habitTitle.textContent = data.habitName;
-
-	const checkbox = document.createElement('input');
-	checkbox.setAttribute('id', 'checkbox');
-	checkbox.setAttribute('type', 'checkbox');
-	checkbox.setAttribute('name', 'checkbox');
-	checkbox.addEventListener('change', () => {
-		if (this.checked) {
-			console.log('Checkbox is checked..');
-			// const response = await deleteCompletion(data.id, 6);
-			// const responseJson = await response.json();
-			// console.log(responseJson);
-		} else {
-			console.log('Checkbox is not checked..');
-			// need to add some logic to determine the completion ids
-			// const response = await postCompletion(data.id);
-			// const responseJson = await response.json();
-			// console.log(responseJson);
-		}
-		if (!this.checked) {
-			console.log('not checked');
-		}
-	});
 
 	const description = document.createElement('p');
 	description.textContent = data.description;
@@ -248,7 +242,8 @@ function createViewHabit(data) {
 	section.append(goHomeButton);
 	section.append(habitTitle);
 	section.append(description);
-	section.append(checkbox);
+	section.append(markAsComplete);
+	section.append(removeCompletion);
 	section.append(chartContainer);
 	section.append(editButton);
 	section.append(deleteButton);
@@ -502,7 +497,7 @@ async function renderHabits() {
 
 async function initPageBindings() {
 	const path = window.location.pathname;
-	if (path === '/') {
+	if (path === '/' || path === '/index.html') {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
 		await renderHabits();
