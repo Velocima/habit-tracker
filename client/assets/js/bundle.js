@@ -202,16 +202,14 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
-		const responseJson = await response.json();
-		console.log(responseJson);
+		console.log(response);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
 		const response = await deleteCompletion(data.id, 1);
-		const responseJson = await response.json();
-		console.log(responseJson);
+		console.log(response);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -222,9 +220,8 @@ function createViewHabit(data) {
 
 	const editButton = document.createElement('button');
 	editButton.textContent = 'Edit';
-	editButton.addEventListener('click', () =>
-		console.log('this should redirect to the edit page...')
-	);
+	editButton.addEventListener('click', () => console.log('edit functionality'));
+	// editButton.addEventListener('click', () => bringUpEditModal(data));
 
 	const deleteButton = document.createElement('button');
 	deleteButton.textContent = 'Delete';
@@ -444,7 +441,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav, addNameToDashboard } = require('./utils');
+const { toggleNav, addNameToDashboard, addNameToProfileInput } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -505,6 +502,7 @@ async function initPageBindings() {
 		bindDashboardListeners();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
+		addNameToProfileInput();
 	}
 }
 
@@ -713,7 +711,50 @@ function addNameToDashboard() {
 	welcomeMessage.textContent = `Welcome, ${localStorage.getItem('name')}`;
 }
 
-module.exports = { toggleNav, addNewHabitToDOM, addNameToDashboard };
+function addNameToProfileInput() {
+	const name = localStorage.getItem('name');
+	const nameInput = document.getElementById('name');
+	nameInput.setAttribute('value', name);
+}
+
+// function bringUpEditModal(data) {
+// 	//Note this function does not work as it should atm..!
+// 	document.getElementById('submit-habit').remove();
+// 	const submitButton = document.createElement('input');
+// 	submitButton.setAttribute('type', 'submit');
+// 	submitButton.setAttribute('value', 'Submit');
+// 	submitButton.addEventListener('Submit', () => {
+// 		// make edit request here
+// 		const data = Object.fromEntries(new FormData(e.target));
+// 		console.log(data);
+// 		window.location.pathname = '/dashboard.html';
+// 	});
+
+// 	const habitModal = document.querySelector('.habit-modal');
+// 	habitModal.removeAttribute('style');
+
+// 	const form = document.querySelector('form');
+// 	form.append(submitButton);
+
+// 	const name = document.getElementById('name');
+// 	name.setAttribute('value', data.habitName);
+
+// 	const frequency = document.getElementById('frequency');
+// 	frequency.setAttribute('value', data.frequency);
+
+// 	const goal = document.getElementById('goal');
+// 	goal.setAttribute('value', data.frequencyTarget);
+
+// 	const modal = document.querySelector('.habit-modal');
+// 	modal.classList.remove('hidden');
+// }
+
+module.exports = {
+	toggleNav,
+	addNewHabitToDOM,
+	addNameToDashboard,
+	addNameToProfileInput,
+};
 
 },{"./dom_elements":3}],10:[function(require,module,exports){
 async function createChart(data = true) {
