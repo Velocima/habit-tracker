@@ -65,6 +65,7 @@
 - Fix `PATCH /auth/:email/password` endpoint
 - Fix `PATCH /user/:email` endpoint
 - Fix `DELETE /user/:email/habit/:id` endpoint
+- Add `GET /user/:email/habit/:id/complete` endpoint
 
 ### Testing
 

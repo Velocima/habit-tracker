@@ -77,12 +77,12 @@ class Habit {
 		});
 	}
 
-	markAsComplete() {
+	get isComplete() {
 		return new Promise(async (res, rej) => {
 			try {
 				const todayUnix = Date.now(); // Milliseconds UNIX time
 
-				const dateStrings = this.completionDates.map((unix) => {
+				const dates = this.completionDates.map((unix) => {
 					const date = new Date(Number(unix));
 					return {
 						day: date.getDay(),
@@ -91,7 +91,7 @@ class Habit {
 					};
 				});
 
-				const todaysUnixDate = new Date(Date.now());
+				const todaysUnixDate = new Date(todayUnix);
 
 				const today = {
 					day: todaysUnixDate.getDay(),
@@ -99,7 +99,44 @@ class Habit {
 					year: todaysUnixDate.getFullYear(),
 				};
 
-				const todaysIndex = dateStrings.findIndex(({ day, month, year }) => {
+				const todaysIndex = dates.findIndex(({ day, month, year }) => {
+					return day === today.day && month === today.month && year === today.year;
+				});
+
+				if (todaysIndex !== -1) {
+					res(true);
+				} else {
+					res(false);
+				}
+			} catch (err) {
+				rej(err);
+			}
+		});
+	}
+
+	markAsComplete() {
+		return new Promise(async (res, rej) => {
+			try {
+				const todayUnix = Date.now(); // Milliseconds UNIX time
+
+				const dates = this.completionDates.map((unix) => {
+					const date = new Date(Number(unix));
+					return {
+						day: date.getDay(),
+						month: date.getMonth(),
+						year: date.getFullYear(),
+					};
+				});
+
+				const todaysUnixDate = new Date(todayUnix);
+
+				const today = {
+					day: todaysUnixDate.getDay(),
+					month: todaysUnixDate.getMonth(),
+					year: todaysUnixDate.getFullYear(),
+				};
+
+				const todaysIndex = dates.findIndex(({ day, month, year }) => {
 					return day === today.day && month === today.month && year === today.year;
 				});
 

@@ -54,7 +54,7 @@ A basic habit tracking app
 | create     | `/user/:email/habit/`                           | `POST`        | Working     |
 | show       | `/user/:email/habit/:id`                        | `GET`         | Working     |
 | destroy    | `/user/:email/habit/:id`                        | `DELETE`      | Working     |
-| show       | `/user/:email/habit/:id/complete`               | `GET`         | In Progress |
+| show       | `/user/:email/habit/:id/complete`               | `GET`         | Working     |
 | create     | `/user/:email/habit/:id/complete`               | `POST`        | Working     |
 | destroy    | `/user/:email/habit/:id/complete/:completionId` | `DELETE`      | Working     |
 | show       | `/user/:email/habit/:id/complete/streaks`       | `GET`         | In Progress |

@@ -58,6 +58,16 @@ router.delete('/:id', verifyToken, async (req, res) => {
 	}
 });
 
+router.get('/:id/complete', verifyToken, async (req, res) => {
+	try {
+		const habit = await Habit.findById(req.params.id);
+		const resp = await habit.isComplete;
+		res.status(200).json({ ...habit, isComplete: resp });
+	} catch (err) {
+		res.status(404).send({ err: err.message });
+	}
+});
+
 // Update
 router.post('/:id/complete', verifyToken, async (req, res) => {
 	try {
