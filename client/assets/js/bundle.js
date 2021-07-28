@@ -162,7 +162,6 @@ function createRegistrationForm() {
 
 function createHabit(data) {
 	const div = document.createElement('div');
-
 	div.setAttribute('class', 'habit-card');
 
 	const habitTitle = document.createElement('h2');
@@ -241,18 +240,27 @@ async function onAddHabitSumbit(e) {
 }
 
 function onFrequencyChange(e) {
-	const form = document.querySelector('form');
-
-	if (form.frequency.value === 'hourly') {
-		addDailyCountField(onAddHabitFormChange);
-	} else if (form.occurences) {
-		form.removeChild(form.childNodes[13]);
-		form.removeChild(form.childNodes[13]);
+	const goal = document.getElementById('goal');
+	if (e.target.value === 'hourly') {
+		goal.setAttribute('max', 15);
+	} else if (e.target.value === 'daily') {
+		goal.setAttribute('max', 7);
+	} else if (e.target.value === 'weekly') {
+		goal.setAttribute('max', 4);
 	}
 }
 
 function onAddHabitFormChange(e) {
-	updateHabitDescription();
+	const form = document.querySelector('form');
+	const description = document.querySelector('.description');
+
+	const name = form.name.value || '*habit*';
+	const goal = form.goal.value || '*goal*';
+	const plurality = form.goal.value === '1' ? '' : 's';
+	const frequency =
+		form.frequency.value === 'hourly' ? 'day' : form.frequency.value === 'daily' ? 'week' : 'month';
+
+	description.innerText = `I am going to ${name} ${goal} time${plurality} per ${frequency}`;
 }
 
 function onClickViewHabit(e) {
@@ -377,10 +385,11 @@ const {
 	onAddHabitSumbit,
 	onClickViewHabit,
 	onAddHabitFormChange,
-  onFrequencyChange,
+	onFrequencyChange,
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
+const { toggleNav } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -407,6 +416,12 @@ function bindDashboardListeners() {
 
 	const habitFrequency = document.getElementById('frequency');
 	habitFrequency.addEventListener('change', onFrequencyChange);
+
+	const closeNavButton = document.querySelector('.close-btn');
+	const openNavButton = document.querySelector('.menu-btn');
+
+	closeNavButton.addEventListener("click", toggleNav);
+	openNavButton.addEventListener("click", toggleNav);
 }
 
 function bindProfileListeners() {
@@ -438,7 +453,7 @@ async function initPageBindings() {
 
 module.exports = { initPageBindings, renderHabits };
 
-},{"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8}],8:[function(require,module,exports){
+},{"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8,"./utils":9}],8:[function(require,module,exports){
 const { logout } = require('./auth');
 
 const devURL = 'http://localhost:3000';
@@ -556,6 +571,9 @@ function toggleNav() {
 	} else {
 		nav.classList.add('hide-nav');
 	}
+	console.log('toggling')
+
+	
 }
 
 function addNewHabitToDOM(data) {
@@ -564,42 +582,7 @@ function addNewHabitToDOM(data) {
 	habits.insertBefore(habit, habits.firstChild);
 }
 
-function updateHabitDescription() {
-	const form = document.querySelector('form');
-	const description = document.querySelector('.description');
-
-	const name = form.name.value || '*habit*';
-	const goal = form.goal.value || '*goal*';
-
-	description.innerText = `I am going to ${name} ${goal} times per day`;
-}
-
-function addDailyCountField(eventHandler) {
-	const form = document.querySelector('form');
-
-	if (form.occurences) return;
-
-	const dailyCountLabel = document.createElement('label');
-	dailyCountLabel.setAttribute('for', 'occurences');
-	dailyCountLabel.innerText = 'Times per day:';
-
-	const dailyCountInput = document.createElement('input');
-	dailyCountInput.setAttribute('name', 'occurences');
-	dailyCountInput.setAttribute('id', 'occurences');
-	dailyCountInput.setAttribute('type', 'number');
-	dailyCountInput.setAttribute('min', 1);
-	dailyCountInput.setAttribute('max', 30);
-	dailyCountInput.setAttribute('placeholder', 'How many times?');
-	dailyCountInput.setAttribute('required', true);
-
-	dailyCountInput.addEventListener('keyup', eventHandler);
-	dailyCountInput.addEventListener('change', eventHandler);
-
-	form.insertBefore(dailyCountInput, form.childNodes[13]);
-	form.insertBefore(dailyCountLabel, form.childNodes[13]);
-}
-
-module.exports = { toggleNav, addNewHabitToDOM, updateHabitDescription, addDailyCountField };
+module.exports = { toggleNav, addNewHabitToDOM };
 
 },{"./dom_elements":3}],10:[function(require,module,exports){
 "use strict";function e(e){this.message=e}e.prototype=new Error,e.prototype.name="InvalidCharacterError";var r="undefined"!=typeof window&&window.atob&&window.atob.bind(window)||function(r){var t=String(r).replace(/=+$/,"");if(t.length%4==1)throw new e("'atob' failed: The string to be decoded is not correctly encoded.");for(var n,o,a=0,i=0,c="";o=t.charAt(i++);~o&&(n=a%4?64*n+o:o,a++%4)?c+=String.fromCharCode(255&n>>(-2*a&6)):0)o="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(o);return c};function t(e){var t=e.replace(/-/g,"+").replace(/_/g,"/");switch(t.length%4){case 0:break;case 2:t+="==";break;case 3:t+="=";break;default:throw"Illegal base64url string!"}try{return function(e){return decodeURIComponent(r(e).replace(/(.)/g,(function(e,r){var t=r.charCodeAt(0).toString(16).toUpperCase();return t.length<2&&(t="0"+t),"%"+t})))}(t)}catch(e){return r(t)}}function n(e){this.message=e}function o(e,r){if("string"!=typeof e)throw new n("Invalid token specified");var o=!0===(r=r||{}).header?0:1;try{return JSON.parse(t(e.split(".")[o]))}catch(e){throw new n("Invalid token specified: "+e.message)}}n.prototype=new Error,n.prototype.name="InvalidTokenError";const a=o;a.default=o,a.InvalidTokenError=n,module.exports=a;

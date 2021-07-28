@@ -12,6 +12,10 @@
   - index
   - dashboard
   - profile
+- Style pages cohesively
+  - pick colour theme
+  - add background image
+- Create responsive navigation  
 
 ## Backend
 
@@ -54,7 +58,6 @@
 
 ### Testing
 - Created test suite for habit end routes 
-- Created test database
-- 
+- Created test database 
 
 ## Misc

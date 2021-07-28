@@ -9,6 +9,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
+const { toggleNav } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -35,6 +36,12 @@ function bindDashboardListeners() {
 
 	const habitFrequency = document.getElementById('frequency');
 	habitFrequency.addEventListener('change', onFrequencyChange);
+
+	const closeNavButton = document.querySelector('.close-btn');
+	const openNavButton = document.querySelector('.menu-btn');
+
+	closeNavButton.addEventListener("click", toggleNav);
+	openNavButton.addEventListener("click", toggleNav);
 }
 
 function bindProfileListeners() {
