@@ -1,25 +1,26 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 :root {
-    --primary: #eeeeee;
-    --secondary: #ff3f00;
-    --tertiary: #4e112e; /*#8e2657*/
-    --bs: 1px 2px 3px rgba(0, 0, 0, 0.6);   
+	--primary: #eeeeee;
+	--secondary: #ff3f00;
+	--tertiary: #4e112e; /*#8e2657*/
+	--bs: 1px 2px 3px rgba(0, 0, 0, 0.6);
 }
 
 h1 {
-    color: var(--tertiary);
-    position: relative;
+	color: var(--tertiary);
+	position: relative;
 }
 
-
-a, ul, li {
-    text-decoration: none;
-    list-style-type: none;
+a,
+ul,
+li {
+	text-decoration: none;
+	list-style-type: none;
 }
 
 /* body {
@@ -31,50 +32,52 @@ a, ul, li {
 } */
 
 body {
-    position: relative;
-    background: var(--primary);
-    font-family: 'Rubik', sans-serif;
+	position: relative;
+	background: var(--primary);
+	font-family: 'Rubik', sans-serif;
 }
 
 body::before {
-    content: '';
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    height: 100vh;
-    background-image: url("../img/geo-img-2.png");
-    background-size: 100vh; 
-    background-repeat: no-repeat;
-    background-position: fixed;
-    opacity: 0.5;
+	content: '';
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	height: 100vh;
+	background-image: url('../img/geo-img-2.png');
+	background-size: 100vh;
+	background-repeat: no-repeat;
+	background-position: fixed;
+	opacity: 0.5;
+	pointer-events: none;
 }
 
 button {
-    background: none;
-    border: 2px solid var(--secondary);
-    color: var(--secondary);
-    padding: 6px 12px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    box-shadow: var(--bs);
-    display: inline-block;
+	background: none;
+	border: 2px solid var(--secondary);
+	color: var(--secondary);
+	padding: 6px 12px;
+	border-radius: 20px;
+	text-transform: uppercase;
+	box-shadow: var(--bs);
+	display: inline-block;
 }
 
 button:hover {
-    color: #222;
-    font-weight: bold;
-    background: var(--secondary);
+	color: #222;
+	font-weight: bold;
+	background: var(--secondary);
 }
 
-input, textarea {
-    padding: 10px 16px;
-    margin: 10px 10px;
-    border-radius:  20px;
-    border: 1px solid #ff3f00;
+input,
+textarea {
+	padding: 10px 16px;
+	margin: 10px 10px;
+	border-radius: 20px;
+	border: 1px solid #ff3f00;
 }
 
 .hide-nav {
-    display: none;
+	display: none;
 }

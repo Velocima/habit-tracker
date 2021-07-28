@@ -41,6 +41,24 @@ A basic habit tracking app
 - Docker
 - PostgreSQL
 
+## API endpoints
+
+| Route name | Path                                            | Method        | Purpose     |
+| ---------- | ----------------------------------------------- | ------------- | ----------- |
+| create     | `/auth/register`                                | `POST`        | Working     |
+| update     | `/auth/login`                                   | `POST`        | Working     |
+| update     | `/auth/:email/password`                         | `PATCH`       | In progress |
+| show       | `/user/:email`                                  | `GET`         | Working     |
+| update     | `/user/:email`                                  | `PATCH`/`PUT` | In progress |
+| show       | `/user/:email/habit`                            | `GET`         | Working     |
+| create     | `/user/:email/habit/`                           | `POST`        | Working     |
+| show       | `/user/:email/habit/:id`                        | `GET`         | Working     |
+| destroy    | `/user/:email/habit/:id`                        | `DELETE`      | In Progress |
+| show       | `/user/:email/habit/:id/complete`               | `GET`         | In Progress |
+| create     | `/user/:email/habit/:id/complete`               | `POST`        | Working     |
+| destroy    | `/user/:email/habit/:id/complete/:completionId` | `DELETE`      | Working     |
+| show       | `/user/:email/habit/:id/complete/streaks`       | `GET`         | In Progress |
+
 ## Changelog
 
 [changelog](./changelog.md)
