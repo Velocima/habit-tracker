@@ -7,36 +7,36 @@
 		<title>Dashboard</title>
 		<link rel="stylesheet" href="assets/css/style.css" />
 		<link rel="stylesheet" href="assets/css/dashboard.css" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap"
+			rel="stylesheet"
+		/>
 		<script defer src="assets/js/bundle.js"></script>
 	</head>
 	<body>
-		<nav class="grid">
-			<!-- <div class="hamburger">
-				<div></div>
-				<div></div>
-				<div></div>
-			</div> -->
-			<!-- <div class="site-name-logo">Habitude</div> -->
+		<nav>
+			<a href="" class="closebtn">&times;</a>
 			<ul>
 				<li>
-					<a href="./profile.html">profile</a>
+					<a class="nav-link" href="./profile.html">profile</a>
 				</li>
 				<li>
-					<button class="add-habit">Add a habit</button>
+					<button class="add-habit nav-link">Add a habit</button>
 				</li>
-				<li><button>logout</button></li>
+				<li><button class="nav-link">logout</button></li>
 			</ul>
 		</nav>
-		<main class="grid">
+		<div class="menu-btn">&#9776;</div>
+		<main>
 			<h1>Welcome,</h1>
 			<section class="habits">
 				<button class="add-habit">Add a habit</button>
 			</section>
+			<section class="habits-container"></section>
 		</main>
-		<section class="habit-modal hidden grid">
+		<section class="habit-modal hidden">
 			<form>
 				<label for="name">Habit name</label>
 				<input name="name" type="text" id="name" required placeholder="Habit" autocomplete="off" />
@@ -48,11 +48,11 @@
 					<option value="daily" selected="selected">Daily</option>
 					<option value="weekly">Weekly</option>
 				</select>
-				<label for="goal">Habbit goal</label>
+				<label for="goal">Habit goal</label>
 				<input name="goal" type="number" id="goal" required placeholder="Habit" min="1" max="7" />
 				<input type="submit" value="Add habit" />
 			</form>
 			<p class="description">I am going to *habit* *goal* times per day</p>
-		</section>
-	</body>
+	</section>
+</body>
 </html>
