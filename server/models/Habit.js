@@ -74,18 +74,43 @@ class Habit {
 		});
 	}
 
-	update() {
+	markAsComplete() {
 		return new Promise(async (res, rej) => {
 			try {
 				const todayUnix = Date.now(); // Milliseconds UNIX time
-				const completedDateUnix = Math.floor(today / 1000); // Seconds UNIX time
-				const result = await db.query(
-					'INSERT into completions (completion_date, habit_id) VALUES $1, $2 WHERE id = $3 RETURNING id;',
-					[completedDate, this.id]
-				);
-				res(result.rows[0]);
+
+				const dateStrings = this.completionDates.map((unix) => {
+					const date = new Date(Number(unix));
+					return {
+						day: date.getDay(),
+						month: date.getMonth(),
+						year: date.getFullYear(),
+					};
+				});
+
+				const todaysUnixDate = new Date(Date.now());
+
+				const today = {
+					day: todaysUnixDate.getDay(),
+					month: todaysUnixDate.getMonth(),
+					year: todaysUnixDate.getFullYear(),
+				};
+
+				const todaysIndex = dateStrings.findIndex(({ day, month, year }) => {
+					return day === today.day && month === today.month && year === today.year;
+				});
+
+				if (todaysIndex === -1) {
+					const result = await db.query(
+						'INSERT into completions (completion_date, habit_id) VALUES ($1, $2) RETURNING *;',
+						[todayUnix, this.id]
+					);
+					res(result.rows[0]);
+				} else {
+					throw new Error('Record already complete for time period');
+				}
 			} catch (err) {
-				rej(`Error updating habits: ${err}`);
+				rej(err);
 			}
 		});
 	}

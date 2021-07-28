@@ -44,23 +44,14 @@ router.post('/', verifyToken, async (req, res) => {
 });
 
 // Update
-router.patch('/:id', verifyToken, async (req, res) => {
+router.patch('/:id/complete', verifyToken, async (req, res) => {
 	try {
 		const habit = await Habit.findById(req.params.id);
-
-		// Converting unix datestamps into strings because we only want the dates:
-		const dateStrings = habit.completionDates.map((date) => date.toLocaleString());
-
-		// Checking for duplicate dates:
-		if (dateStrings.indexOf(today) === -1) {
-			const resp = await habit.update();
-			res.status(200).json(resp);
-		} else {
-			const resp = 'You cannot double-complete a habit';
-			res.status(404).json(resp);
-		}
+		const resp = await habit.markAsComplete();
+		res.status(200).json(resp);
 	} catch (err) {
-		res.status(404).send({ err });
+		console.log(err);
+		res.status(404).send({ err: err.message });
 	}
 });
 
