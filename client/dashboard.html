@@ -31,7 +31,7 @@
 		</nav>
 		<div class="menu-btn">&#9776;</div>
 		<main>
-			<h1>Welcome,</h1>
+			<h1 id="welcome">Welcome,</h1>
 			<section class="habits">
 				<button class="add-habit">Add a habit</button>
 			</section>
@@ -43,9 +43,7 @@
 				<a href="" class="close-btn">&times;</a>
 				<form>
 					<label for="name">Habit name</label>
-					<input name="name" type="text" id="name" required placeholder="Habit" autocomplete="off" />
-					<label for="description">Habit description</label>
-					<textarea name="description" id="description" required placeholder="Description"></textarea>
+					<input name="name" type="text" id="name" required placeholder="e.g. exercise" autocomplete="off" />
 					<label for="frequency">Frequency</label>
 					<select name="frequency" id="frequency" required>
 						<option value="hourly">More than daily</option>
@@ -53,7 +51,7 @@
 						<option value="weekly">Weekly</option>
 					</select>
 					<label for="goal">Habit goal</label>
-					<input name="goal" type="number" id="goal" required placeholder="Habit" min="1" max="7" />
+					<input name="goal" type="number" id="goal" required placeholder="3" min="1" max="7" />
 					<input type="submit" value="Add habit" />
 				</form>
 				<p class="description">I am going to *habit* *goal* times per day</p>
