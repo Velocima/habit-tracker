@@ -73,41 +73,43 @@ class Habit {
 		});
 	}
 
-    update() {
-        return new Promise(async (res, rej) => {
-            try {
-                const todayUnix = Date.now(); // Milliseconds UNIX time
-                const completedDateUnix = (Math.floor(today/ 1000)); // Seconds UNIX time
-                const 
-                const result = await db.query('INSERT into completions (completion_date, habit_id) VALUES $1, $2 WHERE id = $3 RETURNING id;', [ completedDate, this.id]);
-                res(result.rows[0])
-            } catch (err) {
-                rej(`Error updating habits: ${err}`)
-            }
-        })
-    }
+	update() {
+		return new Promise(async (res, rej) => {
+			try {
+				const todayUnix = Date.now(); // Milliseconds UNIX time
+				const completedDateUnix = Math.floor(today / 1000); // Seconds UNIX time
+				const result = await db.query(
+					'INSERT into completions (completion_date, habit_id) VALUES $1, $2 WHERE id = $3 RETURNING id;',
+					[completedDate, this.id]
+				);
+				res(result.rows[0]);
+			} catch (err) {
+				rej(`Error updating habits: ${err}`);
+			}
+		});
+	}
 
-    destroyHabit() {
-        return new Promise(async (resolve, reject) => {
-          try {
-            await db.query(`DELETE FROM habits WHERE id = $1;`, [this.id]);
-            resolve("Habit was deleted");
-          } catch (err) {
-            reject("Habit could not be deleted");
-          }
-        });
-      }
+	destroyHabit() {
+		return new Promise(async (resolve, reject) => {
+			try {
+				await db.query(`DELETE FROM habits WHERE id = $1;`, [this.id]);
+				resolve('Habit was deleted');
+			} catch (err) {
+				reject('Habit could not be deleted');
+			}
+		});
+	}
 
-    static destroyCompletionDate(id) {
-        return new Promise(async (resolve, reject) => {
-          try {
-            await db.query(`DELETE FROM completions WHERE habit_id = $1 RETURNING habit_id;`, [id]);
-            resolve({habit_id: "Completion date was deleted"});
-          } catch (err) {
-            reject("Completion date could not be deleted");
-          }
-        });
-      }
+	static destroyCompletionDate(id) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				await db.query(`DELETE FROM completions WHERE habit_id = $1 RETURNING habit_id;`, [id]);
+				resolve({ habit_id: 'Completion date was deleted' });
+			} catch (err) {
+				reject('Completion date could not be deleted');
+			}
+		});
+	}
 }
 
 module.exports = Habit;
