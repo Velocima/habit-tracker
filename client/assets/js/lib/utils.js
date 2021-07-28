@@ -13,6 +13,7 @@ function addNewHabitToDOM(data) {
 	const habits = document.querySelector('.habits-container');
 	const habit = createHabit(data);
 	habits.insertBefore(habit, habits.firstChild);
+	return habit;
 }
 
 module.exports = { toggleNav, addNewHabitToDOM };

@@ -58,6 +58,8 @@ function logout() {
 module.exports = { requestLogin, requestRegistration, login, logout };
 
 },{"jwt-decode":11}],3:[function(require,module,exports){
+const { deleteHabit } = require('./requests');
+
 function createLoginForm() {
 	const form = document.createElement('form');
 
@@ -180,6 +182,7 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
+	console.log(data);
 
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
@@ -195,13 +198,16 @@ function createViewHabit(data) {
 		viewContainer.textContent = '';
 	});
 
+	const habitTitle = document.createElement('h1');
+	habitTitle.textContent = data.habitName;
+
 	const checkbox = document.createElement('input');
 	checkbox.setAttribute('id', 'checkbox');
 	checkbox.setAttribute('type', 'checkbox');
 	checkbox.setAttribute('name', 'checkbox');
 
 	const description = document.createElement('p');
-	description.textContent = data.habit_description;
+	description.textContent = data.description;
 
 	const editButton = document.createElement('button');
 	editButton.textContent = 'Edit';
@@ -209,25 +215,35 @@ function createViewHabit(data) {
 		console.log('this should redirect to the edit page...')
 	);
 
+	const deleteButton = document.createElement('button');
+	deleteButton.textContent = 'Delete';
+	deleteButton.addEventListener('click', async () => {
+		const response = await deleteHabit(data.id);
+		const responseJson = await response.json();
+		console.log(responseJson);
+	});
+
 	const chartContainer = document.createElement('div');
 	chartContainer.setAttribute('id', 'myChart');
 
 	//add in chart generation and streaks
 
 	section.append(goHomeButton);
-	section.append(checkbox);
+	section.append(habitTitle);
 	section.append(description);
-	section.append(editButton);
+	section.append(checkbox);
 	section.append(chartContainer);
+	section.append(editButton);
+	section.append(deleteButton);
 
 	return section;
 }
 
 module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };
 
-},{}],4:[function(require,module,exports){
+},{"./requests":8}],4:[function(require,module,exports){
 const { createViewHabit } = require('../dom_elements');
-const { postHabit } = require('../requests');
+const { postHabit, getHabitData } = require('../requests');
 const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require('../utils');
 const { createChart } = require('../zing_chart');
 
@@ -246,7 +262,8 @@ async function onAddHabitSumbit(e) {
 		form.reset();
 		const modal = document.querySelector('.habit-modal');
 		modal.classList.add('hidden');
-		addNewHabitToDOM(newHabit);
+		const habitElement = addNewHabitToDOM(newHabit);
+		habitElement.querySelector('button').addEventListener('click', onClickViewHabit);
 	} else {
 		console.log(newHabit);
 		// add error handling
@@ -289,10 +306,11 @@ async function onClickViewHabit(e) {
 	viewContainer.setAttribute('style', 'display:block');
 
 	//create a new request function that retreives all info for this users habit, and call this here
-	// const data = await getHabitInfo(localStorage.getItem('email', e.target.id));
-	const habitSection = createViewHabit('data');
+	const data = await getHabitData(e.target.id);
+	console.log(data);
+	const habitSection = createViewHabit(data.habit);
 	viewContainer.append(habitSection);
-	createChart();
+	createChart(data.habit);
 }
 
 module.exports = {
@@ -450,6 +468,7 @@ function bindProfileListeners() {
 async function renderHabits() {
 	const habitsContainer = document.querySelector('.habits-container');
 	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
+	userHabitData.reverse();
 	let habitSections = userHabitData.map((habit) => createHabit(habit));
 	habitSections.forEach((habit) => habitsContainer.append(habit));
 }
@@ -478,6 +497,23 @@ async function getAllUserHabits(email) {
 		const options = { headers: new Headers({ Authorization: localStorage.getItem('token') }) };
 		const email = localStorage.getItem('email');
 		const url = `${devURL}/user/${email}/habits`;
+		const response = await fetch(url, options);
+		const data = await response.json();
+		if (data.err) {
+			console.warn(data.err);
+			logout();
+		}
+		return data;
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function getHabitData(id) {
+	try {
+		const options = { headers: new Headers({ Authorization: localStorage.getItem('token') }) };
+		const email = localStorage.getItem('email');
+		const url = `${devURL}/user/${email}/habits/${id}`;
 		const response = await fetch(url, options);
 		const data = await response.json();
 		if (data.err) {
@@ -520,7 +556,8 @@ async function deleteHabit(id) {
 			method: 'DELETE',
 			headers: new Headers({ Authorization: localStorage.getItem('token') }),
 		};
-		const response = await fetch(`${devURL}/habits/${id}`, options);
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/user/${email}/habits/${id}`, options);
 		const responseJson = await response.json();
 		if (responseJson.err) {
 			throw Error(err);
@@ -574,7 +611,7 @@ async function putUserInfo(data) {
 	return responseJson;
 }
 
-module.exports = { getAllUserHabits, postHabit, deleteHabit, putHabit, putUserInfo };
+module.exports = { getAllUserHabits, getHabitData, postHabit, deleteHabit, putHabit, putUserInfo };
 
 },{"./auth":2}],9:[function(require,module,exports){
 const { createHabit } = require('./dom_elements');
@@ -592,6 +629,7 @@ function addNewHabitToDOM(data) {
 	const habits = document.querySelector('.habits-container');
 	const habit = createHabit(data);
 	habits.insertBefore(habit, habits.firstChild);
+	return habit;
 }
 
 module.exports = { toggleNav, addNewHabitToDOM };

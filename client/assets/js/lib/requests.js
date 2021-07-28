@@ -11,6 +11,23 @@ async function getAllUserHabits(email) {
 		const data = await response.json();
 		if (data.err) {
 			console.warn(data.err);
+			logout();
+		}
+		return data;
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function getHabitData(id) {
+	try {
+		const options = { headers: new Headers({ Authorization: localStorage.getItem('token') }) };
+		const email = localStorage.getItem('email');
+		const url = `${devURL}/user/${email}/habits/${id}`;
+		const response = await fetch(url, options);
+		const data = await response.json();
+		if (data.err) {
+			console.warn(data.err);
 			// logout();
 		}
 		return data;
@@ -49,7 +66,8 @@ async function deleteHabit(id) {
 			method: 'DELETE',
 			headers: new Headers({ Authorization: localStorage.getItem('token') }),
 		};
-		const response = await fetch(`${devURL}/habits/${id}`, options);
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/user/${email}/habits/${id}`, options);
 		const responseJson = await response.json();
 		if (responseJson.err) {
 			throw Error(err);
@@ -103,4 +121,4 @@ async function putUserInfo(data) {
 	return responseJson;
 }
 
-module.exports = { getAllUserHabits, postHabit, deleteHabit, putHabit, putUserInfo };
+module.exports = { getAllUserHabits, getHabitData, postHabit, deleteHabit, putHabit, putUserInfo };
