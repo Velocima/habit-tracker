@@ -8,6 +8,10 @@
   - dashboard
   - profile
 - Add dynamic habit description to add habit form
+- Create styling pages:
+  - index
+  - dashboard
+  - profile
 
 ## Backend
 
