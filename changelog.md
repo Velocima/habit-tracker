@@ -15,7 +15,7 @@
 - Style pages cohesively
   - pick colour theme
   - add background image
-- Create responsive navigation  
+- Create responsive navigation
 
 ## Backend
 
@@ -60,16 +60,13 @@
 [2.0.0] - 2021-07-28 - Poligera & Velocima
 
 - Add `GET /users/:email/habit/:id` endpoint
+- Add `POST /user/:email/habit/:id/complete` endpoint
+- update `DELETE /user/:email/habit/:id/complete/:completionId` endpoint
+- Fix `PATCH /auth/:email/password` endpoint
 
 ### Testing
-<<<<<<< HEAD
-- Created test suite for habit end routes 
-- Created test database 
-=======
 
 - Created test suite for habit end routes
 - Created test database
--
->>>>>>> 251ac19693d656a6f3439d08fd556a5ae584e2cf
 
 ## Misc
