@@ -477,8 +477,8 @@ function bindDashboardListeners() {
 	const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
 
-	closeNavButton.addEventListener("click", toggleNav);
-	openNavButton.addEventListener("click", toggleNav);
+	closeNavButton.addEventListener('click', toggleNav);
+	openNavButton.addEventListener('click', toggleNav);
 }
 
 function bindProfileListeners() {
@@ -492,6 +492,7 @@ function bindProfileListeners() {
 async function renderHabits() {
 	const habitsContainer = document.querySelector('.habits-container');
 	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
+	userHabitData.reverse();
 	let habitSections = userHabitData.map((habit) => createHabit(habit));
 	habitSections.forEach((habit) => habitsContainer.append(habit));
 }
@@ -520,6 +521,23 @@ async function getAllUserHabits(email) {
 		const options = { headers: new Headers({ Authorization: localStorage.getItem('token') }) };
 		const email = localStorage.getItem('email');
 		const url = `${devURL}/user/${email}/habits`;
+		const response = await fetch(url, options);
+		const data = await response.json();
+		if (data.err) {
+			console.warn(data.err);
+			logout();
+		}
+		return data;
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function getHabitData(id) {
+	try {
+		const options = { headers: new Headers({ Authorization: localStorage.getItem('token') }) };
+		const email = localStorage.getItem('email');
+		const url = `${devURL}/user/${email}/habits/${id}`;
 		const response = await fetch(url, options);
 		const data = await response.json();
 		if (data.err) {
@@ -562,7 +580,8 @@ async function deleteHabit(id) {
 			method: 'DELETE',
 			headers: new Headers({ Authorization: localStorage.getItem('token') }),
 		};
-		const response = await fetch(`${devURL}/habits/${id}`, options);
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/user/${email}/habits/${id}`, options);
 		const responseJson = await response.json();
 		if (responseJson.err) {
 			throw Error(err);
@@ -616,7 +635,59 @@ async function putUserInfo(data) {
 	return responseJson;
 }
 
-module.exports = { getAllUserHabits, postHabit, deleteHabit, putHabit, putUserInfo };
+async function postCompletion(id) {
+	try {
+		const options = {
+			method: 'POST',
+			headers: new Headers({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+			}),
+		};
+		const email = localStorage.getItem('email');
+		const url = `${devURL}/user/${email}/habits/${id}/complete`;
+		const response = await fetch(url, options);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw new Error(err);
+		}
+		console.log(responseJson);
+		return responseJson;
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function deleteCompletion(id, completionId) {
+	try {
+		const options = {
+			method: 'DELETE',
+			headers: new Headers({ Authorization: localStorage.getItem('token') }),
+		};
+		const email = localStorage.getItem('email');
+		const response = await fetch(
+			`${devURL}/user/${email}/habits/${id}/complete/${completionId}`,
+			options
+		);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw Error(err);
+		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+module.exports = {
+	getAllUserHabits,
+	getHabitData,
+	postHabit,
+	deleteHabit,
+	putHabit,
+	putUserInfo,
+	postCompletion,
+	deleteCompletion,
+};
 
 },{"./auth":2}],9:[function(require,module,exports){
 const { createHabit } = require('./dom_elements');

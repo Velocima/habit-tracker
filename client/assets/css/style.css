@@ -5,17 +5,10 @@
 }
 
 :root {
-<<<<<<< HEAD
-    --primary: #eeeeee;
-    --secondary: #ff3f00;
-    --tertiary: #8e2657; /*#8e2657*/
-    --bs: 1px 2px 3px rgba(0, 0, 0, 0.6);   
-=======
 	--primary: #eeeeee;
 	--secondary: #ff3f00;
 	--tertiary: #4e112e; /*#8e2657*/
 	--bs: 1px 2px 3px rgba(0, 0, 0, 0.6);
->>>>>>> 03f14367a3a2c33bebe0c8fa3f2bbdcb241a7712
 }
 
 h1 {
@@ -45,38 +38,6 @@ body {
 }
 
 body::before {
-<<<<<<< HEAD
-    content: '';
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    height: 100vh;
-    background-image: url("../img/geo-img-2.png");
-    background-size: 100vh; 
-    background-repeat: no-repeat;
-    background-position: fixed;
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-button {
-    background-color: var(--secondary);
-    border: 2px solid var(--tertiary);
-    color: var(--tertiary);
-    padding: 6px 12px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    display: inline-block;
-}
-
-button:hover {
-    color: #4e112e; /*#8e2657*/
-    font-weight: bold;
-    background: var(--secondary);
-    box-shadow: var(--bs);
-=======
 	content: '';
 	position: absolute;
 	top: 0px;
@@ -107,7 +68,6 @@ button:hover {
 	color: #222;
 	font-weight: bold;
 	background: var(--secondary);
->>>>>>> 03f14367a3a2c33bebe0c8fa3f2bbdcb241a7712
 }
 
 input,
