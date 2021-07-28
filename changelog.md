@@ -63,6 +63,7 @@
 - Add `POST /user/:email/habit/:id/complete` endpoint
 - update `DELETE /user/:email/habit/:id/complete/:completionId` endpoint
 - Fix `PATCH /auth/:email/password` endpoint
+- Fix `PATCH /user/:email` endpoint
 
 ### Testing
 

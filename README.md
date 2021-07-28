@@ -47,9 +47,9 @@ A basic habit tracking app
 | ---------- | ----------------------------------------------- | ------------- | ----------- |
 | create     | `/auth/register`                                | `POST`        | Working     |
 | update     | `/auth/login`                                   | `POST`        | Working     |
-| update     | `/auth/:email/password`                         | `PATCH`       | In progress |
+| update     | `/auth/:email/password`                         | `PATCH`       | Working     |
 | show       | `/user/:email`                                  | `GET`         | Working     |
-| update     | `/user/:email`                                  | `PATCH`/`PUT` | In progress |
+| update     | `/user/:email`                                  | `PATCH`/`PUT` | Working     |
 | show       | `/user/:email/habit`                            | `GET`         | Working     |
 | create     | `/user/:email/habit/`                           | `POST`        | Working     |
 | show       | `/user/:email/habit/:id`                        | `GET`         | Working     |
