@@ -411,6 +411,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
+const { toggleNav } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -437,6 +438,12 @@ function bindDashboardListeners() {
 
 	const habitFrequency = document.getElementById('frequency');
 	habitFrequency.addEventListener('change', onFrequencyChange);
+
+	const closeNavButton = document.querySelector('.close-btn');
+	const openNavButton = document.querySelector('.menu-btn');
+
+	closeNavButton.addEventListener("click", toggleNav);
+	openNavButton.addEventListener("click", toggleNav);
 }
 
 function bindProfileListeners() {
@@ -468,7 +475,7 @@ async function initPageBindings() {
 
 module.exports = { initPageBindings, renderHabits };
 
-},{"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8}],8:[function(require,module,exports){
+},{"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8,"./utils":9}],8:[function(require,module,exports){
 const { logout } = require('./auth');
 
 const devURL = 'http://localhost:3000';
@@ -586,6 +593,9 @@ function toggleNav() {
 	} else {
 		nav.classList.add('hide-nav');
 	}
+	console.log('toggling')
+
+	
 }
 
 function addNewHabitToDOM(data) {

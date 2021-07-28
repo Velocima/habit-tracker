@@ -73,16 +73,20 @@ nav p {
     cursor: pointer;
 }
 
-.closebtn {
+.close-btn {
     padding-left: 10px;
 }
 
 /*-------------*/
 main {
+    position: relative;
     text-align: center;
     padding-top: 50px;
 }
 
+.habit-modal {
+    position: relative;
+}
 
 form {
     display: flex;
@@ -101,6 +105,19 @@ form {
 @media screen and  (min-width: 375px){
     form {
         width: calc(80vw/1.25)
+    }
+}
+
+@media  screen and (max-width: 375px){
+    .menu-btn {
+        padding: 5px 0 0 10px ;
+        color: var(--secondary);
+        font-size: 24px;
+        cursor: pointer;
+    }
+    
+    .closebtn {
+        padding-left: 10px;
     }
 }
 
