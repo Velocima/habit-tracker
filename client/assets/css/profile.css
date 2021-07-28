@@ -6,10 +6,5 @@ h1 {
 }
 
 form {
-    position: relative;
-    display: flex;
-    flex-direction: column;
     width: 70%;
-    align-items: center;
-    margin: 20px auto;
 }

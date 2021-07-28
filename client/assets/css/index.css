@@ -4,37 +4,15 @@ body {
     margin-top: 150px;
 }
 
-h1 {
-    position: relative;
-    font-size: 50px;
-}
-
-p {
-    position: relative;
-    padding: 20px;
-}
-
 button {
     position: relative;
 }
 
-form {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    margin: 20px auto;
-}
 
-label[for="name"] {
-    display: none;
-}
-
-label[for="email"] {
-    display: none;
-}
-
-label[for="password"] {
+label[for="name"],
+label[for="password"],
+label[for="email"]
+ {
     display: none;
 }
 
@@ -43,30 +21,3 @@ label[for="password"] {
 
 }
 
-
-@media screen and  (min-width: 375px){
-    form {
-        width: calc(80vw/1.25)
-    }
-}
-
-@media screen and  (min-width: 620px){
-
-    form {
-        width: calc(70vw/1.5)
-    }
-}
-
-@media screen and  (min-width: 960px){
-
-    form {
-        width: calc(60vw/1.5);   
-    }
-}
-
-@media screen and  (min-width: 1200px){
-
-    form {
-        width: calc(50vw/1.5);   
-    }
-}
