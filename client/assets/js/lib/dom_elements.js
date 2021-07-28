@@ -119,7 +119,7 @@ function createHabit(data) {
 }
 
 function createViewHabit(data) {
-	const section = document.createElement('section');
+	const section = document.createElement('div');
 
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
@@ -149,12 +149,16 @@ function createViewHabit(data) {
 		console.log('this should redirect to the edit page...')
 	);
 
+	const chartContainer = document.createElement('div');
+	chartContainer.setAttribute('id', 'myChart');
+
 	//add in chart generation and streaks
 
 	section.append(goHomeButton);
 	section.append(checkbox);
 	section.append(description);
 	section.append(editButton);
+	section.append(chartContainer);
 
 	return section;
 }
