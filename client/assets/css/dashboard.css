@@ -1,0 +1,46 @@
+:root {
+    --primary: #eeeeee;
+    --secondary: #ff3f00;
+    --tertiary: #8e2657;
+    --bs: 1px 2px 3px rgba(0, 0, 0, 0.6);   
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+nav {
+    margin: 0 20px;
+
+}
+
+nav ul {
+    display: none;
+}
+
+grid {}
+
+
+
+/* .hamburger {
+    width: 70px;
+    height: 100%;
+    background: var(--tertiary);
+    padding: 15px 17px;
+    border-top-left-radius: 20px;
+    cursor: pointer;
+} */
+
+@media screen and  (min-width: 620px){
+
+}
+
+
+@media screen and  (min-width: 960px){
+
+}
+
+@media screen and  (min-width: 1200px){
+
+}

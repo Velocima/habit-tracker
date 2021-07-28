@@ -63,7 +63,7 @@ function createLoginForm() {
 
 	const emailLabel = document.createElement('label');
 	emailLabel.setAttribute('for', 'email');
-	emailLabel.innerText = 'Email';
+	// emailLabel.innerText = 'Email';
 
 	const emailInput = document.createElement('input');
 	emailInput.setAttribute('name', 'email');
@@ -77,7 +77,7 @@ function createLoginForm() {
 
 	const passwordLabel = document.createElement('label');
 	passwordLabel.setAttribute('for', 'password');
-	passwordLabel.innerText = 'Password';
+	// passwordLabel.innerText = 'Password';
 
 	const passwordInput = document.createElement('input');
 	passwordInput.setAttribute('name', 'password');
@@ -95,6 +95,10 @@ function createLoginForm() {
 
 	form.append(loginButton);
 
+	const hasNoAccount = document.createElement('p');
+	hasNoAccount.innerText = "Don't have an account?";
+	form.append(hasNoAccount);
+
 	return form;
 }
 
@@ -103,13 +107,13 @@ function createRegistrationForm() {
 
 	const nameLabel = document.createElement('label');
 	nameLabel.setAttribute('for', 'name');
-	nameLabel.innerText = 'Name';
+	// nameLabel.innerText = 'Name';
 
 	const nameInput = document.createElement('input');
 	nameInput.setAttribute('name', 'name');
 	nameInput.setAttribute('id', 'name');
 	nameInput.setAttribute('type', 'text');
-	nameInput.setAttribute('placeholder', 'name');
+	nameInput.setAttribute('placeholder', 'Name');
 	nameInput.setAttribute('required', true);
 
 	form.append(nameLabel);
@@ -117,7 +121,7 @@ function createRegistrationForm() {
 
 	const emailLabel = document.createElement('label');
 	emailLabel.setAttribute('for', 'email');
-	emailLabel.innerText = 'Email';
+	// emailLabel.innerText = 'Email';
 
 	const emailInput = document.createElement('input');
 	emailInput.setAttribute('name', 'email');
@@ -131,7 +135,7 @@ function createRegistrationForm() {
 
 	const passwordLabel = document.createElement('label');
 	passwordLabel.setAttribute('for', 'password');
-	passwordLabel.innerText = 'Password';
+	// passwordLabel.innerText = 'Password';
 
 	const passwordInput = document.createElement('input');
 	passwordInput.setAttribute('name', 'password');
@@ -148,6 +152,10 @@ function createRegistrationForm() {
 	registerButton.setAttribute('value', 'Register');
 
 	form.append(registerButton);
+
+	const hasAccount = document.createElement('p');
+	hasAccount.innerText = "Already have an account?";
+	form.append(hasAccount);
 
 	return form;
 }
@@ -194,6 +202,7 @@ function onFrequencyChange(e) {
 		form.removeChild(form.childNodes[13]);
 	}
 }
+
 
 function onAddHabitFormChange(e) {
 	updateHabitDescription();
