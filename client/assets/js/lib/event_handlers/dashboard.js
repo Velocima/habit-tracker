@@ -11,7 +11,10 @@ function onAddHabitButtonClick(e) {
 async function onAddHabitSumbit(e) {
 	e.preventDefault();
 	const data = Object.fromEntries(new FormData(e.target));
-	const newHabit = await postHabit(data);
+	const description = document.querySelector('.description').textContent;
+	console.log(description);
+	const submitData = { ...data, description };
+	const newHabit = await postHabit(submitData);
 	console.log('the new habit', newHabit);
 	if (!newHabit.err) {
 		const form = document.querySelector('form');

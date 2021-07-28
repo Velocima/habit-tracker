@@ -9,7 +9,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav } = require('./utils');
+const { toggleNav, addNameToDashboard } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -62,10 +62,11 @@ async function renderHabits() {
 
 async function initPageBindings() {
 	const path = window.location.pathname;
-	if (path === '/') {
+	if (path === '/' || path === '/index.html') {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
 		await renderHabits();
+		addNameToDashboard();
 		bindDashboardListeners();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();

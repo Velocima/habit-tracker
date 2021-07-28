@@ -198,30 +198,24 @@ function createViewHabit(data) {
 		viewContainer.textContent = '';
 	});
 
+	const markAsComplete = document.createElement('button');
+	markAsComplete.textContent = 'Mark as complete';
+	markAsComplete.addEventListener('click', async () => {
+		const response = await postCompletion(data.id);
+		const responseJson = await response.json();
+		console.log(responseJson);
+	});
+
+	const removeCompletion = document.createElement('button');
+	removeCompletion.textContent = 'Remove completion';
+	removeCompletion.addEventListener('click', async () => {
+		const response = await deleteCompletion(data.id, 1);
+		const responseJson = await response.json();
+		console.log(responseJson);
+	});
+
 	const habitTitle = document.createElement('h1');
 	habitTitle.textContent = data.habitName;
-
-	const checkbox = document.createElement('input');
-	checkbox.setAttribute('id', 'checkbox');
-	checkbox.setAttribute('type', 'checkbox');
-	checkbox.setAttribute('name', 'checkbox');
-	checkbox.addEventListener('change', () => {
-		if (this.checked) {
-			console.log('Checkbox is checked..');
-			// const response = await deleteCompletion(data.id, 6);
-			// const responseJson = await response.json();
-			// console.log(responseJson);
-		} else {
-			console.log('Checkbox is not checked..');
-			// need to add some logic to determine the completion ids
-			// const response = await postCompletion(data.id);
-			// const responseJson = await response.json();
-			// console.log(responseJson);
-		}
-		if (!this.checked) {
-			console.log('not checked');
-		}
-	});
 
 	const description = document.createElement('p');
 	description.textContent = data.description;
@@ -248,7 +242,8 @@ function createViewHabit(data) {
 	section.append(goHomeButton);
 	section.append(habitTitle);
 	section.append(description);
-	section.append(checkbox);
+	section.append(markAsComplete);
+	section.append(removeCompletion);
 	section.append(chartContainer);
 	section.append(editButton);
 	section.append(deleteButton);
@@ -272,7 +267,10 @@ function onAddHabitButtonClick(e) {
 async function onAddHabitSumbit(e) {
 	e.preventDefault();
 	const data = Object.fromEntries(new FormData(e.target));
-	const newHabit = await postHabit(data);
+	const description = document.querySelector('.description').textContent;
+	console.log(description);
+	const submitData = { ...data, description };
+	const newHabit = await postHabit(submitData);
 	console.log('the new habit', newHabit);
 	if (!newHabit.err) {
 		const form = document.querySelector('form');
@@ -446,7 +444,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav } = require('./utils');
+const { toggleNav, addNameToDashboard } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -499,10 +497,11 @@ async function renderHabits() {
 
 async function initPageBindings() {
 	const path = window.location.pathname;
-	if (path === '/') {
+	if (path === '/' || path === '/index.html') {
 		bindIndexListeners();
 	} else if (path === '/dashboard.html') {
 		await renderHabits();
+		addNameToDashboard();
 		bindDashboardListeners();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
@@ -709,7 +708,12 @@ function addNewHabitToDOM(data) {
 	return habit;
 }
 
-module.exports = { toggleNav, addNewHabitToDOM };
+function addNameToDashboard() {
+	const welcomeMessage = document.getElementById('welcome');
+	welcomeMessage.textContent = `Welcome, ${localStorage.getItem('name')}`;
+}
+
+module.exports = { toggleNav, addNewHabitToDOM, addNameToDashboard };
 
 },{"./dom_elements":3}],10:[function(require,module,exports){
 async function createChart(data = true) {

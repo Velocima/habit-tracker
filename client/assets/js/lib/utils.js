@@ -17,4 +17,9 @@ function addNewHabitToDOM(data) {
 	return habit;
 }
 
-module.exports = { toggleNav, addNewHabitToDOM };
+function addNameToDashboard() {
+	const welcomeMessage = document.getElementById('welcome');
+	welcomeMessage.textContent = `Welcome, ${localStorage.getItem('name')}`;
+}
+
+module.exports = { toggleNav, addNewHabitToDOM, addNameToDashboard };
