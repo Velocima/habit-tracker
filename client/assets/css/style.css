@@ -21,10 +21,23 @@ a, ul, li {
     list-style-type: none;
 }
 
+/* body {
+    background: var(--primary);
+    background-image: url("../img/geo-img-1.png");
+    background-size: 100vh;
+    background-repeat: no-repeat;
+    font-family: 'Rubik', sans-serif;
+} */
+
 body {
     background: var(--primary);
+    background-image: url("../img/geo-img-2.png");
+    background-size: 100vh; 
+    background-repeat: no-repeat;
+    background-position: fixed;
     font-family: 'Rubik', sans-serif;
 }
+
 
 button {
     background: none;
@@ -49,16 +62,3 @@ input, textarea {
     border-radius:  20px;
     border: 1px solid #ff3f00;
 }
-
-/* @media screen and  (min-width: 620px){
-
-}
-
-
-@media screen and  (min-width: 960px){
-
-}
-
-@media screen and  (min-width: 1200px){
-
-} */
