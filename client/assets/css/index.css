@@ -42,15 +42,29 @@ label[for="password"] {
 
 
 
-@media screen and  (min-width: 620px){
-
+@media screen and  (min-width: 375px){
+    form {
+        width: calc(80vw/1.25)
+    }
 }
 
+@media screen and  (min-width: 620px){
+
+    form {
+        width: calc(70vw/1.5)
+    }
+}
 
 @media screen and  (min-width: 960px){
 
+    form {
+        width: calc(60vw/1.5);   
+    }
 }
 
 @media screen and  (min-width: 1200px){
 
+    form {
+        width: calc(50vw/1.5);   
+    }
 }

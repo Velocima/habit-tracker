@@ -1,6 +1,8 @@
 const { createHabit } = require('./dom_elements');
 
-function toggleNav() {}
+function toggleNav() {
+
+}
 
 function addNewHabitToDOM(data) {
 	const habits = document.querySelector('habits');
