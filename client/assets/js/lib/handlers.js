@@ -5,7 +5,7 @@ const {
 	onAddHabitSumbit,
 	onClickViewHabit,
 	onAddHabitFormChange,
-  onFrequencyChange,
+	onFrequencyChange,
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
