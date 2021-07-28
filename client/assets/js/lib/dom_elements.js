@@ -94,7 +94,7 @@ function createRegistrationForm() {
 	form.append(registerButton);
 
 	const hasAccount = document.createElement('p');
-	hasAccount.innerText = "Already have an account?";
+	hasAccount.innerText = 'Already have an account?';
 	form.append(hasAccount);
 
 	return form;
@@ -102,6 +102,7 @@ function createRegistrationForm() {
 
 function createHabit(data) {
 	const div = document.createElement('div');
+	div.setAttribute('class', 'habit-card');
 
 	const habitTitle = document.createElement('h2');
 	habitTitle.textContent = data.habitName;

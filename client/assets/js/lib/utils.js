@@ -3,7 +3,7 @@ const { createHabit } = require('./dom_elements');
 function toggleNav() {}
 
 function addNewHabitToDOM(data) {
-	const habits = document.querySelector('habits');
+	const habits = document.querySelector('.habits-container');
 	const habit = createHabit(data);
 	habits.insertBefore(habit, habits.firstChild);
 }
