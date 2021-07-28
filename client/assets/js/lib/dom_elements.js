@@ -142,16 +142,14 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
-		const responseJson = await response.json();
-		console.log(responseJson);
+		console.log(response);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
 		const response = await deleteCompletion(data.id, 1);
-		const responseJson = await response.json();
-		console.log(responseJson);
+		console.log(response);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -162,9 +160,8 @@ function createViewHabit(data) {
 
 	const editButton = document.createElement('button');
 	editButton.textContent = 'Edit';
-	editButton.addEventListener('click', () =>
-		console.log('this should redirect to the edit page...')
-	);
+	editButton.addEventListener('click', () => console.log('edit functionality'));
+	// editButton.addEventListener('click', () => bringUpEditModal(data));
 
 	const deleteButton = document.createElement('button');
 	deleteButton.textContent = 'Delete';
