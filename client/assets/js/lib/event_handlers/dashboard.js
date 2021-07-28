@@ -1,6 +1,6 @@
 const { createViewHabit } = require('../dom_elements');
 const { postHabit } = require('../requests');
-const { updateHabitDescription, addDailyCountField } = require('../utils');
+const { addDailyCountField } = require('../utils');
 
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
@@ -35,7 +35,16 @@ function onFrequencyChange(e) {
 }
 
 function onAddHabitFormChange(e) {
-	updateHabitDescription();
+	const form = document.querySelector('form');
+	const description = document.querySelector('.description');
+
+	const name = form.name.value || '*habit*';
+	const goal = form.goal.value || '*goal*';
+	const plurality = form.goal.value === '1' ? '' : 's';
+	const frequency =
+		form.frequency.value === 'hourly' ? 'day' : form.frequency.value === 'daily' ? 'week' : 'month';
+
+	description.innerText = `I am going to ${name} ${goal} time${plurality} per ${frequency}`;
 }
 
 function onClickViewHabit(e) {
