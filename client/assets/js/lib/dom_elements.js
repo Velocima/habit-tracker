@@ -145,6 +145,13 @@ function createViewHabit(data) {
 	checkbox.setAttribute('id', 'checkbox');
 	checkbox.setAttribute('type', 'checkbox');
 	checkbox.setAttribute('name', 'checkbox');
+	checkbox.addEventListener('change', () => {
+		if (this.checked) {
+			console.log('Checkbox is checked..');
+		} else {
+			console.log('Checkbox is not checked..');
+		}
+	});
 
 	const description = document.createElement('p');
 	description.textContent = data.description;
