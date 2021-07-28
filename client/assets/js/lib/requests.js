@@ -121,4 +121,56 @@ async function putUserInfo(data) {
 	return responseJson;
 }
 
-module.exports = { getAllUserHabits, getHabitData, postHabit, deleteHabit, putHabit, putUserInfo };
+async function postCompletion(id) {
+	try {
+		const options = {
+			method: 'POST',
+			headers: new Headers({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+			}),
+		};
+		const email = localStorage.getItem('email');
+		const url = `${devURL}/user/${email}/habits/${id}/complete`;
+		const response = await fetch(url, options);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw new Error(err);
+		}
+		console.log(responseJson);
+		return responseJson;
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function deleteCompletion(id, completionId) {
+	try {
+		const options = {
+			method: 'DELETE',
+			headers: new Headers({ Authorization: localStorage.getItem('token') }),
+		};
+		const email = localStorage.getItem('email');
+		const response = await fetch(
+			`${devURL}/user/${email}/habits/${id}/complete/${completionId}`,
+			options
+		);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw Error(err);
+		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+module.exports = {
+	getAllUserHabits,
+	getHabitData,
+	postHabit,
+	deleteHabit,
+	putHabit,
+	putUserInfo,
+	postCompletion,
+	deleteCompletion,
+};

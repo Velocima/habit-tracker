@@ -1,4 +1,4 @@
-const { deleteHabit } = require('./requests');
+const { deleteHabit, postCompletion, deleteCompletion } = require('./requests');
 
 function createLoginForm() {
 	const form = document.createElement('form');
@@ -148,8 +148,18 @@ function createViewHabit(data) {
 	checkbox.addEventListener('change', () => {
 		if (this.checked) {
 			console.log('Checkbox is checked..');
+			// const response = await deleteCompletion(data.id, 6);
+			// const responseJson = await response.json();
+			// console.log(responseJson);
 		} else {
 			console.log('Checkbox is not checked..');
+			// need to add some logic to determine the completion ids
+			// const response = await postCompletion(data.id);
+			// const responseJson = await response.json();
+			// console.log(responseJson);
+		}
+		if (!this.checked) {
+			console.log('not checked');
 		}
 	});
 

@@ -58,7 +58,7 @@ function logout() {
 module.exports = { requestLogin, requestRegistration, login, logout };
 
 },{"jwt-decode":11}],3:[function(require,module,exports){
-const { deleteHabit } = require('./requests');
+const { deleteHabit, postCompletion, deleteCompletion } = require('./requests');
 
 function createLoginForm() {
 	const form = document.createElement('form');
@@ -208,8 +208,18 @@ function createViewHabit(data) {
 	checkbox.addEventListener('change', () => {
 		if (this.checked) {
 			console.log('Checkbox is checked..');
+			// const response = await deleteCompletion(data.id, 6);
+			// const responseJson = await response.json();
+			// console.log(responseJson);
 		} else {
 			console.log('Checkbox is not checked..');
+			// need to add some logic to determine the completion ids
+			// const response = await postCompletion(data.id);
+			// const responseJson = await response.json();
+			// console.log(responseJson);
+		}
+		if (!this.checked) {
+			console.log('not checked');
 		}
 	});
 
@@ -618,7 +628,59 @@ async function putUserInfo(data) {
 	return responseJson;
 }
 
-module.exports = { getAllUserHabits, getHabitData, postHabit, deleteHabit, putHabit, putUserInfo };
+async function postCompletion(id) {
+	try {
+		const options = {
+			method: 'POST',
+			headers: new Headers({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+			}),
+		};
+		const email = localStorage.getItem('email');
+		const url = `${devURL}/user/${email}/habits/${id}/complete`;
+		const response = await fetch(url, options);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw new Error(err);
+		}
+		console.log(responseJson);
+		return responseJson;
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function deleteCompletion(id, completionId) {
+	try {
+		const options = {
+			method: 'DELETE',
+			headers: new Headers({ Authorization: localStorage.getItem('token') }),
+		};
+		const email = localStorage.getItem('email');
+		const response = await fetch(
+			`${devURL}/user/${email}/habits/${id}/complete/${completionId}`,
+			options
+		);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw Error(err);
+		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+module.exports = {
+	getAllUserHabits,
+	getHabitData,
+	postHabit,
+	deleteHabit,
+	putHabit,
+	putUserInfo,
+	postCompletion,
+	deleteCompletion,
+};
 
 },{"./auth":2}],9:[function(require,module,exports){
 const { createHabit } = require('./dom_elements');
