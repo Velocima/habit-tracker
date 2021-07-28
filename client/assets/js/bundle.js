@@ -154,7 +154,7 @@ function createRegistrationForm() {
 	form.append(registerButton);
 
 	const hasAccount = document.createElement('p');
-	hasAccount.innerText = "Already have an account?";
+	hasAccount.innerText = 'Already have an account?';
 	form.append(hasAccount);
 
 	return form;
@@ -162,6 +162,8 @@ function createRegistrationForm() {
 
 function createHabit(data) {
 	const div = document.createElement('div');
+
+	div.setAttribute('class', 'habit-card');
 
 	const habitTitle = document.createElement('h2');
 	habitTitle.textContent = data.habitName;
@@ -214,7 +216,7 @@ module.exports = { createLoginForm, createRegistrationForm, createHabit, createV
 },{}],4:[function(require,module,exports){
 const { createViewHabit } = require('../dom_elements');
 const { postHabit } = require('../requests');
-const { updateHabitDescription, addDailyCountField } = require('../utils');
+const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require('../utils');
 
 function onAddHabitButtonClick(e) {
 	const modal = document.querySelector('.habit-modal');
@@ -225,7 +227,8 @@ async function onAddHabitSumbit(e) {
 	e.preventDefault();
 	const data = Object.fromEntries(new FormData(e.target));
 	const newHabit = await postHabit(data);
-	if (newHabit.success) {
+	console.log('the new habit', newHabit);
+	if (!newHabit.err) {
 		const form = document.querySelector('form');
 		form.reset();
 		const modal = document.querySelector('.habit-modal');
@@ -415,10 +418,10 @@ function bindProfileListeners() {
 }
 
 async function renderHabits() {
-	const main = document.querySelector('main');
+	const habitsContainer = document.querySelector('.habits-container');
 	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
 	let habitSections = userHabitData.map((habit) => createHabit(habit));
-	habitSections.forEach((habit) => main.append(habit));
+	habitSections.forEach((habit) => habitsContainer.append(habit));
 }
 
 async function initPageBindings() {
@@ -556,7 +559,7 @@ function toggleNav() {
 }
 
 function addNewHabitToDOM(data) {
-	const habits = document.querySelector('habits');
+	const habits = document.querySelector('.habits-container');
 	const habit = createHabit(data);
 	habits.insertBefore(habit, habits.firstChild);
 }

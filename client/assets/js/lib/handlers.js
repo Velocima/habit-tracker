@@ -46,10 +46,10 @@ function bindProfileListeners() {
 }
 
 async function renderHabits() {
-	const main = document.querySelector('main');
+	const habitsContainer = document.querySelector('.habits-container');
 	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
 	let habitSections = userHabitData.map((habit) => createHabit(habit));
-	habitSections.forEach((habit) => main.append(habit));
+	habitSections.forEach((habit) => habitsContainer.append(habit));
 }
 
 async function initPageBindings() {
