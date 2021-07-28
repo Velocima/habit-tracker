@@ -61,6 +61,9 @@ class Habit {
 		return new Promise(async (res, rej) => {
 			try {
 				let result = await db.query(`SELECT * FROM habits WHERE id = $1;`, [id]);
+				if (result.rowCount === 0) {
+					throw new Error('Habit not found');
+				}
 				let datesResult = await db.query(
 					'SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $1 ORDER BY completion_date);',
 					[result.rows[0].id]
@@ -69,7 +72,7 @@ class Habit {
 				let habit = new Habit({ ...result.rows[0], completionDates });
 				res(habit);
 			} catch (err) {
-				rej(`Error retrieving habits: ${err}`);
+				rej(err);
 			}
 		});
 	}

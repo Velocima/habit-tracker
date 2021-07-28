@@ -64,6 +64,7 @@
 - update `DELETE /user/:email/habit/:id/complete/:completionId` endpoint
 - Fix `PATCH /auth/:email/password` endpoint
 - Fix `PATCH /user/:email` endpoint
+- Fix `DELETE /user/:email/habit/:id` endpoint
 
 ### Testing
 

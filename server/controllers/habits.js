@@ -43,6 +43,21 @@ router.post('/', verifyToken, async (req, res) => {
 	}
 });
 
+// Delete a habit
+router.delete('/:id', verifyToken, async (req, res) => {
+	try {
+		const habit = await Habit.findById(req.params.id);
+		await habit.destroyHabit();
+		res.status(204).json();
+	} catch (err) {
+		if (err.message === 'Habit not found') {
+			res.status(404).json({ err: err.message });
+		} else {
+			res.status(500).send();
+		}
+	}
+});
+
 // Update
 router.post('/:id/complete', verifyToken, async (req, res) => {
 	try {
@@ -50,19 +65,7 @@ router.post('/:id/complete', verifyToken, async (req, res) => {
 		const resp = await habit.markAsComplete();
 		res.status(200).json(resp);
 	} catch (err) {
-		console.log(err);
 		res.status(404).send({ err: err.message });
-	}
-});
-
-// Delete a habit
-router.delete('/:id', verifyToken, async (req, res) => {
-	try {
-		const habit = await Habit.findById(req.params.id);
-		await habit.destroy();
-		res.status(204).json();
-	} catch (err) {
-		res.status(500).json({ err });
 	}
 });
 
