@@ -14,10 +14,11 @@
 			rel="stylesheet"
 		/>
 		<script defer src="assets/js/bundle.js"></script>
+		<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
 	</head>
 	<body>
 		<nav>
-			<a href="" class="closebtn">&times;</a>
+			<a href="" class="close-btn" >&times;</a>
 			<ul>
 				<li>
 					<a class="nav-link" href="./profile.html">profile</a>
@@ -36,6 +37,7 @@
 			</section>
 			<section class="habits-container"></section>
 		</main>
+		<section class="habit-view" id="habit-view"></section>
 		<section class="habit-modal hidden">
 			<form>
 				<label for="name">Habit name</label>
@@ -53,6 +55,6 @@
 				<input type="submit" value="Add habit" />
 			</form>
 			<p class="description">I am going to *habit* *goal* times per day</p>
-	</section>
-</body>
+		</section>
+	</body>
 </html>
