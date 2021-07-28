@@ -87,13 +87,13 @@ main {
 }
 
 
-form {
+/* form {
 	display: flex;
 	flex-direction: column;
 	width: 80%;
 	align-items: center;
 	margin: 20px auto;
-}
+} */
 
 .description {
 	text-align: center;
@@ -105,7 +105,7 @@ form {
 	display: none;
 }
 
-@media screen and (min-width: 375px) {
+/* @media screen and (min-width: 375px) {
 	form {
 		width: calc(80vw / 1.25);
 	}
@@ -128,9 +128,9 @@ form {
 	form {
 		width: calc(70vw / 1.5);
 	}
-}
+} */
 
-@media screen and (min-width: 960px) {
+/* @media screen and (min-width: 960px) {
 	form {
 		width: calc(60vw / 1.5);
 	}
@@ -140,4 +140,4 @@ form {
 	form {
 		width: calc(50vw / 1.5);
 	}
-}
+} */
