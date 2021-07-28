@@ -44,23 +44,14 @@ router.post('/', verifyToken, async (req, res) => {
 });
 
 // Update
-router.patch('/:id', verifyToken, async (req, res) => {
+router.post('/:id/complete', verifyToken, async (req, res) => {
 	try {
 		const habit = await Habit.findById(req.params.id);
-
-		// Converting unix datestamps into strings because we only want the dates:
-		const dateStrings = habit.completionDates.map((date) => date.toLocaleString());
-
-		// Checking for duplicate dates:
-		if (dateStrings.indexOf(today) === -1) {
-			const resp = await habit.update();
-			res.status(200).json(resp);
-		} else {
-			const resp = 'You cannot double-complete a habit';
-			res.status(404).json(resp);
-		}
+		const resp = await habit.markAsComplete();
+		res.status(200).json(resp);
 	} catch (err) {
-		res.status(404).send({ err });
+		console.log(err);
+		res.status(404).send({ err: err.message });
 	}
 });
 
@@ -76,12 +67,12 @@ router.delete('/:id', verifyToken, async (req, res) => {
 });
 
 // Delete a completion date (if user made a mistake)
-router.delete('/completions/:id', verifyToken, async (req, res) => {
+router.delete('/:id/complete/:completionId', verifyToken, async (req, res) => {
 	try {
-		await Habit.destroyCompletionDate(req.params.id);
+		await Habit.destroyCompletionDate(req.params.completionId);
 		res.status(204).json();
 	} catch (err) {
-		res.status(500).json({ err });
+		res.status(404).json({ err: err.message });
 	}
 });
 
