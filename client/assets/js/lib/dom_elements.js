@@ -171,8 +171,11 @@ function createViewHabit(data) {
 		console.log(responseJson);
 	});
 
-	const chartContainer = document.createElement('div');
-	chartContainer.setAttribute('id', 'myChart');
+	const chartContainer1 = document.createElement('div');
+	chartContainer1.setAttribute('id', 'chart1');
+
+	const chartContainer2 = document.createElement('div');
+	chartContainer2.setAttribute('id', 'chart2');
 
 	//add in chart generation and streaks
 
@@ -181,7 +184,8 @@ function createViewHabit(data) {
 	section.append(description);
 	section.append(markAsComplete);
 	section.append(removeCompletion);
-	section.append(chartContainer);
+	section.append(chartContainer1);
+	section.append(chartContainer2);
 	section.append(editButton);
 	section.append(deleteButton);
 
