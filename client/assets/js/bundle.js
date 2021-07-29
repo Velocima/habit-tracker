@@ -70,6 +70,7 @@ const {
 	postCompletion,
 	deleteCompletion,
 	getLastestCompletionId,
+	getHabitData,
 } = require('./requests');
 
 function createLoginForm() {
@@ -215,17 +216,40 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
+		onUpdateCompletion(data.id);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
+		const completions = document.querySelectorAll('.habit-instance-complete').length;
+		if (completions === 0) {
+			return;
+		}
 		const id = await getLastestCompletionId(data.id);
 		const response = await deleteCompletion(data.id, id);
+		onUpdateCompletion(data.id);
 	});
 
 	const habitTitle = document.createElement('h1');
 	habitTitle.textContent = data.habitName;
+
+	const streaksContainer = document.createElement('div');
+	streaksContainer.setAttribute('class', 'streaks-container');
+
+	const currentStreak = document.createElement('p');
+	currentStreak.textContent = 'Current streak';
+	const bestStreak = document.createElement('p');
+	bestStreak.textContent = 'Best streak';
+	const bestStreakSpan = document.createElement('span');
+	bestStreakSpan.textContent = data.bestStreak;
+	const currentStreakSpan = document.createElement('span');
+	currentStreakSpan.textContent = data.currentStreak;
+
+	streaksContainer.append(currentStreak);
+	streaksContainer.append(bestStreak);
+	streaksContainer.append(currentStreakSpan);
+	streaksContainer.append(bestStreakSpan);
 
 	const description = document.createElement('p');
 	description.textContent = data.description;
@@ -237,14 +261,65 @@ function createViewHabit(data) {
 		window.location.pathname = '/dashboard.html';
 	});
 
+	const infographicContainer = document.createElement('div');
+	infographicContainer.setAttribute('class', 'infographic-container');
+
+	for (let i = 0; i < data.frequencyTarget; i++) {
+		const div = document.createElement('div');
+		if (data.currentCompletions > i) {
+			div.setAttribute('class', 'habit-instance-complete');
+		}
+		infographicContainer.append(div);
+	}
+
+	const infographicTitle = document.createElement('h2');
+	infographicTitle.innerText = 'Progress';
+
 	section.append(goHomeButton);
 	section.append(habitTitle);
 	section.append(description);
 	section.append(markAsComplete);
 	section.append(removeCompletion);
+	section.append(infographicTitle);
+	section.append(infographicContainer);
+	section.append(streaksContainer);
 	section.append(deleteButton);
 
 	return section;
+}
+
+async function onUpdateCompletion(id) {
+	try {
+		const { habit } = await getHabitData(id);
+		const infographicContainer = document.querySelector('.infographic-container');
+		const streaksContainer = document.querySelector('.streaks-container');
+		infographicContainer.textContent = '';
+		streaksContainer.textContent = '';
+
+		const currentStreak = document.createElement('p');
+		currentStreak.textContent = 'Current streak';
+		const bestStreak = document.createElement('p');
+		bestStreak.textContent = 'Best streak';
+		const bestStreakSpan = document.createElement('span');
+		bestStreakSpan.textContent = habit.bestStreak;
+		const currentStreakSpan = document.createElement('span');
+		currentStreakSpan.textContent = habit.currentStreak;
+
+		streaksContainer.append(currentStreak);
+		streaksContainer.append(bestStreak);
+		streaksContainer.append(currentStreakSpan);
+		streaksContainer.append(bestStreakSpan);
+
+		for (let i = 0; i < habit.frequencyTarget; i++) {
+			const div = document.createElement('div');
+			if (habit.currentCompletions > i) {
+				div.setAttribute('class', 'habit-instance-complete');
+			}
+			infographicContainer.append(div);
+		}
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };
@@ -564,7 +639,7 @@ async function getAllUserHabits(email) {
 		const data = await response.json();
 		if (data.err) {
 			console.warn(data.err);
-			logout();
+			// logout();
 		}
 		return data;
 	} catch (err) {
@@ -711,7 +786,6 @@ async function postCompletion(id) {
 		if (responseJson.err) {
 			throw new Error(err);
 		}
-		console.log(responseJson);
 		return responseJson;
 	} catch (err) {
 		console.warn(err);
