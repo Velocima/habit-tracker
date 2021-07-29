@@ -486,12 +486,6 @@ function bindProfileListeners() {
 
 	const changePasswordSubmitButton = document.getElementById('change-password-form');
 	changePasswordSubmitButton.addEventListener('submit', onChangePasswordSumbit);
-
-	const closeNavButton = document.querySelector('.close-btn');
-	const openNavButton = document.querySelector('.menu-btn');
-
-	closeNavButton.addEventListener('click', toggleNav);
-	openNavButton.addEventListener('click', toggleNav);
 }
 
 async function renderHabits() {
@@ -706,7 +700,7 @@ function toggleNav() {
 	} else {
 		nav.classList.add('hide-nav');
 	}
-	console.log('toggling');
+	// console.log('toggling');
 }
 
 function addNewHabitToDOM(data) {
