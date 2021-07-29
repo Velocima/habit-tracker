@@ -1,6 +1,8 @@
 const { logout } = require('./auth');
 
-const devURL = 'http://localhost:3000';
+const devURL = window.location.hostname.includes('localhost')
+	? 'http://localhost:3000'
+	: 'https://habitude-app.herokuapp.com';
 
 async function getAllUserHabits(email) {
 	try {
@@ -11,7 +13,7 @@ async function getAllUserHabits(email) {
 		const data = await response.json();
 		if (data.err) {
 			console.warn(data.err);
-			logout();
+			// logout();
 		}
 		return data;
 	} catch (err) {
@@ -158,7 +160,6 @@ async function postCompletion(id) {
 		if (responseJson.err) {
 			throw new Error(err);
 		}
-		console.log(responseJson);
 		return responseJson;
 	} catch (err) {
 		console.warn(err);
