@@ -13,6 +13,7 @@
 			href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap"
 			rel="stylesheet"
 		/>
+		<link rel="icon" href="./assets/img/favicon.ico" />
 		<script defer src="assets/js/bundle.js"></script>
 		<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
 	</head>
@@ -24,9 +25,12 @@
 					<a class="nav-link" href="./profile.html">profile</a>
 				</li>
 				<li>
-					<button class="add-habit nav-link">Add a habit</button>
+					<a class="nav-link" href="./dashboard.html">dashboard</a>
 				</li>
-				<li><button class="nav-link">logout</button></li>
+				<li>
+					<button id="nav-add-habit" class="nav-link">Add a habit</button>
+				</li>
+				<li><button class="nav-link logout">logout</button></li>
 			</ul>
 		</nav>
 		<div class="menu-btn">&#9776;</div>
@@ -40,7 +44,7 @@
 		<section class="habit-view" id="habit-view"></section>
 		<section class="habit-modal hidden">
 			<div class="modal-content">
-				<a href="" class="close-btn">&times;</a>
+				<i class="close-modal">&times;</i>
 				<h1>New Habit</h1>
 				<form>
 					<label for="name">Habit name</label>

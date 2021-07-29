@@ -28,16 +28,20 @@ function addNameToProfileInput() {
 }
 
 function validateUser() {
+	const path = window.location.pathname;
 	const name = localStorage.getItem('name');
 	const email = localStorage.getItem('email');
 	const token = localStorage.getItem('token');
+
+	if ((path === '/' || path === '/index.html') && (!name || !email || !token)) {
+		return;
+	}
 	if (!name || !email || !token) {
 		localStorage.clear();
 		window.location.pathname = '/';
 		return;
 	}
 	//validate token
-	const path = window.location.pathname;
 	if ((path === '/' || path === '/index.html') && name && email && token) {
 		window.location.pathname = '/dashboard.html';
 	}

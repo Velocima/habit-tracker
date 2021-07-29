@@ -49,7 +49,6 @@ function onRegistrationSumbit(e) {
 function onLoginSumbit(e) {
 	e.preventDefault();
 	let data = Object.fromEntries(new FormData(e.target));
-	console.log(data);
 	requestLogin(data);
 }
 
