@@ -217,11 +217,6 @@ function createViewHabit(data) {
 	const description = document.createElement('p');
 	description.textContent = data.description;
 
-	const editButton = document.createElement('button');
-	editButton.textContent = 'Edit';
-	editButton.addEventListener('click', () => console.log('edit functionality'));
-	// editButton.addEventListener('click', () => bringUpEditModal(data));
-
 	const deleteButton = document.createElement('button');
 	deleteButton.textContent = 'Delete';
 	deleteButton.addEventListener('click', async () => {
@@ -234,7 +229,6 @@ function createViewHabit(data) {
 	section.append(description);
 	section.append(markAsComplete);
 	section.append(removeCompletion);
-	section.append(editButton);
 	section.append(deleteButton);
 
 	return section;
