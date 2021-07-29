@@ -4,55 +4,55 @@ const { initPageBindings } = require('./lib/handlers');
 document.addEventListener('DOMContentLoaded', initPageBindings);
 
 },{"./lib/handlers":7}],2:[function(require,module,exports){
-const jwt_decode = require("jwt-decode");
+const jwt_decode = require('jwt-decode');
 
 async function requestLogin(data) {
-  try {
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    };
-    const response = await fetch(`http://localhost:3000/auth/login`, options);
-    const responseJson = await response.json();
-    if (!responseJson.success) {
-      throw new Error("Login not authorised");
-    }
-    login(responseJson.token);
-  } catch (err) {
-    console.warn(err);
-  }
+	try {
+		const options = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data),
+		};
+		const response = await fetch(`http://localhost:3000/auth/login`, options);
+		const responseJson = await response.json();
+		if (!responseJson.success) {
+			throw new Error('Login not authorised');
+		}
+		login(responseJson.token);
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 async function requestRegistration(data) {
-  try {
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    };
-    const response = await fetch(`http://localhost:3000/auth/register`, options);
-    const responseJson = await response.json();
-    if (responseJson.err) {
-      throw Error(responseJson.err);
-    }
-    requestLogin(data);
-  } catch (err) {
-    console.warn(err);
-  }
+	try {
+		const options = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data),
+		};
+		const response = await fetch(`http://localhost:3000/auth/register`, options);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw Error(responseJson.err);
+		}
+		requestLogin(data);
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 function login(token) {
-  const user = jwt_decode(token);
-  localStorage.setItem("token", token);
-  localStorage.setItem("name", user.name);
-  localStorage.setItem("email", user.email);
-  window.location.pathname = "/dashboard.html";
+	const user = jwt_decode(token);
+	localStorage.setItem('token', token);
+	localStorage.setItem('name', user.name);
+	localStorage.setItem('email', user.email);
+	window.location.pathname = '/dashboard.html';
 }
 
 function logout() {
-  localStorage.clear();
-  window.location.pathname = "/index.html";
+	localStorage.clear();
+	window.location.pathname = '/';
 }
 
 module.exports = { requestLogin, requestRegistration, login, logout };
@@ -182,7 +182,6 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
-	console.log(data);
 
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
@@ -202,14 +201,12 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
-		console.log(response);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
 		const response = await deleteCompletion(data.id, 1);
-		console.log(response);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -228,7 +225,6 @@ function createViewHabit(data) {
 	deleteButton.addEventListener('click', async () => {
 		const response = await deleteHabit(data.id);
 		const responseJson = await response.json();
-		console.log(responseJson);
 	});
 
 	const chartContainer1 = document.createElement('div');
@@ -261,6 +257,15 @@ const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require
 const { createChart } = require('../zing_chart');
 
 function onAddHabitButtonClick(e) {
+	if (window.location.pathname !== '/dashboard.html') {
+		localStorage.setItem('add-habit', 'true');
+		window.location.pathname = '/dashboard.html';
+	}
+	const nav = document.querySelector('nav');
+	if (!nav.classList.contains('hide-nav')) {
+		nav.classList.add('hide-nav');
+	}
+
 	const modal = document.querySelector('.habit-modal');
 	modal.classList.remove('hidden');
 }
@@ -269,10 +274,8 @@ async function onAddHabitSumbit(e) {
 	e.preventDefault();
 	const data = Object.fromEntries(new FormData(e.target));
 	const description = document.querySelector('.description').textContent;
-	console.log(description);
 	const submitData = { ...data, description };
 	const newHabit = await postHabit(submitData);
-	console.log('the new habit', newHabit);
 	if (!newHabit.err) {
 		const form = document.querySelector('form');
 		form.reset();
@@ -289,7 +292,7 @@ async function onAddHabitSumbit(e) {
 function onFrequencyChange(e) {
 	const goal = document.getElementById('goal');
 	if (e.target.value === 'hourly') {
-		goal.setAttribute('max', 15);
+		goal.setAttribute('max', 10);
 	} else if (e.target.value === 'daily') {
 		goal.setAttribute('max', 7);
 	} else if (e.target.value === 'weekly') {
@@ -323,10 +326,14 @@ async function onClickViewHabit(e) {
 
 	//create a new request function that retreives all info for this users habit, and call this here
 	const data = await getHabitData(e.target.id);
-	console.log(data);
 	const habitSection = createViewHabit(data.habit);
 	viewContainer.append(habitSection);
 	createChart(data.habit);
+}
+
+function closeModal() {
+	const modal = document.querySelector('.habit-modal');
+	modal.classList.add('hidden');
 }
 
 module.exports = {
@@ -335,6 +342,7 @@ module.exports = {
 	onFrequencyChange,
 	onAddHabitFormChange,
 	onClickViewHabit,
+	closeModal,
 };
 
 },{"../dom_elements":3,"../requests":8,"../utils":9,"../zing_chart":10}],5:[function(require,module,exports){
@@ -389,7 +397,6 @@ function onRegistrationSumbit(e) {
 function onLoginSumbit(e) {
 	e.preventDefault();
 	let data = Object.fromEntries(new FormData(e.target));
-	console.log(data);
 	requestLogin(data);
 }
 
@@ -401,34 +408,44 @@ module.exports = {
 };
 
 },{"../auth":2,"../dom_elements":3}],6:[function(require,module,exports){
-const { putUserInfo } = require("../requests");
+const { putUserInfo, changePassword } = require('../requests');
 
 async function onChangePasswordSumbit(e) {
-  e.preventDefault();
-  const formData = Object.fromEntries(new FormData(e.target));
-  let response;
-  if (formData["new-password"] === formData["confirm-password"]) {
-    try {
-      response = await putUserInfo(formData);
-    } catch (error) {
-      console.warn(error);
-    }
-  } else {
-    window.alert("Your passwords do not match, please try again.");
-  }
+	e.preventDefault();
+	try {
+		const formData = Object.fromEntries(new FormData(e.target));
+		if (formData['new-password'] !== formData['confirm-password']) {
+			window.alert('Your passwords do not match, please try again.');
+			return;
+		}
+		let response = await changePassword(formData);
+		if (response.err) {
+			throw new Error(response.err.message);
+		}
+		window.location.pathname = '/dashboard.html';
+	} catch (error) {
+		window.alert('Could not change password - current password incorrect');
+		console.warn(error);
+	}
 }
 
 async function onUpdateUserInfoSumbit(e) {
-  e.preventDefault();
-  const formData = Object.fromEntries(new FormData(e.target));
-  let response;
-
-  try {
-    response = await putUserInfo(formData);
-  } catch (error) {
-    console.warn(error);
-  }
-  console.log(response);
+	e.preventDefault();
+	try {
+		const formData = Object.fromEntries(new FormData(e.target));
+		if (formData.name === localStorage.getItem('name')) {
+			window.alert('Must provide a different name to update.');
+			return;
+		}
+		const response = await putUserInfo(formData);
+		if (response.err) {
+			throw new Error(response.err.message);
+		} else {
+			window.location.pathname = '/dashboard.html';
+		}
+	} catch (error) {
+		console.warn(error);
+	}
 }
 
 module.exports = { onChangePasswordSumbit, onUpdateUserInfoSumbit };
@@ -442,10 +459,12 @@ const {
 	onClickViewHabit,
 	onAddHabitFormChange,
 	onFrequencyChange,
+	closeModal,
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav, addNameToDashboard, addNameToProfileInput } = require('./utils');
+const { toggleNav, addNameToDashboard, addNameToProfileInput, validateUser } = require('./utils');
+const { logout } = require('./auth');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -456,13 +475,16 @@ function bindIndexListeners() {
 }
 
 function bindDashboardListeners() {
-	const addHabitButtons = document.querySelectorAll('.add-habit');
-	addHabitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
+	const addHabitButtons = document.querySelector('.add-habit');
+	addHabitButtons.addEventListener('click', onAddHabitButtonClick);
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
 
 	const viewHabitButtons = document.querySelectorAll('.view-button');
 	viewHabitButtons.forEach((button) => button.addEventListener('click', onClickViewHabit));
+
+	const closeButton = document.querySelector('.close-modal');
+	closeButton.addEventListener('click', closeModal);
 
 	const addHabitFormFields = document.querySelectorAll('input, textarea, select');
 	addHabitFormFields.forEach((field) => {
@@ -472,12 +494,19 @@ function bindDashboardListeners() {
 
 	const habitFrequency = document.getElementById('frequency');
 	habitFrequency.addEventListener('change', onFrequencyChange);
+}
 
+function bindNavListeners() {
 	const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
-
 	closeNavButton.addEventListener('click', toggleNav);
 	openNavButton.addEventListener('click', toggleNav);
+
+	const navAddHabitButton = document.getElementById('nav-add-habit');
+	navAddHabitButton.addEventListener('click', onAddHabitButtonClick);
+
+	const logoutButton = document.querySelector('.logout');
+	logoutButton.addEventListener('click', logout);
 }
 
 function bindProfileListeners() {
@@ -496,7 +525,16 @@ async function renderHabits() {
 	habitSections.forEach((habit) => habitsContainer.append(habit));
 }
 
+function openHabitModalFromProfile() {
+	const isAddHabit = localStorage.getItem('add-habit');
+	if (isAddHabit === 'true') {
+		onAddHabitButtonClick();
+		localStorage.removeItem('add-habit');
+	}
+}
+
 async function initPageBindings() {
+	validateUser();
 	const path = window.location.pathname;
 	if (path === '/' || path === '/index.html') {
 		bindIndexListeners();
@@ -504,15 +542,18 @@ async function initPageBindings() {
 		await renderHabits();
 		addNameToDashboard();
 		bindDashboardListeners();
+		bindNavListeners();
+		openHabitModalFromProfile();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
 		addNameToProfileInput();
+		bindNavListeners();
 	}
 }
 
 module.exports = { initPageBindings, renderHabits };
 
-},{"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8,"./utils":9}],8:[function(require,module,exports){
+},{"./auth":2,"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8,"./utils":9}],8:[function(require,module,exports){
 const { logout } = require('./auth');
 
 const devURL = 'http://localhost:3000';
@@ -568,7 +609,6 @@ async function postHabit(data) {
 		if (responseJson.err) {
 			throw new Error(err);
 		}
-		console.log(responseJson);
 		return responseJson;
 	} catch (err) {
 		console.warn(err);
@@ -615,25 +655,48 @@ async function putHabit(data) {
 async function putUserInfo(data) {
 	try {
 		const options = {
-			method: 'PUT',
+			method: 'PATCH',
 			headers: new Headers({
 				Authorization: localStorage.getItem('token'),
 				'Content-Type': 'application/json',
 			}),
 			body: JSON.stringify(data),
 		};
-		const response = await fetch(`${devURL}/user/${data.email}`, options);
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/user/${email}`, options);
 		const responseJson = await response.json();
 		if (responseJson.err) {
-			throw Error(err);
+			throw Error(responseJson.err);
 		} else {
-			// redirect to the dashboard
-			console.log(responseJson);
+			localStorage.setItem('name', responseJson.name);
+			return responseJson;
 		}
 	} catch (err) {
 		console.warn(err);
 	}
-	return responseJson;
+}
+
+async function changePassword(data) {
+	try {
+		const options = {
+			method: 'PATCH',
+			headers: new Headers({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+			}),
+			body: JSON.stringify(data),
+		};
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/auth/${email}/password`, options);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw Error(err);
+		} else {
+			return responseJson;
+		}
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 async function postCompletion(id) {
@@ -688,6 +751,7 @@ module.exports = {
 	putUserInfo,
 	postCompletion,
 	deleteCompletion,
+	changePassword,
 };
 
 },{"./auth":2}],9:[function(require,module,exports){
@@ -700,7 +764,6 @@ function toggleNav() {
 	} else {
 		nav.classList.add('hide-nav');
 	}
-	// console.log('toggling');
 }
 
 function addNewHabitToDOM(data) {
@@ -719,6 +782,26 @@ function addNameToProfileInput() {
 	const name = localStorage.getItem('name');
 	const nameInput = document.getElementById('name');
 	nameInput.setAttribute('value', name);
+}
+
+function validateUser() {
+	const path = window.location.pathname;
+	const name = localStorage.getItem('name');
+	const email = localStorage.getItem('email');
+	const token = localStorage.getItem('token');
+
+	if ((path === '/' || path === '/index.html') && (!name || !email || !token)) {
+		return;
+	}
+	if (!name || !email || !token) {
+		localStorage.clear();
+		window.location.pathname = '/';
+		return;
+	}
+	//validate token
+	if ((path === '/' || path === '/index.html') && name && email && token) {
+		window.location.pathname = '/dashboard.html';
+	}
 }
 
 // function bringUpEditModal(data) {
@@ -758,6 +841,7 @@ module.exports = {
 	addNewHabitToDOM,
 	addNameToDashboard,
 	addNameToProfileInput,
+	validateUser,
 };
 
 },{"./dom_elements":3}],10:[function(require,module,exports){
