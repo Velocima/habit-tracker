@@ -11,7 +11,7 @@ async function getAllUserHabits(email) {
 		const data = await response.json();
 		if (data.err) {
 			console.warn(data.err);
-			logout();
+			// logout();
 		}
 		return data;
 	} catch (err) {
@@ -158,7 +158,6 @@ async function postCompletion(id) {
 		if (responseJson.err) {
 			throw new Error(err);
 		}
-		console.log(responseJson);
 		return responseJson;
 	} catch (err) {
 		console.warn(err);
