@@ -78,10 +78,16 @@ async function onClickViewHabit(e) {
 	createChart(data.habit);
 }
 
+function closeModal() {
+	const modal = document.querySelector('.habit-modal');
+	modal.classList.add('hidden');
+}
+
 module.exports = {
 	onAddHabitButtonClick,
 	onAddHabitSumbit,
 	onFrequencyChange,
 	onAddHabitFormChange,
 	onClickViewHabit,
+	closeModal,
 };

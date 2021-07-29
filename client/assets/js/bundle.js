@@ -331,12 +331,18 @@ async function onClickViewHabit(e) {
 	createChart(data.habit);
 }
 
+function closeModal() {
+	const modal = document.querySelector('.habit-modal');
+	modal.classList.add('hidden');
+}
+
 module.exports = {
 	onAddHabitButtonClick,
 	onAddHabitSumbit,
 	onFrequencyChange,
 	onAddHabitFormChange,
 	onClickViewHabit,
+	closeModal,
 };
 
 },{"../dom_elements":3,"../requests":8,"../utils":9,"../zing_chart":10}],5:[function(require,module,exports){
@@ -445,6 +451,7 @@ const {
 	onClickViewHabit,
 	onAddHabitFormChange,
 	onFrequencyChange,
+	closeModal,
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
@@ -467,6 +474,9 @@ function bindDashboardListeners() {
 
 	const viewHabitButtons = document.querySelectorAll('.view-button');
 	viewHabitButtons.forEach((button) => button.addEventListener('click', onClickViewHabit));
+
+	const closeButton = document.querySelector('.close-modal');
+	closeButton.addEventListener('click', closeModal);
 
 	const addHabitFormFields = document.querySelectorAll('input, textarea, select');
 	addHabitFormFields.forEach((field) => {
