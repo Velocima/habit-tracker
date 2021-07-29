@@ -68,6 +68,15 @@
 - Add `GET /user/:email/habit/:id/complete` endpoint
 - Add current and best streaks to habit constructor
 
+[2.0.0] - 2021-07-29 - Poligera
+- Reformatted completion dates in db as 'YYYY-MM-DD'
+- Updated migrations and seeds files accordingly
+- Rewrite Habit model to handle the above and make comprehensive habit_frequency and frequency_target checks
+- Add completionsCount property (an object) to the Habit prototype so the occurence of every date is counted
+- Update isComplete() and markAsComplete methods;
+- Added dayjs library as dependency
+- Updated currentStreak and bestStreak methods on Habit model
+
 ### Testing
 
 - Created test suite for habit end routes
