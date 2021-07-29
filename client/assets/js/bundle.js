@@ -226,7 +226,7 @@ function createViewHabit(data) {
 	deleteButton.textContent = 'Delete';
 	deleteButton.addEventListener('click', async () => {
 		const response = await deleteHabit(data.id);
-		const responseJson = await response.json();
+		window.location.pathname = '/dashboard.html';
 	});
 
 	section.append(goHomeButton);
@@ -613,8 +613,7 @@ async function deleteHabit(id) {
 		};
 		const email = localStorage.getItem('email');
 		const response = await fetch(`${devURL}/user/${email}/habits/${id}`, options);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
 	} catch (err) {

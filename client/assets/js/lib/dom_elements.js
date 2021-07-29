@@ -166,7 +166,7 @@ function createViewHabit(data) {
 	deleteButton.textContent = 'Delete';
 	deleteButton.addEventListener('click', async () => {
 		const response = await deleteHabit(data.id);
-		const responseJson = await response.json();
+		window.location.pathname = '/dashboard.html';
 	});
 
 	section.append(goHomeButton);

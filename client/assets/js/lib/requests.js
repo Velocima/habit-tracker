@@ -67,8 +67,7 @@ async function deleteHabit(id) {
 		};
 		const email = localStorage.getItem('email');
 		const response = await fetch(`${devURL}/user/${email}/habits/${id}`, options);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
 	} catch (err) {
