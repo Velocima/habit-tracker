@@ -1,4 +1,4 @@
-const habitController = require('../../../controllers/habit') //check the path is correct
+const habitController = require('../../../controllers/habits') //check the path is correct
 // or is this const router = require('router')??
 
 const Habit = require('../../../models/Habit');
