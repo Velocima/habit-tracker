@@ -7,7 +7,6 @@ function toggleNav() {
 	} else {
 		nav.classList.add('hide-nav');
 	}
-	console.log('toggling');
 }
 
 function addNewHabitToDOM(data) {
