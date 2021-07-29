@@ -20,6 +20,7 @@ async function requestLogin(data) {
 		}
 		login(responseJson.token);
 	} catch (err) {
+		window.alert(err.message);
 		console.warn(err);
 	}
 }
@@ -33,11 +34,17 @@ async function requestRegistration(data) {
 		};
 		const response = await fetch(`http://localhost:3000/auth/register`, options);
 		const responseJson = await response.json();
-		if (responseJson.err) {
-			throw Error(responseJson.err);
+		if (!responseJson.msg) {
+			throw Error(responseJson);
 		}
 		requestLogin(data);
 	} catch (err) {
+		if (
+			err.message ===
+			'Error creating user: error: duplicate key value violates unique constraint "users_pkey"'
+		) {
+			window.alert('Account with this email already exists.');
+		}
 		console.warn(err);
 	}
 }
@@ -57,8 +64,13 @@ function logout() {
 
 module.exports = { requestLogin, requestRegistration, login, logout };
 
-},{"jwt-decode":11}],3:[function(require,module,exports){
-const { deleteHabit, postCompletion, deleteCompletion } = require('./requests');
+},{"jwt-decode":10}],3:[function(require,module,exports){
+const {
+	deleteHabit,
+	postCompletion,
+	deleteCompletion,
+	getLastestCompletionId,
+} = require('./requests');
 
 function createLoginForm() {
 	const form = document.createElement('form');
@@ -182,9 +194,11 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
+	section.setAttribute('class', 'habit-view-container');
 
 	const goHomeButton = document.createElement('button');
-	goHomeButton.textContent = 'Return to Dashboard';
+	goHomeButton.setAttribute('class', 'return');
+	goHomeButton.textContent = '⇚';
 	// can change this to be more elegant
 	goHomeButton.addEventListener('click', () => {
 		const main = document.querySelector('main');
@@ -206,7 +220,8 @@ function createViewHabit(data) {
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
-		const response = await deleteCompletion(data.id, 1);
+		const id = await getLastestCompletionId(data.id);
+		const response = await deleteCompletion(data.id, id);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -215,34 +230,18 @@ function createViewHabit(data) {
 	const description = document.createElement('p');
 	description.textContent = data.description;
 
-	const editButton = document.createElement('button');
-	editButton.textContent = 'Edit';
-	editButton.addEventListener('click', () => console.log('edit functionality'));
-	// editButton.addEventListener('click', () => bringUpEditModal(data));
-
 	const deleteButton = document.createElement('button');
 	deleteButton.textContent = 'Delete';
 	deleteButton.addEventListener('click', async () => {
 		const response = await deleteHabit(data.id);
-		const responseJson = await response.json();
+		window.location.pathname = '/dashboard.html';
 	});
-
-	const chartContainer1 = document.createElement('div');
-	chartContainer1.setAttribute('id', 'chart1');
-
-	const chartContainer2 = document.createElement('div');
-	chartContainer2.setAttribute('id', 'chart2');
-
-	//add in chart generation and streaks
 
 	section.append(goHomeButton);
 	section.append(habitTitle);
 	section.append(description);
 	section.append(markAsComplete);
 	section.append(removeCompletion);
-	section.append(chartContainer1);
-	section.append(chartContainer2);
-	section.append(editButton);
 	section.append(deleteButton);
 
 	return section;
@@ -253,8 +252,7 @@ module.exports = { createLoginForm, createRegistrationForm, createHabit, createV
 },{"./requests":8}],4:[function(require,module,exports){
 const { createViewHabit } = require('../dom_elements');
 const { postHabit, getHabitData } = require('../requests');
-const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require('../utils');
-const { createChart } = require('../zing_chart');
+const { addNewHabitToDOM } = require('../utils');
 
 function onAddHabitButtonClick(e) {
 	if (window.location.pathname !== '/dashboard.html') {
@@ -328,7 +326,6 @@ async function onClickViewHabit(e) {
 	const data = await getHabitData(e.target.id);
 	const habitSection = createViewHabit(data.habit);
 	viewContainer.append(habitSection);
-	createChart(data.habit);
 }
 
 function closeModal() {
@@ -345,7 +342,7 @@ module.exports = {
 	closeModal,
 };
 
-},{"../dom_elements":3,"../requests":8,"../utils":9,"../zing_chart":10}],5:[function(require,module,exports){
+},{"../dom_elements":3,"../requests":8,"../utils":9}],5:[function(require,module,exports){
 const { createLoginForm, createRegistrationForm } = require('../dom_elements');
 const { requestLogin, requestRegistration } = require('../auth');
 const body = document.querySelector('body');
@@ -623,8 +620,7 @@ async function deleteHabit(id) {
 		};
 		const email = localStorage.getItem('email');
 		const response = await fetch(`${devURL}/user/${email}/habits/${id}`, options);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
 	} catch (err) {
@@ -733,10 +729,18 @@ async function deleteCompletion(id, completionId) {
 			`${devURL}/user/${email}/habits/${id}/complete/${completionId}`,
 			options
 		);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function getLastestCompletionId(id) {
+	try {
+		const { habit } = await getHabitData(id);
+		return habit.completionDates[habit.completionDates.length - 1].id;
 	} catch (err) {
 		console.warn(err);
 	}
@@ -752,6 +756,7 @@ module.exports = {
 	postCompletion,
 	deleteCompletion,
 	changePassword,
+	getLastestCompletionId,
 };
 
 },{"./auth":2}],9:[function(require,module,exports){
@@ -804,38 +809,6 @@ function validateUser() {
 	}
 }
 
-// function bringUpEditModal(data) {
-// 	//Note this function does not work as it should atm..!
-// 	document.getElementById('submit-habit').remove();
-// 	const submitButton = document.createElement('input');
-// 	submitButton.setAttribute('type', 'submit');
-// 	submitButton.setAttribute('value', 'Submit');
-// 	submitButton.addEventListener('Submit', () => {
-// 		// make edit request here
-// 		const data = Object.fromEntries(new FormData(e.target));
-// 		console.log(data);
-// 		window.location.pathname = '/dashboard.html';
-// 	});
-
-// 	const habitModal = document.querySelector('.habit-modal');
-// 	habitModal.removeAttribute('style');
-
-// 	const form = document.querySelector('form');
-// 	form.append(submitButton);
-
-// 	const name = document.getElementById('name');
-// 	name.setAttribute('value', data.habitName);
-
-// 	const frequency = document.getElementById('frequency');
-// 	frequency.setAttribute('value', data.frequency);
-
-// 	const goal = document.getElementById('goal');
-// 	goal.setAttribute('value', data.frequencyTarget);
-
-// 	const modal = document.querySelector('.habit-modal');
-// 	modal.classList.remove('hidden');
-// }
-
 module.exports = {
 	toggleNav,
 	addNewHabitToDOM,
@@ -845,132 +818,6 @@ module.exports = {
 };
 
 },{"./dom_elements":3}],10:[function(require,module,exports){
-async function createChart(data = true) {
-	// DEFINE CHART LOCATIONS (IDS)
-	// -----------------------------
-	// Main chart render location
-	const chart1Id = 'chart1';
-	const chart2Id = 'chart2';
-
-	// CHART CONFIG
-	// -----------------------------
-
-	// Chart 1
-	const chart1Data = {
-		type: 'ring',
-		globals: {
-			fontFamily: 'Poppins',
-			color: 'purple',
-		},
-		plot: {
-			slice: '80%',
-			valueBox: {
-				placement: 'center',
-				text: '75 %',
-				fontSize: '32px',
-				fontWeight: 'normal',
-			},
-			animation: {
-				effect: 'ANIMATION_EXPAND_LEFT',
-				sequence: 'ANIMATION_BY_PLOT_AND_NODE',
-				speed: '200',
-			},
-		},
-		gui: {
-			contextMenu: {
-				button: {
-					visible: false,
-				},
-			},
-		},
-		plotarea: {
-			margin: '0px 0px 0px 0px',
-		},
-		backgroundColor: 'transparent',
-		series: [
-			{
-				values: [25],
-				backgroundColor: 'transparent',
-				borderWidth: 0,
-				shadow: 0,
-			},
-			{
-				values: [75],
-				backgroundColor: '#8e2657',
-				borderWidth: 0,
-				shadow: 0,
-				slice: 90,
-			},
-		],
-	};
-
-	// Chart 2
-	const chart2Data = {
-		type: 'hbar',
-		backgroundColor: 'transparent',
-		globals: {
-			fontSize: '16px',
-		},
-		plot: {
-			animation: {
-				delay: 300,
-				effect: 'ANIMATION_EXPAND_TOP',
-				method: 'ANIMATION_LINEAR',
-				sequence: 'ANIMATION_BY_PLOT_AND_NODE',
-				speed: '500',
-			},
-			'value-box': {
-				//Displays all data values by default.
-			},
-			styles: ['#ff3f00', '#8e2657'],
-		},
-		gui: {
-			contextMenu: {
-				button: {
-					visible: false,
-				},
-			},
-		},
-		plotarea: {
-			margin: '10px 40px 10px 60px',
-		},
-		'scale-x': {
-			labels: ['Current', 'Best'],
-			guide: {
-				visible: false,
-			},
-		},
-		scaleY: {
-			guide: {
-				visible: false,
-			},
-			visible: false,
-		},
-		series: [{ values: [5, 8] }],
-	};
-	// RENDER CHARTS
-	// -----------------------------
-
-	// Chart 1
-	zingchart.render({
-		id: chart1Id,
-		data: chart1Data,
-		height: '50%',
-		width: '100%',
-	});
-
-	// Chart 2
-	zingchart.render({
-		id: chart2Id,
-		data: chart2Data,
-		height: '10%',
-		width: '100%',
-	});
-}
-
-module.exports = { createChart };
-
-},{}],11:[function(require,module,exports){
 "use strict";function e(e){this.message=e}e.prototype=new Error,e.prototype.name="InvalidCharacterError";var r="undefined"!=typeof window&&window.atob&&window.atob.bind(window)||function(r){var t=String(r).replace(/=+$/,"");if(t.length%4==1)throw new e("'atob' failed: The string to be decoded is not correctly encoded.");for(var n,o,a=0,i=0,c="";o=t.charAt(i++);~o&&(n=a%4?64*n+o:o,a++%4)?c+=String.fromCharCode(255&n>>(-2*a&6)):0)o="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(o);return c};function t(e){var t=e.replace(/-/g,"+").replace(/_/g,"/");switch(t.length%4){case 0:break;case 2:t+="==";break;case 3:t+="=";break;default:throw"Illegal base64url string!"}try{return function(e){return decodeURIComponent(r(e).replace(/(.)/g,(function(e,r){var t=r.charCodeAt(0).toString(16).toUpperCase();return t.length<2&&(t="0"+t),"%"+t})))}(t)}catch(e){return r(t)}}function n(e){this.message=e}function o(e,r){if("string"!=typeof e)throw new n("Invalid token specified");var o=!0===(r=r||{}).header?0:1;try{return JSON.parse(t(e.split(".")[o]))}catch(e){throw new n("Invalid token specified: "+e.message)}}n.prototype=new Error,n.prototype.name="InvalidTokenError";const a=o;a.default=o,a.InvalidTokenError=n,module.exports=a;
 
 

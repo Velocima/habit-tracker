@@ -79,15 +79,19 @@ class Habit {
 					throw new Error('Habit not found');
 				}
 				let datesResult = await db.query(
-					'SELECT ARRAY(SELECT completion_date FROM completions WHERE completions.habit_id = $1 ORDER BY completion_date);',
+					'SELECT * FROM completions WHERE habit_id = $1 ORDER BY completion_date;',
 					[result.rows[0].id]
 				);
-				const completionDates = datesResult.rows[0].array;
-				const currentStreak = Habit.getCurrentStreak(completionDates);
-				const bestStreak = Habit.getBestStreak(completionDates);
+				console.log(datesResult.rows[0]);
+				const completionDates = datesResult.rows;
+				const currentStreak = Habit.getCurrentStreak(
+					completionDates.map((data) => data.completion_date)
+				);
+				const bestStreak = Habit.getBestStreak(completionDates.map((data) => data.completion_date));
 				let habit = new Habit({ ...result.rows[0], completionDates, currentStreak, bestStreak });
 				res(habit);
 			} catch (err) {
+				console.log(err.message);
 				rej(err);
 			}
 		});
@@ -174,6 +178,7 @@ class Habit {
 	destroyHabit() {
 		return new Promise(async (resolve, reject) => {
 			try {
+				await db.query(`DELETE FROM completions WHERE habit_id = $1;`, [this.id]);
 				await db.query(`DELETE FROM habits WHERE id = $1;`, [this.id]);
 				resolve('Habit was deleted');
 			} catch (err) {
