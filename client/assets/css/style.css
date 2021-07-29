@@ -15,6 +15,7 @@ body {
 	position: relative;
 	background: var(--primary);
 	font-family: 'Rubik', sans-serif;
+	height: 100vh;
 }
 
 body::before {
@@ -139,6 +140,7 @@ a {
 } */
 
 .menu-btn {
+	width: fit-content;
 	padding: 5px 0 0 10px;
 	color: var(--secondary);
 	font-size: 24px;
