@@ -53,7 +53,6 @@ async function postHabit(data) {
 		if (responseJson.err) {
 			throw new Error(err);
 		}
-		console.log(responseJson);
 		return responseJson;
 	} catch (err) {
 		console.warn(err);
@@ -111,12 +110,10 @@ async function putUserInfo(data) {
 		const response = await fetch(`${devURL}/user/${email}`, options);
 		const responseJson = await response.json();
 		localStorage.setItem('name', responseJson.name);
-		return responseJson;
 		if (responseJson.err) {
 			throw Error(err);
 		} else {
-			// redirect to the dashboard
-			console.log(responseJson);
+			return responseJson;
 		}
 	} catch (err) {
 		console.warn(err);

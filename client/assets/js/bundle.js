@@ -182,7 +182,6 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
-	console.log(data);
 
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
@@ -202,14 +201,12 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
-		console.log(response);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
 		const response = await deleteCompletion(data.id, 1);
-		console.log(response);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -228,7 +225,6 @@ function createViewHabit(data) {
 	deleteButton.addEventListener('click', async () => {
 		const response = await deleteHabit(data.id);
 		const responseJson = await response.json();
-		console.log(responseJson);
 	});
 
 	const chartContainer1 = document.createElement('div');
@@ -278,10 +274,8 @@ async function onAddHabitSumbit(e) {
 	e.preventDefault();
 	const data = Object.fromEntries(new FormData(e.target));
 	const description = document.querySelector('.description').textContent;
-	console.log(description);
 	const submitData = { ...data, description };
 	const newHabit = await postHabit(submitData);
-	console.log('the new habit', newHabit);
 	if (!newHabit.err) {
 		const form = document.querySelector('form');
 		form.reset();
@@ -332,7 +326,6 @@ async function onClickViewHabit(e) {
 
 	//create a new request function that retreives all info for this users habit, and call this here
 	const data = await getHabitData(e.target.id);
-	console.log(data);
 	const habitSection = createViewHabit(data.habit);
 	viewContainer.append(habitSection);
 	createChart(data.habit);
@@ -398,7 +391,6 @@ function onRegistrationSumbit(e) {
 function onLoginSumbit(e) {
 	e.preventDefault();
 	let data = Object.fromEntries(new FormData(e.target));
-	console.log(data);
 	requestLogin(data);
 }
 
@@ -410,34 +402,36 @@ module.exports = {
 };
 
 },{"../auth":2,"../dom_elements":3}],6:[function(require,module,exports){
-const { putUserInfo } = require("../requests");
+const { putUserInfo } = require('../requests');
 
 async function onChangePasswordSumbit(e) {
-  e.preventDefault();
-  const formData = Object.fromEntries(new FormData(e.target));
-  let response;
-  if (formData["new-password"] === formData["confirm-password"]) {
-    try {
-      response = await putUserInfo(formData);
-    } catch (error) {
-      console.warn(error);
-    }
-  } else {
-    window.alert("Your passwords do not match, please try again.");
-  }
+	e.preventDefault();
+	const formData = Object.fromEntries(new FormData(e.target));
+	let response;
+	if (formData['new-password'] === formData['confirm-password']) {
+		try {
+			response = await putUserInfo(formData);
+		} catch (error) {
+			console.warn(error);
+		}
+	} else {
+		window.alert('Your passwords do not match, please try again.');
+	}
 }
 
 async function onUpdateUserInfoSumbit(e) {
-  e.preventDefault();
-  const formData = Object.fromEntries(new FormData(e.target));
-  let response;
-
-  try {
-    response = await putUserInfo(formData);
-  } catch (error) {
-    console.warn(error);
-  }
-  console.log(response);
+	e.preventDefault();
+	try {
+		const formData = Object.fromEntries(new FormData(e.target));
+		const response = await putUserInfo(formData);
+		if (response.err) {
+			throw new Error(err.message);
+		} else {
+			window.location.pathname = '/dashboard.html';
+		}
+	} catch (error) {
+		console.warn(error);
+	}
 }
 
 module.exports = { onChangePasswordSumbit, onUpdateUserInfoSumbit };
@@ -597,7 +591,6 @@ async function postHabit(data) {
 		if (responseJson.err) {
 			throw new Error(err);
 		}
-		console.log(responseJson);
 		return responseJson;
 	} catch (err) {
 		console.warn(err);
@@ -655,12 +648,10 @@ async function putUserInfo(data) {
 		const response = await fetch(`${devURL}/user/${email}`, options);
 		const responseJson = await response.json();
 		localStorage.setItem('name', responseJson.name);
-		return responseJson;
 		if (responseJson.err) {
 			throw Error(err);
 		} else {
-			// redirect to the dashboard
-			console.log(responseJson);
+			return responseJson;
 		}
 	} catch (err) {
 		console.warn(err);

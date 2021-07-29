@@ -21,10 +21,8 @@ async function onAddHabitSumbit(e) {
 	e.preventDefault();
 	const data = Object.fromEntries(new FormData(e.target));
 	const description = document.querySelector('.description').textContent;
-	console.log(description);
 	const submitData = { ...data, description };
 	const newHabit = await postHabit(submitData);
-	console.log('the new habit', newHabit);
 	if (!newHabit.err) {
 		const form = document.querySelector('form');
 		form.reset();
@@ -75,7 +73,6 @@ async function onClickViewHabit(e) {
 
 	//create a new request function that retreives all info for this users habit, and call this here
 	const data = await getHabitData(e.target.id);
-	console.log(data);
 	const habitSection = createViewHabit(data.habit);
 	viewContainer.append(habitSection);
 	createChart(data.habit);

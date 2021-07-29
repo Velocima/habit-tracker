@@ -122,7 +122,6 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
-	console.log(data);
 
 	const goHomeButton = document.createElement('button');
 	goHomeButton.textContent = 'Return to Dashboard';
@@ -142,14 +141,12 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
-		console.log(response);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
 		const response = await deleteCompletion(data.id, 1);
-		console.log(response);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -168,7 +165,6 @@ function createViewHabit(data) {
 	deleteButton.addEventListener('click', async () => {
 		const response = await deleteHabit(data.id);
 		const responseJson = await response.json();
-		console.log(responseJson);
 	});
 
 	const chartContainer1 = document.createElement('div');
