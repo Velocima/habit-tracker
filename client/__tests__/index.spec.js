@@ -12,4 +12,5 @@ describe('index.html', () => {
         let header = document.querySelector('h1');
         expect(header.textContent).toContain('Habitude');
     })
+
 })
