@@ -1,5 +1,5 @@
 const db = require('../db_config/config');
-const dayjs = require('dayjs'); 
+const dayjs = require('dayjs');
 
 /**
  * Habit class.
@@ -60,10 +60,17 @@ class Habit {
 						[habit.id]
 					);
 					const completionDates = completions.rows[0].array;
-					const completionsCount = completionDates => completionDates.reduce((acc, curr) => (acc[curr] = ++acc[curr] || 1, acc), {});
+					const completionsCount = (completionDates) =>
+						completionDates.reduce((acc, curr) => ((acc[curr] = ++acc[curr] || 1), acc), {});
 					const currentStreak = Habit.getCurrentStreak(completionDates);
 					const bestStreak = Habit.getBestStreak(completionDates);
-					return new Habit({ ...habit, completionDates, completionsCount, currentStreak, bestStreak });
+					return new Habit({
+						...habit,
+						completionDates,
+						completionsCount,
+						currentStreak,
+						bestStreak,
+					});
 				});
 				const habits = await Promise.all(data);
 				res(habits);
@@ -85,19 +92,23 @@ class Habit {
 					'SELECT * FROM completions WHERE habit_id = $1 ORDER BY completion_date;',
 					[result.rows[0].id]
 				);
-				// const completionDates = datesResult.rows[0].array;
-				
+
 				const completionDates = datesResult.rows;
-				const completionsCount = completionDates => completionDates.map(date => date.completion_date).reduce((acc, curr) => (acc[curr] = ++acc[curr] || 1, acc), {});
-				//const currentStreak = Habit.getCurrentStreak(completionDates);
-				//const bestStreak = Habit.getBestStreak(completionDates);
-				let habit = new Habit({ ...result.rows[0], completionDates, completionsCount, currentStreak, bestStreak });
-				// console.log(datesResult.rows[0]);
+				const completionsCount = (completionDates) =>
+					completionDates
+						.map((date) => date.completion_date)
+						.reduce((acc, curr) => ((acc[curr] = ++acc[curr] || 1), acc), {});
 				const currentStreak = Habit.getCurrentStreak(
 					completionDates.map((data) => data.completion_date)
 				);
 				const bestStreak = Habit.getBestStreak(completionDates.map((data) => data.completion_date));
-				// let habit = new Habit({ ...result.rows[0], completionDates, currentStreak, bestStreak });
+				let habit = new Habit({
+					...result.rows[0],
+					completionDates,
+					completionsCount,
+					currentStreak,
+					bestStreak,
+				});
 				res(habit);
 			} catch (err) {
 				console.log(err.message);
@@ -111,7 +122,10 @@ class Habit {
 			try {
 				// creating today's date in 'YYYY-MM-DD' format
 				const today = new Date();
-				const todaysDate = `${today.getFullYear()}-${(today.getMonth()+1).padStart(2, '0')}-${today.getDate().padStart(2, '0')}`;
+				const todaysDate = `${today.getFullYear()}-${(today.getMonth() + 1).padStart(
+					2,
+					'0'
+				)}-${today.getDate().padStart(2, '0')}`;
 
 				// Sending "true" only if today's date alrerady exeists in the db:
 				if (this.completionsCount.hasOwnProperty(todaysDate) === true) {
@@ -128,10 +142,12 @@ class Habit {
 	markAsComplete() {
 		return new Promise(async (res, rej) => {
 			try {
-
 				// creating today's date in YYYYMMDD format
 				const today = new Date();
-				const todaysDate = `${today.getFullYear()}-${(today.getMonth()+1).padStart(2, '0')}-${today.getDate().padStart(2, '0')}`;
+				const todaysDate = `${today.getFullYear()}-${(today.getMonth() + 1).padStart(
+					2,
+					'0'
+				)}-${today.getDate().padStart(2, '0')}`;
 
 				// A new completion record is added only if today's date doesn't exist in db yet:
 				if (this.completionsCount.hasOwnProperty(todaysDate) === false) {
@@ -182,68 +198,80 @@ class Habit {
 
 		// Getting today's date to match db dates ('YYYY-MM-DD' format):
 		const today = new Date();
-		const todayStr = `${today.getFullYear()}-${(today.getMonth()+1).padStart(2, '0')}-${today.getDate().padStart(2, '0')}`;
+		const todayStr = `${today.getFullYear()}-${(today.getMonth() + 1).padStart(2, '0')}-${today
+			.getDate()
+			.padStart(2, '0')}`;
 		const todaysDate = dayjs(todayStr); // applying dayjs format
 
 		const completedDaysUnformatted = Object.keys(completionsCount); // getting all unique completion dates
-		const uniqueCompletedDays = completedDaysUnformatted.map(date => dayjs(date)); // applying dayjs format to unique completion dates
+		const uniqueCompletedDays = completedDaysUnformatted.map((date) => dayjs(date)); // applying dayjs format to unique completion dates
 
 		// Converting completionDates array to dayjs format:
-		const completionDatesFormatted = completionDates.map(date => dayjs(date));
+		const completionDatesFormatted = completionDates.map((date) => dayjs(date));
 
 		let currentStreak = 0;
 		let previousDay = todaysDate;
 
-		if (this.frequency === "hourly") {
+		if (this.frequency === 'hourly') {
 			// If the difference between today & last completion date is > 1 day, the streak is broken:
-			if (Math.abs(previousDay.diff(uniqueCompletedDays[uniqueCompletedDays.length - 1], 'day')) > 1) {
+			if (
+				Math.abs(previousDay.diff(uniqueCompletedDays[uniqueCompletedDays.length - 1], 'day')) > 1
+			) {
 				return currentStreak; // retuns 0
 			}
 			// Iterating through dates array backwards:
 			for (let i = completionDatesFormatted.length - 1; i >= 0; i--) {
-				if (completionDatesFormatted[i].diff(previousDay, "day") <= 1) {
+				if (completionDatesFormatted[i].diff(previousDay, 'day') <= 1) {
 					currentStreak++;
 					previousDay = completionDatesFormatted[i];
 				} else {
 					return currentStreak;
 				}
 			}
-			
 		}
 
-		if (this.frequency === "daily") {
+		if (this.frequency === 'daily') {
 			// If the difference between today & last completion date is > 1 week, the streak is broken:
-			if (Math.abs(previousDay.diff(completionDatesFormatted[completionDatesFormatted.length - 1], 'week')) > 1) {
+			if (
+				Math.abs(
+					previousDay.diff(completionDatesFormatted[completionDatesFormatted.length - 1], 'week')
+				) > 1
+			) {
 				return currentStreak; // retuns 0
 			}
 			// Iterating through dates array backwards:
 			for (let i = completionDatesFormatted.length - 1; i >= 0; i--) {
-			if (Math.abs(completionDatesFormatted[i].diff(previousDay, "week")) <= 1) {
-				currentStreak++;
-				previousDay = completionDatesFormatted[i];
-			} else {
-				return currentStreak;
+				if (Math.abs(completionDatesFormatted[i].diff(previousDay, 'week')) <= 1) {
+					currentStreak++;
+					previousDay = completionDatesFormatted[i];
+				} else {
+					return currentStreak;
 				}
 			}
 		}
 
-		if (this.frequency === "weekly") {
+		if (this.frequency === 'weekly') {
 			// If the difference between today a& last completion date is > 1 month, the streak is broken:
-			if (Math.abs(previousDay.diff(completionDatesFormatted[completionDatesFormatted.length - 1]), 'month') > 1) {
+			if (
+				Math.abs(
+					previousDay.diff(completionDatesFormatted[completionDatesFormatted.length - 1]),
+					'month'
+				) > 1
+			) {
 				return currentStreak; // retuns 0
 			}
 			// Iterating through dates array backwards:
 			for (let i = completionDatesFormatted.length - 1; i >= 0; i--) {
-			if (Math.abs(completionDatesFormatted[i].diff(previousDay, "month")) <= 1) {
-				currentStreak++;
-				previousDay = completionDatesFormatted[i];
-			} else {
-				return currentStreak;
+				if (Math.abs(completionDatesFormatted[i].diff(previousDay, 'month')) <= 1) {
+					currentStreak++;
+					previousDay = completionDatesFormatted[i];
+				} else {
+					return currentStreak;
 				}
 			}
 		}
 		return currentStreak;
-}
+	}
 
 	static getBestStreak(completionDates, completionsCount) {
 		if (completionDates.length === 0) {
@@ -251,26 +279,32 @@ class Habit {
 		}
 		// Getting today's date to match db dates ('YYYY-MM-DD' format):
 		const today = new Date();
-		const todayStr = `${today.getFullYear()}-${(today.getMonth()+1).padStart(2, '0')}-${today.getDate().padStart(2, '0')}`;
+		const todayStr = `${today.getFullYear()}-${(today.getMonth() + 1).padStart(2, '0')}-${today
+			.getDate()
+			.padStart(2, '0')}`;
 		const todaysDate = dayjs(todayStr); // applying dayjs format
 
 		const completedDaysUnformatted = Object.keys(completionsCount); // getting all unique completion dates
-		const uniqueCompletedDays = completedDaysUnformatted.map(date => dayjs(date)); // applying dayjs format to unique completion dates
+		const uniqueCompletedDays = completedDaysUnformatted.map((date) => dayjs(date)); // applying dayjs format to unique completion dates
 
 		// Converting completionDates array to dayjs format:
-		const completionDatesFormatted = completionDates.map(date => dayjs(date));
+		const completionDatesFormatted = completionDates.map((date) => dayjs(date));
 
 		let currentStreak = 0;
 		let bestStreak = 0;
 
-		if (this.frequency === "hourly") {
+		if (this.frequency === 'hourly') {
 			// If the difference between today & last completion date is > 1 day, the streak is broken:
-			if (Math.abs(previousDay.diff(uniqueCompletedDays[uniqueCompletedDays.length - 1]), 'day') > 1) {
+			if (
+				Math.abs(previousDay.diff(uniqueCompletedDays[uniqueCompletedDays.length - 1]), 'day') > 1
+			) {
 				return currentStreak; // retuns 0
 			}
 			// Iterating through dates array backwards:
 			for (let i = completionDatesFormatted.length - 1; i >= 0; i--) {
-				if (Math.abs(completionDatesFormatted[i].diff(previousDay), "day") <= this.frequencyTarget) {
+				if (
+					Math.abs(completionDatesFormatted[i].diff(previousDay), 'day') <= this.frequencyTarget
+				) {
 					currentStreak++;
 					previousDay = completionDatesFormatted[i];
 					if (currentStreak > bestStreak) {
@@ -280,17 +314,23 @@ class Habit {
 					currentStreak = 1;
 				}
 			}
-			
 		}
 
-		if (this.frequency === "daily") {
+		if (this.frequency === 'daily') {
 			// If the difference between today & last completion date is > 1 day, the streak is broken:
-			if (Math.abs(previousDay.diff(completionDatesFormatted[completionDatesFormatted.length - 1]), 'week') > 1) {
+			if (
+				Math.abs(
+					previousDay.diff(completionDatesFormatted[completionDatesFormatted.length - 1]),
+					'week'
+				) > 1
+			) {
 				return currentStreak; // retuns 0
 			}
 			// Iterating through dates array backwards:
 			for (let i = completionDatesFormatted.length - 1; i >= 0; i--) {
-				if (Math.abs(completionDatesFormatted[i].diff(previousDay), "week") <= this.frequencyTarget) {
+				if (
+					Math.abs(completionDatesFormatted[i].diff(previousDay), 'week') <= this.frequencyTarget
+				) {
 					currentStreak++;
 					previousDay = completionDatesFormatted[i];
 					if (currentStreak > bestStreak) {
@@ -300,27 +340,28 @@ class Habit {
 					currentStreak = 1;
 				}
 			}
-			
 		}
 
-		if (this.frequency === "weekly") {
+		if (this.frequency === 'weekly') {
 			// If the difference between today a& last completion date is > 1 month, the streak is broken:
-			if (previousDay.diff(completionDatesFormatted[completionDatesFormatted.length - 1], 'month') > 1) {
+			if (
+				previousDay.diff(completionDatesFormatted[completionDatesFormatted.length - 1], 'month') > 1
+			) {
 				return currentStreak; // retuns 0
 			}
 			// Iterating through dates array backwards:
 			for (let i = completionDatesFormatted.length - 1; i >= 0; i--) {
-			if (completionDatesFormatted[i].diff(previousDay, "month") <= 1) {
-				currentStreak++;
-				previousDay = completionDatesFormatted[i];
-				if (currentStreak > bestStreak) {
-					bestStreak = currentStreak;
+				if (completionDatesFormatted[i].diff(previousDay, 'month') <= 1) {
+					currentStreak++;
+					previousDay = completionDatesFormatted[i];
+					if (currentStreak > bestStreak) {
+						bestStreak = currentStreak;
+					}
+				} else {
+					currentStreak = 1;
 				}
-			} else {
-				currentStreak = 1;
 			}
-		}
-		return currentStreak;
+			return currentStreak;
 		}
 	}
 }
