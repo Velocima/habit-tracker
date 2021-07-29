@@ -182,9 +182,11 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
+	section.setAttribute('class', 'habit-view-container');
 
 	const goHomeButton = document.createElement('button');
-	goHomeButton.textContent = 'Return to Dashboard';
+	goHomeButton.setAttribute('class', 'return');
+	goHomeButton.textContent = '⇚';
 	// can change this to be more elegant
 	goHomeButton.addEventListener('click', () => {
 		const main = document.querySelector('main');
