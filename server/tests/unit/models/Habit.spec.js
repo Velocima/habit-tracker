@@ -13,9 +13,9 @@ describe('Habit', () => {
             let habit = {email: "email@email.co.uk", name: "Sleeping", description: "Sleeping 8 hours a day", 
             frequency: "daily", frequencyTarget: "1", streak: 0}
             jest.spyOn(db, 'query')
-                .mockResolvedValueOnce({rows: [{...habit, id: 1}]});
+                .mockResolvedValueOnce({rows: [...habit]});
             const result = Habit.create(habit)
-            expect(result).toHaveProperty('id')
+            expect(result).toHaveProperty('email')
         })
     });
 
