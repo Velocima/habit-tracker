@@ -193,6 +193,7 @@ function createHabit(data) {
 }
 
 function createViewHabit(data) {
+	console.log(data);
 	const section = document.createElement('div');
 	section.setAttribute('class', 'habit-view-container');
 
@@ -254,12 +255,28 @@ function createViewHabit(data) {
 		window.location.pathname = '/dashboard.html';
 	});
 
+	const infographicContainer = document.createElement('div');
+	infographicContainer.setAttribute('class', 'infographic-container');
+
+	for (let i = 0; i < data.frequencyTarget; i++) {
+		const div = document.createElement('div');
+		if (data.currentCompletions > i) {
+			div.setAttribute('class', 'habit-instance-complete');
+		}
+		infographicContainer.append(div);
+	}
+
+	const infographicTitle = document.createElement('h2');
+	infographicTitle.innerText = 'Progress';
+
 	section.append(goHomeButton);
 	section.append(habitTitle);
 	section.append(description);
 	section.append(markAsComplete);
-	section.append(streaksContainer);
 	section.append(removeCompletion);
+	section.append(infographicTitle);
+	section.append(infographicContainer);
+	section.append(streaksContainer);
 	section.append(deleteButton);
 
 	return section;

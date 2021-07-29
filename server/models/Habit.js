@@ -1,6 +1,9 @@
 const db = require('../db_config/config');
 const dayjs = require('dayjs');
-
+const dayOfYear = require('dayjs/plugin/dayOfYear');
+const weekOfYear = require('dayjs/plugin/weekOfYear');
+dayjs.extend(dayOfYear);
+dayjs.extend(weekOfYear);
 /**
  * Habit class.
  * Contains create, update, and delete functionality.
@@ -17,6 +20,7 @@ class Habit {
 		this.completionDates = data.completionDates; // an array of dates in 'YYYY-MM-YY' format
 		this.currentStreak = data.currentStreak;
 		this.bestStreak = data.bestStreak;
+		this.currentCompletions = data.currentCompletions;
 	}
 
 	static create({ email, name, description, frequency, goal }) {
@@ -86,7 +90,7 @@ class Habit {
 				const completionDates = datesResult.rows;
 				const streaks = Habit.getStreaks(
 					completionDates.map((data) => data.completion_date),
-					result.rows[0].frequency,
+					result.rows[0].habit_frequency,
 					result.rows[0].frequency_target
 				);
 				let habit = new Habit({
@@ -153,10 +157,11 @@ class Habit {
 			return {
 				bestStreak: 0,
 				currentStreak: 0,
+				currentCompletions: 0,
 			};
 		}
 
-		let today = dayjs();
+		let today = dayjs(new Date());
 		let dates = [];
 
 		if (frequency === 'hourly') {
@@ -177,29 +182,29 @@ class Habit {
 			return {
 				bestStreak: 0,
 				currentStreak: 0,
+				currentCompletions: 0,
 			};
 		}
-
-		const datesData = dates
-			.reduce(
-				(acc, curr) => {
-					if (curr === acc[acc.length - 1].day) {
-						acc[acc.length - 1].count++;
-					} else {
-						acc.push({
-							day: curr,
-							count: 1,
-						});
-					}
-					return acc;
+		const fullDatesData = dates.reduce(
+			(acc, curr) => {
+				if (curr === acc[acc.length - 1].day) {
+					acc[acc.length - 1].count++;
+				} else {
+					acc.push({
+						day: curr,
+						count: 1,
+					});
+				}
+				return acc;
+			},
+			[
+				{
+					day: dates[0],
+					count: 0,
 				},
-				[
-					{
-						day: dates[0],
-						count: 0,
-					},
-				]
-			)
+			]
+		);
+		const datesData = fullDatesData
 			.filter((day) => day.count >= frequencyTarget)
 			.map((date) => date.day);
 
@@ -218,9 +223,15 @@ class Habit {
 			}
 			previousDate = datesData[i];
 		}
+		let currentCompletions = 0;
+
+		if (today === fullDatesData[fullDatesData.length - 1].day) {
+			currentCompletions = fullDatesData[fullDatesData.length - 1].count;
+		}
 		return {
 			bestStreak,
 			currentStreak,
+			currentCompletions,
 		};
 	}
 }
