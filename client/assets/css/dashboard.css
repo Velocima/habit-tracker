@@ -95,3 +95,17 @@ main {
 	z-index: 80;
 	flex-basis: 50%;
 }
+
+.streaks-container {
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: 1fr 1fr;
+	place-items: center;
+}
+.streaks-container p {
+	padding: 10px;
+}
+
+.streaks-container span {
+	font-size: 32px;
+}

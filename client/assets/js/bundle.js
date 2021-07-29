@@ -227,6 +227,23 @@ function createViewHabit(data) {
 	const habitTitle = document.createElement('h1');
 	habitTitle.textContent = data.habitName;
 
+	const streaksContainer = document.createElement('div');
+	streaksContainer.setAttribute('class', 'streaks-container');
+
+	const currentStreak = document.createElement('p');
+	currentStreak.textContent = 'Current streak';
+	const bestStreak = document.createElement('p');
+	bestStreak.textContent = 'Best streak';
+	const bestStreakSpan = document.createElement('span');
+	bestStreakSpan.textContent = data.bestStreak;
+	const currentStreakSpan = document.createElement('span');
+	currentStreakSpan.textContent = data.currentStreak;
+
+	streaksContainer.append(currentStreak);
+	streaksContainer.append(bestStreak);
+	streaksContainer.append(currentStreakSpan);
+	streaksContainer.append(bestStreakSpan);
+
 	const description = document.createElement('p');
 	description.textContent = data.description;
 
@@ -241,6 +258,7 @@ function createViewHabit(data) {
 	section.append(habitTitle);
 	section.append(description);
 	section.append(markAsComplete);
+	section.append(streaksContainer);
 	section.append(removeCompletion);
 	section.append(deleteButton);
 
