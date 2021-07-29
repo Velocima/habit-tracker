@@ -98,3 +98,21 @@ main {
 	display: none;
 }
 
+.add-habit {
+	margin: 15px 0;
+}
+
+.habits-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.habit-card {
+	width: 80%;
+	display: flex;
+	justify-content: space-between;
+	margin: 10px 0;
+	padding: 10px;
+	border-radius: 20px;
+	background-color: #f1ab729a;
+}
