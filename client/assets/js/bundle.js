@@ -445,7 +445,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav, addNameToDashboard, addNameToProfileInput } = require('./utils');
+const { toggleNav, addNameToDashboard, addNameToProfileInput, validateUser } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -486,12 +486,6 @@ function bindProfileListeners() {
 
 	const changePasswordSubmitButton = document.getElementById('change-password-form');
 	changePasswordSubmitButton.addEventListener('submit', onChangePasswordSumbit);
-
-	const closeNavButton = document.querySelector('.close-btn');
-	const openNavButton = document.querySelector('.menu-btn');
-
-	closeNavButton.addEventListener('click', toggleNav);
-	openNavButton.addEventListener('click', toggleNav);
 }
 
 async function renderHabits() {
@@ -503,6 +497,7 @@ async function renderHabits() {
 }
 
 async function initPageBindings() {
+	validateUser();
 	const path = window.location.pathname;
 	if (path === '/' || path === '/index.html') {
 		bindIndexListeners();
@@ -621,15 +616,18 @@ async function putHabit(data) {
 async function putUserInfo(data) {
 	try {
 		const options = {
-			method: 'PUT',
+			method: 'PATCH',
 			headers: new Headers({
 				Authorization: localStorage.getItem('token'),
 				'Content-Type': 'application/json',
 			}),
 			body: JSON.stringify(data),
 		};
-		const response = await fetch(`${devURL}/user/${data.email}`, options);
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/user/${email}`, options);
 		const responseJson = await response.json();
+		localStorage.setItem('name', responseJson.name);
+		return responseJson;
 		if (responseJson.err) {
 			throw Error(err);
 		} else {
@@ -639,7 +637,6 @@ async function putUserInfo(data) {
 	} catch (err) {
 		console.warn(err);
 	}
-	return responseJson;
 }
 
 async function postCompletion(id) {
@@ -697,76 +694,8 @@ module.exports = {
 };
 
 },{"./auth":2}],9:[function(require,module,exports){
-const { createHabit } = require('./dom_elements');
 
-function toggleNav() {
-	const nav = document.querySelector('nav');
-	if (nav.classList.contains('hide-nav')) {
-		nav.classList.remove('hide-nav');
-	} else {
-		nav.classList.add('hide-nav');
-	}
-	console.log('toggling');
-}
-
-function addNewHabitToDOM(data) {
-	const habits = document.querySelector('.habits-container');
-	const habit = createHabit(data);
-	habits.insertBefore(habit, habits.firstChild);
-	return habit;
-}
-
-function addNameToDashboard() {
-	const welcomeMessage = document.getElementById('welcome');
-	welcomeMessage.textContent = `Welcome, ${localStorage.getItem('name')}`;
-}
-
-function addNameToProfileInput() {
-	const name = localStorage.getItem('name');
-	const nameInput = document.getElementById('name');
-	nameInput.setAttribute('value', name);
-}
-
-// function bringUpEditModal(data) {
-// 	//Note this function does not work as it should atm..!
-// 	document.getElementById('submit-habit').remove();
-// 	const submitButton = document.createElement('input');
-// 	submitButton.setAttribute('type', 'submit');
-// 	submitButton.setAttribute('value', 'Submit');
-// 	submitButton.addEventListener('Submit', () => {
-// 		// make edit request here
-// 		const data = Object.fromEntries(new FormData(e.target));
-// 		console.log(data);
-// 		window.location.pathname = '/dashboard.html';
-// 	});
-
-// 	const habitModal = document.querySelector('.habit-modal');
-// 	habitModal.removeAttribute('style');
-
-// 	const form = document.querySelector('form');
-// 	form.append(submitButton);
-
-// 	const name = document.getElementById('name');
-// 	name.setAttribute('value', data.habitName);
-
-// 	const frequency = document.getElementById('frequency');
-// 	frequency.setAttribute('value', data.frequency);
-
-// 	const goal = document.getElementById('goal');
-// 	goal.setAttribute('value', data.frequencyTarget);
-
-// 	const modal = document.querySelector('.habit-modal');
-// 	modal.classList.remove('hidden');
-// }
-
-module.exports = {
-	toggleNav,
-	addNewHabitToDOM,
-	addNameToDashboard,
-	addNameToProfileInput,
-};
-
-},{"./dom_elements":3}],10:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 async function createChart(data = true) {
 	// DEFINE CHART LOCATIONS (IDS)
 	// -----------------------------
