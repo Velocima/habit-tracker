@@ -1,4 +1,9 @@
-const { deleteHabit, postCompletion, deleteCompletion } = require('./requests');
+const {
+	deleteHabit,
+	postCompletion,
+	deleteCompletion,
+	getLastestCompletionId,
+} = require('./requests');
 
 function createLoginForm() {
 	const form = document.createElement('form');
@@ -148,7 +153,8 @@ function createViewHabit(data) {
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
-		const response = await deleteCompletion(data.id, 1);
+		const id = await getLastestCompletionId(data.id);
+		const response = await deleteCompletion(data.id, id);
 	});
 
 	const habitTitle = document.createElement('h1');

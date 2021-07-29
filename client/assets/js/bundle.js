@@ -58,7 +58,12 @@ function logout() {
 module.exports = { requestLogin, requestRegistration, login, logout };
 
 },{"jwt-decode":10}],3:[function(require,module,exports){
-const { deleteHabit, postCompletion, deleteCompletion } = require('./requests');
+const {
+	deleteHabit,
+	postCompletion,
+	deleteCompletion,
+	getLastestCompletionId,
+} = require('./requests');
 
 function createLoginForm() {
 	const form = document.createElement('form');
@@ -208,7 +213,8 @@ function createViewHabit(data) {
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
-		const response = await deleteCompletion(data.id, 1);
+		const id = await getLastestCompletionId(data.id);
+		const response = await deleteCompletion(data.id, id);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -716,10 +722,18 @@ async function deleteCompletion(id, completionId) {
 			`${devURL}/user/${email}/habits/${id}/complete/${completionId}`,
 			options
 		);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function getLastestCompletionId(id) {
+	try {
+		const { habit } = await getHabitData(id);
+		return habit.completionDates[habit.completionDates.length - 1].id;
 	} catch (err) {
 		console.warn(err);
 	}
@@ -735,6 +749,7 @@ module.exports = {
 	postCompletion,
 	deleteCompletion,
 	changePassword,
+	getLastestCompletionId,
 };
 
 },{"./auth":2}],9:[function(require,module,exports){
