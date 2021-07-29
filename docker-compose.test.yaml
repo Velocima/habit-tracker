@@ -18,8 +18,8 @@ services:
       environment: 
         - POSTGRES_DB=habit_test
         - POSTGRES_PASSWORD=habitpass
-  volumes:
+volumes:
     test_db:
-  networks: 
+networks: 
     default:
       name: habit_test
