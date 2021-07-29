@@ -4,6 +4,15 @@ const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require
 const { createChart } = require('../zing_chart');
 
 function onAddHabitButtonClick(e) {
+	if (window.location.pathname !== '/dashboard.html') {
+		localStorage.setItem('add-habit', 'true');
+		window.location.pathname = '/dashboard.html';
+	}
+	const nav = document.querySelector('nav');
+	if (!nav.classList.contains('hide-nav')) {
+		nav.classList.add('hide-nav');
+	}
+
 	const modal = document.querySelector('.habit-modal');
 	modal.classList.remove('hidden');
 }

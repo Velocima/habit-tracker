@@ -21,8 +21,8 @@ function bindIndexListeners() {
 }
 
 function bindDashboardListeners() {
-	const addHabitButtons = document.querySelectorAll('.add-habit');
-	addHabitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
+	const addHabitButtons = document.querySelector('.add-habit');
+	addHabitButtons.addEventListener('click', onAddHabitButtonClick);
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
 
@@ -42,10 +42,13 @@ function bindDashboardListeners() {
 function bindNavListeners() {
 	const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
-	const logoutButton = document.querySelector('.logout');
-
 	closeNavButton.addEventListener('click', toggleNav);
 	openNavButton.addEventListener('click', toggleNav);
+
+	const navAddHabitButton = document.getElementById('nav-add-habit');
+	navAddHabitButton.addEventListener('click', onAddHabitButtonClick);
+
+	const logoutButton = document.querySelector('.logout');
 	logoutButton.addEventListener('click', logout);
 }
 
@@ -65,6 +68,14 @@ async function renderHabits() {
 	habitSections.forEach((habit) => habitsContainer.append(habit));
 }
 
+function openHabitModalFromProfile() {
+	const isAddHabit = localStorage.getItem('add-habit');
+	if (isAddHabit === 'true') {
+		onAddHabitButtonClick();
+		localStorage.removeItem('add-habit');
+	}
+}
+
 async function initPageBindings() {
 	validateUser();
 	const path = window.location.pathname;
@@ -75,6 +86,7 @@ async function initPageBindings() {
 		addNameToDashboard();
 		bindDashboardListeners();
 		bindNavListeners();
+		openHabitModalFromProfile();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
 		addNameToProfileInput();
