@@ -70,6 +70,7 @@ const {
 	postCompletion,
 	deleteCompletion,
 	getLastestCompletionId,
+	getHabitData,
 } = require('./requests');
 
 function createLoginForm() {
@@ -193,7 +194,6 @@ function createHabit(data) {
 }
 
 function createViewHabit(data) {
-	console.log(data);
 	const section = document.createElement('div');
 	section.setAttribute('class', 'habit-view-container');
 
@@ -216,13 +216,19 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
+		onUpdateCompletion(data.id);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
+		const completions = document.querySelectorAll('.habit-instance-complete').length;
+		if (completions === 0) {
+			return;
+		}
 		const id = await getLastestCompletionId(data.id);
 		const response = await deleteCompletion(data.id, id);
+		onUpdateCompletion(data.id);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -280,6 +286,40 @@ function createViewHabit(data) {
 	section.append(deleteButton);
 
 	return section;
+}
+
+async function onUpdateCompletion(id) {
+	try {
+		const { habit } = await getHabitData(id);
+		const infographicContainer = document.querySelector('.infographic-container');
+		const streaksContainer = document.querySelector('.streaks-container');
+		infographicContainer.textContent = '';
+		streaksContainer.textContent = '';
+
+		const currentStreak = document.createElement('p');
+		currentStreak.textContent = 'Current streak';
+		const bestStreak = document.createElement('p');
+		bestStreak.textContent = 'Best streak';
+		const bestStreakSpan = document.createElement('span');
+		bestStreakSpan.textContent = habit.bestStreak;
+		const currentStreakSpan = document.createElement('span');
+		currentStreakSpan.textContent = habit.currentStreak;
+
+		streaksContainer.append(currentStreak);
+		streaksContainer.append(bestStreak);
+		streaksContainer.append(currentStreakSpan);
+		streaksContainer.append(bestStreakSpan);
+
+		for (let i = 0; i < habit.frequencyTarget; i++) {
+			const div = document.createElement('div');
+			if (habit.currentCompletions > i) {
+				div.setAttribute('class', 'habit-instance-complete');
+			}
+			infographicContainer.append(div);
+		}
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };
