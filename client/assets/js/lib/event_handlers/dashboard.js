@@ -1,9 +1,17 @@
 const { createViewHabit } = require('../dom_elements');
 const { postHabit, getHabitData } = require('../requests');
-const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require('../utils');
-const { createChart } = require('../zing_chart');
+const { addNewHabitToDOM } = require('../utils');
 
 function onAddHabitButtonClick(e) {
+	if (window.location.pathname !== '/dashboard.html') {
+		localStorage.setItem('add-habit', 'true');
+		window.location.pathname = '/dashboard.html';
+	}
+	const nav = document.querySelector('nav');
+	if (!nav.classList.contains('hide-nav')) {
+		nav.classList.add('hide-nav');
+	}
+
 	const modal = document.querySelector('.habit-modal');
 	modal.classList.remove('hidden');
 }
@@ -12,10 +20,8 @@ async function onAddHabitSumbit(e) {
 	e.preventDefault();
 	const data = Object.fromEntries(new FormData(e.target));
 	const description = document.querySelector('.description').textContent;
-	console.log(description);
 	const submitData = { ...data, description };
 	const newHabit = await postHabit(submitData);
-	console.log('the new habit', newHabit);
 	if (!newHabit.err) {
 		const form = document.querySelector('form');
 		form.reset();
@@ -32,7 +38,7 @@ async function onAddHabitSumbit(e) {
 function onFrequencyChange(e) {
 	const goal = document.getElementById('goal');
 	if (e.target.value === 'hourly') {
-		goal.setAttribute('max', 15);
+		goal.setAttribute('max', 10);
 	} else if (e.target.value === 'daily') {
 		goal.setAttribute('max', 7);
 	} else if (e.target.value === 'weekly') {
@@ -66,10 +72,13 @@ async function onClickViewHabit(e) {
 
 	//create a new request function that retreives all info for this users habit, and call this here
 	const data = await getHabitData(e.target.id);
-	console.log(data);
 	const habitSection = createViewHabit(data.habit);
 	viewContainer.append(habitSection);
-	createChart(data.habit);
+}
+
+function closeModal() {
+	const modal = document.querySelector('.habit-modal');
+	modal.classList.add('hidden');
 }
 
 module.exports = {
@@ -78,4 +87,5 @@ module.exports = {
 	onFrequencyChange,
 	onAddHabitFormChange,
 	onClickViewHabit,
+	closeModal,
 };

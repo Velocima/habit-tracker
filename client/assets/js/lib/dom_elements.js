@@ -1,4 +1,9 @@
-const { deleteHabit, postCompletion, deleteCompletion } = require('./requests');
+const {
+	deleteHabit,
+	postCompletion,
+	deleteCompletion,
+	getLastestCompletionId,
+} = require('./requests');
 
 function createLoginForm() {
 	const form = document.createElement('form');
@@ -122,10 +127,11 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
-	console.log(data);
+	section.setAttribute('class', 'habit-view-container');
 
 	const goHomeButton = document.createElement('button');
-	goHomeButton.textContent = 'Return to Dashboard';
+	goHomeButton.setAttribute('class', 'return');
+	goHomeButton.textContent = '⇚';
 	// can change this to be more elegant
 	goHomeButton.addEventListener('click', () => {
 		const main = document.querySelector('main');
@@ -142,14 +148,13 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
-		console.log(response);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
-		const response = await deleteCompletion(data.id, 1);
-		console.log(response);
+		const id = await getLastestCompletionId(data.id);
+		const response = await deleteCompletion(data.id, id);
 	});
 
 	const habitTitle = document.createElement('h1');
@@ -158,35 +163,18 @@ function createViewHabit(data) {
 	const description = document.createElement('p');
 	description.textContent = data.description;
 
-	const editButton = document.createElement('button');
-	editButton.textContent = 'Edit';
-	editButton.addEventListener('click', () => console.log('edit functionality'));
-	// editButton.addEventListener('click', () => bringUpEditModal(data));
-
 	const deleteButton = document.createElement('button');
 	deleteButton.textContent = 'Delete';
 	deleteButton.addEventListener('click', async () => {
 		const response = await deleteHabit(data.id);
-		const responseJson = await response.json();
-		console.log(responseJson);
+		window.location.pathname = '/dashboard.html';
 	});
-
-	const chartContainer1 = document.createElement('div');
-	chartContainer1.setAttribute('id', 'chart1');
-
-	const chartContainer2 = document.createElement('div');
-	chartContainer2.setAttribute('id', 'chart2');
-
-	//add in chart generation and streaks
 
 	section.append(goHomeButton);
 	section.append(habitTitle);
 	section.append(description);
 	section.append(markAsComplete);
 	section.append(removeCompletion);
-	section.append(chartContainer1);
-	section.append(chartContainer2);
-	section.append(editButton);
 	section.append(deleteButton);
 
 	return section;

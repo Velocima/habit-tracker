@@ -7,7 +7,6 @@ function toggleNav() {
 	} else {
 		nav.classList.add('hide-nav');
 	}
-	console.log('toggling');
 }
 
 function addNewHabitToDOM(data) {
@@ -28,41 +27,30 @@ function addNameToProfileInput() {
 	nameInput.setAttribute('value', name);
 }
 
-// function bringUpEditModal(data) {
-// 	//Note this function does not work as it should atm..!
-// 	document.getElementById('submit-habit').remove();
-// 	const submitButton = document.createElement('input');
-// 	submitButton.setAttribute('type', 'submit');
-// 	submitButton.setAttribute('value', 'Submit');
-// 	submitButton.addEventListener('Submit', () => {
-// 		// make edit request here
-// 		const data = Object.fromEntries(new FormData(e.target));
-// 		console.log(data);
-// 		window.location.pathname = '/dashboard.html';
-// 	});
+function validateUser() {
+	const path = window.location.pathname;
+	const name = localStorage.getItem('name');
+	const email = localStorage.getItem('email');
+	const token = localStorage.getItem('token');
 
-// 	const habitModal = document.querySelector('.habit-modal');
-// 	habitModal.removeAttribute('style');
-
-// 	const form = document.querySelector('form');
-// 	form.append(submitButton);
-
-// 	const name = document.getElementById('name');
-// 	name.setAttribute('value', data.habitName);
-
-// 	const frequency = document.getElementById('frequency');
-// 	frequency.setAttribute('value', data.frequency);
-
-// 	const goal = document.getElementById('goal');
-// 	goal.setAttribute('value', data.frequencyTarget);
-
-// 	const modal = document.querySelector('.habit-modal');
-// 	modal.classList.remove('hidden');
-// }
+	if ((path === '/' || path === '/index.html') && (!name || !email || !token)) {
+		return;
+	}
+	if (!name || !email || !token) {
+		localStorage.clear();
+		window.location.pathname = '/';
+		return;
+	}
+	//validate token
+	if ((path === '/' || path === '/index.html') && name && email && token) {
+		window.location.pathname = '/dashboard.html';
+	}
+}
 
 module.exports = {
 	toggleNav,
 	addNewHabitToDOM,
 	addNameToDashboard,
 	addNameToProfileInput,
+	validateUser,
 };

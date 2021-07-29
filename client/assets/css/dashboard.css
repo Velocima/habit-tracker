@@ -4,63 +4,6 @@
 	--tertiary: #8e2657;
 }
 
-/* nav {
-	position: absolute;
-	flex-direction: column;
-	width: 75%;
-	height: 100%;
-	background: var(--tertiary);
-	z-index: 1000;
-}
-
-ul {
-	text-align: center;
-	padding-top: 30px;
-	height: 100%;
-}
-
-nav ul li button {
-	border: none;
-	border-style: none;
-	text-transform: capitalize;
-	font-family: 'Rubik', sans-serif;
-	font-size: 32px;
-	font-weight: bold;
-	box-shadow: none;
-	padding: 0;
-    background: var(--tertiary);
-    color: var(--secondary);
-}
-
-nav ul li button:hover {
-    background: none;
-    color: var(--secondary);
-    box-shadow: none;
-}
-
-a {
-	color: var(--secondary);
-	font-size: 32px;
-	font-weight: bold;
-	text-transform: capitalize;
-}
-
-nav p {
-	color: var(--secondary);
-	padding-left: 5px;
-}
-
-.menu-btn {
-	padding: 5px 0 0 10px;
-	color: var(--secondary);
-	font-size: 24px;
-	cursor: pointer;
-}
-
-.close-btn {
-	padding-left: 10px;
-} */
-
 main {
 	position: relative;
 	text-align: center;
@@ -74,27 +17,81 @@ main {
 }
 
 .habit-modal {
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 .modal-content {
-    background-color: var(--primary);
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-  }
+	background-color: var(--primary);
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
 
 .hidden {
 	display: none;
 }
 
+.add-habit {
+	margin: 15px 0;
+}
+
+.habits-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.habit-card {
+	width: 80%;
+	display: flex;
+	justify-content: space-between;
+	margin: 10px 0;
+	padding: 10px;
+	border-radius: 20px;
+	background-color: #f1ab729a;
+}
+
+.habit-view-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.habit-view-container button {
+	width: fit-content;
+}
+
+#chart1,
+#chart2 {
+	width: 100%;
+}
+.return {
+	z-index: 100;
+	position: fixed;
+	top: 2px;
+	right: 0;
+	margin-top: 0 !important;
+	color: var(--secondary);
+	background-color: #ffffff00;
+	border: #ffffff00;
+	padding: 0 10px;
+	font-size: 32px;
+	font-weight: bold;
+	text-transform: capitalize;
+}
+
+.habit-view-container button {
+	margin: 10px 0;
+	z-index: 80;
+	flex-basis: 50%;
+}
