@@ -1,6 +1,8 @@
 const { logout } = require('./auth');
 
-const devURL = 'http://localhost:3000';
+const devURL = window.location.hostname.includes('localhost')
+	? 'http://localhost:3000'
+	: 'https://habitude-app.herokuapp.com';
 
 async function getAllUserHabits(email) {
 	try {
