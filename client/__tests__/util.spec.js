@@ -15,7 +15,7 @@ describe('functions for inputting data into forms', () => {
 
     describe('input data to form', () => {
         test('adds a new habit to the DOM', () => {
-            inputs.addNewHabitToDOM();
+
         })
 
         test('adds name to dashboard', () =>  {
@@ -31,16 +31,10 @@ describe('functions for inputting data into forms', () => {
 
 
     describe('Toggling the nav bar', () => {
-        // beforeEach(() => {
-        //     document.documentElement.innerHTML = '<body><nav class="hide-nav"></nav>';
-        //     nav = document.querySelector('nav');
-        //     hideNav = document.querySelector('.hide-nav');
-        // })
-
         test('opens nav bar when menu button is clicked', () => {
             document.documentElement.innerHTML = '<body><nav class="hide-nav"></nav>';
             const nav = document.querySelector('nav')
             utils.toggleNav();
-            expect(nav.className).toBe('hide-nav')
+            expect(nav.classList).toBe('hide-nav')
         })
         })
