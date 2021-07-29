@@ -472,7 +472,9 @@ function bindDashboardListeners() {
 
 	const habitFrequency = document.getElementById('frequency');
 	habitFrequency.addEventListener('change', onFrequencyChange);
+}
 
+function bindNavListeners() {
 	const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
 
@@ -505,9 +507,11 @@ async function initPageBindings() {
 		await renderHabits();
 		addNameToDashboard();
 		bindDashboardListeners();
+		bindNavListeners();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
 		addNameToProfileInput();
+		bindNavListeners();
 	}
 }
 
