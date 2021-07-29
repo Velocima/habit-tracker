@@ -2,7 +2,7 @@ TRUNCATE users, habits RESTART IDENTITY
 
 INSERT INTO users (email, name, password_digest) 
 VALUES
-    ('user1@email.co.uk', 'User1', '')
+    ('user1@email.co.uk', 'User1', '1U03lKdhJzMd')
     ('user2@email.co.uk', 'User2', '')
     ('user3@email.co.uk', 'User3', '')
     
