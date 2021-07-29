@@ -1,7 +1,6 @@
 const { createViewHabit } = require('../dom_elements');
 const { postHabit, getHabitData } = require('../requests');
-const { updateHabitDescription, addDailyCountField, addNewHabitToDOM } = require('../utils');
-const { createChart } = require('../zing_chart');
+const { addNewHabitToDOM } = require('../utils');
 
 function onAddHabitButtonClick(e) {
 	if (window.location.pathname !== '/dashboard.html') {
@@ -75,7 +74,6 @@ async function onClickViewHabit(e) {
 	const data = await getHabitData(e.target.id);
 	const habitSection = createViewHabit(data.habit);
 	viewContainer.append(habitSection);
-	createChart(data.habit);
 }
 
 function closeModal() {
