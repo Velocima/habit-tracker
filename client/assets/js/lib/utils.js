@@ -7,7 +7,6 @@ function toggleNav() {
 	} else {
 		nav.classList.add('hide-nav');
 	}
-	// console.log('toggling');
 }
 
 function addNewHabitToDOM(data) {
@@ -26,6 +25,26 @@ function addNameToProfileInput() {
 	const name = localStorage.getItem('name');
 	const nameInput = document.getElementById('name');
 	nameInput.setAttribute('value', name);
+}
+
+function validateUser() {
+	const path = window.location.pathname;
+	const name = localStorage.getItem('name');
+	const email = localStorage.getItem('email');
+	const token = localStorage.getItem('token');
+
+	if ((path === '/' || path === '/index.html') && (!name || !email || !token)) {
+		return;
+	}
+	if (!name || !email || !token) {
+		localStorage.clear();
+		window.location.pathname = '/';
+		return;
+	}
+	//validate token
+	if ((path === '/' || path === '/index.html') && name && email && token) {
+		window.location.pathname = '/dashboard.html';
+	}
 }
 
 // function bringUpEditModal(data) {
@@ -65,4 +84,5 @@ module.exports = {
 	addNewHabitToDOM,
 	addNameToDashboard,
 	addNameToProfileInput,
+	validateUser,
 };

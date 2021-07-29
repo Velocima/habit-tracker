@@ -53,7 +53,6 @@ async function postHabit(data) {
 		if (responseJson.err) {
 			throw new Error(err);
 		}
-		console.log(responseJson);
 		return responseJson;
 	} catch (err) {
 		console.warn(err);
@@ -100,25 +99,48 @@ async function putHabit(data) {
 async function putUserInfo(data) {
 	try {
 		const options = {
-			method: 'PUT',
+			method: 'PATCH',
 			headers: new Headers({
 				Authorization: localStorage.getItem('token'),
 				'Content-Type': 'application/json',
 			}),
 			body: JSON.stringify(data),
 		};
-		const response = await fetch(`${devURL}/user/${data.email}`, options);
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/user/${email}`, options);
 		const responseJson = await response.json();
 		if (responseJson.err) {
-			throw Error(err);
+			throw Error(responseJson.err);
 		} else {
-			// redirect to the dashboard
-			console.log(responseJson);
+			localStorage.setItem('name', responseJson.name);
+			return responseJson;
 		}
 	} catch (err) {
 		console.warn(err);
 	}
-	return responseJson;
+}
+
+async function changePassword(data) {
+	try {
+		const options = {
+			method: 'PATCH',
+			headers: new Headers({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+			}),
+			body: JSON.stringify(data),
+		};
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/auth/${email}/password`, options);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw Error(err);
+		} else {
+			return responseJson;
+		}
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 async function postCompletion(id) {
@@ -173,4 +195,5 @@ module.exports = {
 	putUserInfo,
 	postCompletion,
 	deleteCompletion,
+	changePassword,
 };

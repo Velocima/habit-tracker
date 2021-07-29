@@ -6,10 +6,12 @@ const {
 	onClickViewHabit,
 	onAddHabitFormChange,
 	onFrequencyChange,
+	closeModal,
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav, addNameToDashboard, addNameToProfileInput } = require('./utils');
+const { toggleNav, addNameToDashboard, addNameToProfileInput, validateUser } = require('./utils');
+const { logout } = require('./auth');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -20,13 +22,16 @@ function bindIndexListeners() {
 }
 
 function bindDashboardListeners() {
-	const addHabitButtons = document.querySelectorAll('.add-habit');
-	addHabitButtons.forEach((button) => button.addEventListener('click', onAddHabitButtonClick));
+	const addHabitButtons = document.querySelector('.add-habit');
+	addHabitButtons.addEventListener('click', onAddHabitButtonClick);
 	const addHabitForm = document.querySelector('form');
 	addHabitForm.addEventListener('submit', onAddHabitSumbit);
 
 	const viewHabitButtons = document.querySelectorAll('.view-button');
 	viewHabitButtons.forEach((button) => button.addEventListener('click', onClickViewHabit));
+
+	const closeButton = document.querySelector('.close-modal');
+	closeButton.addEventListener('click', closeModal);
 
 	const addHabitFormFields = document.querySelectorAll('input, textarea, select');
 	addHabitFormFields.forEach((field) => {
@@ -36,12 +41,19 @@ function bindDashboardListeners() {
 
 	const habitFrequency = document.getElementById('frequency');
 	habitFrequency.addEventListener('change', onFrequencyChange);
+}
 
+function bindNavListeners() {
 	const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
-
 	closeNavButton.addEventListener('click', toggleNav);
 	openNavButton.addEventListener('click', toggleNav);
+
+	const navAddHabitButton = document.getElementById('nav-add-habit');
+	navAddHabitButton.addEventListener('click', onAddHabitButtonClick);
+
+	const logoutButton = document.querySelector('.logout');
+	logoutButton.addEventListener('click', logout);
 }
 
 function bindProfileListeners() {
@@ -60,7 +72,16 @@ async function renderHabits() {
 	habitSections.forEach((habit) => habitsContainer.append(habit));
 }
 
+function openHabitModalFromProfile() {
+	const isAddHabit = localStorage.getItem('add-habit');
+	if (isAddHabit === 'true') {
+		onAddHabitButtonClick();
+		localStorage.removeItem('add-habit');
+	}
+}
+
 async function initPageBindings() {
+	validateUser();
 	const path = window.location.pathname;
 	if (path === '/' || path === '/index.html') {
 		bindIndexListeners();
@@ -68,9 +89,12 @@ async function initPageBindings() {
 		await renderHabits();
 		addNameToDashboard();
 		bindDashboardListeners();
+		bindNavListeners();
+		openHabitModalFromProfile();
 	} else if (path === '/profile.html') {
 		bindProfileListeners();
 		addNameToProfileInput();
+		bindNavListeners();
 	}
 }
 
