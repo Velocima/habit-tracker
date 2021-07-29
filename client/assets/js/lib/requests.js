@@ -67,8 +67,7 @@ async function deleteHabit(id) {
 		};
 		const email = localStorage.getItem('email');
 		const response = await fetch(`${devURL}/user/${email}/habits/${id}`, options);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
 	} catch (err) {
@@ -177,10 +176,18 @@ async function deleteCompletion(id, completionId) {
 			`${devURL}/user/${email}/habits/${id}/complete/${completionId}`,
 			options
 		);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function getLastestCompletionId(id) {
+	try {
+		const { habit } = await getHabitData(id);
+		return habit.completionDates[habit.completionDates.length - 1].id;
 	} catch (err) {
 		console.warn(err);
 	}
@@ -196,4 +203,5 @@ module.exports = {
 	postCompletion,
 	deleteCompletion,
 	changePassword,
+	getLastestCompletionId,
 };
