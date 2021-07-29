@@ -10,6 +10,7 @@ const {
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
 const { toggleNav, addNameToDashboard, addNameToProfileInput, validateUser } = require('./utils');
+const { logout } = require('./auth');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -41,9 +42,11 @@ function bindDashboardListeners() {
 function bindNavListeners() {
 	const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
+	const logoutButton = document.querySelector('.logout');
 
 	closeNavButton.addEventListener('click', toggleNav);
 	openNavButton.addEventListener('click', toggleNav);
+	logoutButton.addEventListener('click', logout);
 }
 
 function bindProfileListeners() {

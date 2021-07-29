@@ -4,55 +4,55 @@ const { initPageBindings } = require('./lib/handlers');
 document.addEventListener('DOMContentLoaded', initPageBindings);
 
 },{"./lib/handlers":7}],2:[function(require,module,exports){
-const jwt_decode = require("jwt-decode");
+const jwt_decode = require('jwt-decode');
 
 async function requestLogin(data) {
-  try {
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    };
-    const response = await fetch(`http://localhost:3000/auth/login`, options);
-    const responseJson = await response.json();
-    if (!responseJson.success) {
-      throw new Error("Login not authorised");
-    }
-    login(responseJson.token);
-  } catch (err) {
-    console.warn(err);
-  }
+	try {
+		const options = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data),
+		};
+		const response = await fetch(`http://localhost:3000/auth/login`, options);
+		const responseJson = await response.json();
+		if (!responseJson.success) {
+			throw new Error('Login not authorised');
+		}
+		login(responseJson.token);
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 async function requestRegistration(data) {
-  try {
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    };
-    const response = await fetch(`http://localhost:3000/auth/register`, options);
-    const responseJson = await response.json();
-    if (responseJson.err) {
-      throw Error(responseJson.err);
-    }
-    requestLogin(data);
-  } catch (err) {
-    console.warn(err);
-  }
+	try {
+		const options = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data),
+		};
+		const response = await fetch(`http://localhost:3000/auth/register`, options);
+		const responseJson = await response.json();
+		if (responseJson.err) {
+			throw Error(responseJson.err);
+		}
+		requestLogin(data);
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 function login(token) {
-  const user = jwt_decode(token);
-  localStorage.setItem("token", token);
-  localStorage.setItem("name", user.name);
-  localStorage.setItem("email", user.email);
-  window.location.pathname = "/dashboard.html";
+	const user = jwt_decode(token);
+	localStorage.setItem('token', token);
+	localStorage.setItem('name', user.name);
+	localStorage.setItem('email', user.email);
+	window.location.pathname = '/dashboard.html';
 }
 
 function logout() {
-  localStorage.clear();
-  window.location.pathname = "/index.html";
+	localStorage.clear();
+	window.location.pathname = '/';
 }
 
 module.exports = { requestLogin, requestRegistration, login, logout };
@@ -446,6 +446,7 @@ const {
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
 const { toggleNav, addNameToDashboard, addNameToProfileInput, validateUser } = require('./utils');
+const { logout } = require('./auth');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -477,9 +478,11 @@ function bindDashboardListeners() {
 function bindNavListeners() {
 	const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
+	const logoutButton = document.querySelector('.logout');
 
 	closeNavButton.addEventListener('click', toggleNav);
 	openNavButton.addEventListener('click', toggleNav);
+	logoutButton.addEventListener('click', logout);
 }
 
 function bindProfileListeners() {
@@ -517,7 +520,7 @@ async function initPageBindings() {
 
 module.exports = { initPageBindings, renderHabits };
 
-},{"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8,"./utils":9}],8:[function(require,module,exports){
+},{"./auth":2,"./dom_elements":3,"./event_handlers/dashboard":4,"./event_handlers/index":5,"./event_handlers/profile":6,"./requests":8,"./utils":9}],8:[function(require,module,exports){
 const { logout } = require('./auth');
 
 const devURL = 'http://localhost:3000';
