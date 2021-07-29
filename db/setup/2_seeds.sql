@@ -7,14 +7,14 @@ VALUES
 
 INSERT INTO habits (email, habit_name, habit_description, habit_frequency, frequency_target) 
 VALUES
-    ('polina@polina.com', 'Drink 2 litres of water', 'I need to get enough water daily, 2 litres is an optimal amount', 'daily', 1),
-    ('ridwan@ridwan.co.uk', 'Running 5k', 'I want to run 5k once a week', 'weekly', 1),
-    ('ridwan@ridwan.co.uk', '8 hours of sleep', 'I want get 8 hours of sleep to feel healthy', 'daily', 1),
-    ('max@max.co.uk', 'Eat 5 portions of fruit and veg', 'I need to eat anought fibre in the form of 5 portions of fruit and veg', 'daily', 1);
+    ('polina@polina.com', 'Drink a glass of water', 'Drink a glass of water 10 times daily', 'daily', 10),
+    ('ridwan@ridwan.co.uk', 'Running 5k', 'Run 5k once a week', 'weekly', 1),
+    ('ridwan@ridwan.co.uk', '8 hours of sleep', 'Sleep 8 hours daily', 'daily', 1),
+    ('max@max.co.uk', 'Eat 5 portions of fruit and veg', 'Eat 5 portioms of fruit and veg daily', 'daily', 1);
 
 INSERT INTO completions (completion_date, habit_id)
 VALUES
-    (1627377751123, 1),
-    (1627200409123, 2),
-    (1626595609123, 3),
-    (1625120110123, 4);
+    ('2021-07-19', 1),
+    ('2021-07-21', 2),
+    ('2021-07-23', 3),
+    ('2021-07-25', 4);
