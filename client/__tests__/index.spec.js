@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
+const handlers = require('../assets/js/lib/event_handlers/index.js')
 
 
 describe('head testing', () => {
@@ -63,12 +64,103 @@ describe('head testing', () => {
 
 describe("body testing", () => {
     beforeAll(() => {
-        document.documentElement.innerHTML = `<body><nav></nav><div></div><main><h1></h1><section><section></main><section><section></body>`;
+        document.documentElement.innerHTML = `<body></body>`;
     });
 
     test('it has a header title', () => {
         let header = document.querySelector('h1');
         expect(header.textContent).toContain('Habitude');
+    })
+
+    test('front page has a description paragraph', () => {
+        let description = document.querySelector('p');
+        expect(description.textContent).toContain('The simple way to build habits that last.');
+    })
+
+    test('front page has two buttons', () => {
+        expect(document.querySelectorAll('button')).toHaveLength(2);
+    })
+
+    test('login button has name "LOGIN"', () => {
+        expect(document.querySelectorAll('button')[0]).textContent.toContain('LOGIN');
+    })
+
+    test('register button has name "REGISTER"', () => {
+        expect(document.querySelectorAll('button')[1]).textContent.toContain('REGISTER');
+    })
+
+
+    // Login form
+    test('login form is rendered', () => {
+        handlers.onLoginButtonClick(e);
+        expect(document.querySelector('form').toBeTruthy())
+    })
+
+    test('login form has 6 child components', () => {
+        handlers.onLoginButtonClick(e);
+        expect(document.querySelector('form').childElementCount.toEqual(6))
+    })
+
+    test('login input fields have labels', () => {
+        handlers.onLoginButtonClick(e);
+        expect(document.querySelectorAll('label')).toHaveLength(2);
+    })
+
+    test('old login button is hidden when the form is rendered', () => {
+        handlers.onLoginButtonClick(e);
+        expect (document.querySelectorAll('button')[0].className.toBe('login hidden'));
+    })
+
+    test('slogan paragraph is removed when form is rendered', () => {
+        handlers.onLoginButtonClick(e);
+        expect(document.querySelectorAll('p').toHaveLength(1));
+    })
+
+    test(`form has a paragraph "Don't have an account?"`, () => {
+        handlers.onLoginButtonClick(e);
+        expect(document.querySelectorAll('p').textContent.toContain("Don't have an account?"));
+    })
+
+
+    // Registration form
+    test('registration form is rendered', () => {
+        handlers.onRegistrationButtonClick(e);
+        expect(document.querySelector('form').toBeTruthy())
+    })
+
+    test('registration form has 8 child components', () => {
+        handlers.onRegistrationButtonClick(e);
+        expect(document.querySelector('form').childElementCount.toEqual(8))
+    })
+
+    test('all registration input fields have labels', () => {
+        handlers.onRegistrationButtonClick(e);
+        expect(document.querySelectorAll('label')).toHaveLength(3);
+    })
+
+    test('old register button is hidden when the registration form is rendered', () => {
+        handlers.onRegistrationButtonClick(e);
+        expect (document.querySelectorAll('button')[1].className.toBe('register hidden'));
+    })
+
+    test('login button is visible when the registration form is rendered', () => {
+        handlers.onRegistrationButtonClick(e);
+        expect (document.querySelectorAll('button')[0].className.toBe('login'));
+    })
+
+    test('slogan paragraph is removed when form is rendered', () => {
+        handlers.onRegistrationButtonClick(e);
+        expect(document.querySelectorAll('p').toHaveLength(1));
+    })
+
+    test('login form is removed when registration form is rendered', () => {
+        handlers.onRegistrationButtonClick(e);
+        expect(document.querySelectorAll('form').toHaveLength(0));
+    })
+
+    test(`form has a paragraph "Already have an account?"`, () => {
+        handlers.onLoginButtonClick(e);
+        expect(document.querySelectorAll('p').textContent.toContain("Already have an account?"));
     })
 
 })
