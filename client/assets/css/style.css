@@ -102,6 +102,8 @@ nav {
 	height: 100%;
 	background: var(--tertiary);
 	z-index: 1000;
+	transform: translateX(0);
+	transition: 0.3s;
 }
 
 ul {
@@ -157,7 +159,7 @@ i {
 }
 
 .hide-nav {
-	display: none;
+	transform: translateX(-100%);
 }
 
 @media screen and (min-width: 375px) {
