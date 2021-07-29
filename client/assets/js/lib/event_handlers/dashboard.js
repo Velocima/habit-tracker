@@ -39,7 +39,7 @@ async function onAddHabitSumbit(e) {
 function onFrequencyChange(e) {
 	const goal = document.getElementById('goal');
 	if (e.target.value === 'hourly') {
-		goal.setAttribute('max', 15);
+		goal.setAttribute('max', 10);
 	} else if (e.target.value === 'daily') {
 		goal.setAttribute('max', 7);
 	} else if (e.target.value === 'weekly') {

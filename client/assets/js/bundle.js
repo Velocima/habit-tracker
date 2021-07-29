@@ -292,7 +292,7 @@ async function onAddHabitSumbit(e) {
 function onFrequencyChange(e) {
 	const goal = document.getElementById('goal');
 	if (e.target.value === 'hourly') {
-		goal.setAttribute('max', 15);
+		goal.setAttribute('max', 10);
 	} else if (e.target.value === 'daily') {
 		goal.setAttribute('max', 7);
 	} else if (e.target.value === 'weekly') {
@@ -408,20 +408,24 @@ module.exports = {
 };
 
 },{"../auth":2,"../dom_elements":3}],6:[function(require,module,exports){
-const { putUserInfo } = require('../requests');
+const { putUserInfo, changePassword } = require('../requests');
 
 async function onChangePasswordSumbit(e) {
 	e.preventDefault();
-	const formData = Object.fromEntries(new FormData(e.target));
-	let response;
-	if (formData['new-password'] === formData['confirm-password']) {
-		try {
-			response = await putUserInfo(formData);
-		} catch (error) {
-			console.warn(error);
+	try {
+		const formData = Object.fromEntries(new FormData(e.target));
+		if (formData['new-password'] !== formData['confirm-password']) {
+			window.alert('Your passwords do not match, please try again.');
+			return;
 		}
-	} else {
-		window.alert('Your passwords do not match, please try again.');
+		let response = await changePassword(formData);
+		if (response.err) {
+			throw new Error(response.err.message);
+		}
+		window.location.pathname = '/dashboard.html';
+	} catch (error) {
+		window.alert('Could not change password - current password incorrect');
+		console.warn(error);
 	}
 }
 
@@ -429,9 +433,13 @@ async function onUpdateUserInfoSumbit(e) {
 	e.preventDefault();
 	try {
 		const formData = Object.fromEntries(new FormData(e.target));
+		if (formData.name === localStorage.getItem('name')) {
+			window.alert('Must provide a different name to update.');
+			return;
+		}
 		const response = await putUserInfo(formData);
 		if (response.err) {
-			throw new Error(err.message);
+			throw new Error(response.err.message);
 		} else {
 			window.location.pathname = '/dashboard.html';
 		}
@@ -657,7 +665,30 @@ async function putUserInfo(data) {
 		const email = localStorage.getItem('email');
 		const response = await fetch(`${devURL}/user/${email}`, options);
 		const responseJson = await response.json();
-		localStorage.setItem('name', responseJson.name);
+		if (responseJson.err) {
+			throw Error(responseJson.err);
+		} else {
+			localStorage.setItem('name', responseJson.name);
+			return responseJson;
+		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function changePassword(data) {
+	try {
+		const options = {
+			method: 'PATCH',
+			headers: new Headers({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+			}),
+			body: JSON.stringify(data),
+		};
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/auth/${email}/password`, options);
+		const responseJson = await response.json();
 		if (responseJson.err) {
 			throw Error(err);
 		} else {
@@ -720,6 +751,7 @@ module.exports = {
 	putUserInfo,
 	postCompletion,
 	deleteCompletion,
+	changePassword,
 };
 
 },{"./auth":2}],9:[function(require,module,exports){

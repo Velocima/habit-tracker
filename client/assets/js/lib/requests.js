@@ -109,7 +109,30 @@ async function putUserInfo(data) {
 		const email = localStorage.getItem('email');
 		const response = await fetch(`${devURL}/user/${email}`, options);
 		const responseJson = await response.json();
-		localStorage.setItem('name', responseJson.name);
+		if (responseJson.err) {
+			throw Error(responseJson.err);
+		} else {
+			localStorage.setItem('name', responseJson.name);
+			return responseJson;
+		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function changePassword(data) {
+	try {
+		const options = {
+			method: 'PATCH',
+			headers: new Headers({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+			}),
+			body: JSON.stringify(data),
+		};
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/auth/${email}/password`, options);
+		const responseJson = await response.json();
 		if (responseJson.err) {
 			throw Error(err);
 		} else {
@@ -172,4 +195,5 @@ module.exports = {
 	putUserInfo,
 	postCompletion,
 	deleteCompletion,
+	changePassword,
 };
