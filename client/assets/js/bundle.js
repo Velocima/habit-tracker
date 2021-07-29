@@ -445,7 +445,7 @@ const {
 } = require('./event_handlers/dashboard');
 const { createHabit } = require('./dom_elements');
 const { getAllUserHabits } = require('./requests');
-const { toggleNav, addNameToDashboard, addNameToProfileInput } = require('./utils');
+const { toggleNav, addNameToDashboard, addNameToProfileInput, validateUser } = require('./utils');
 
 function bindIndexListeners() {
 	const loginButton = document.querySelector('.login');
@@ -486,12 +486,6 @@ function bindProfileListeners() {
 
 	const changePasswordSubmitButton = document.getElementById('change-password-form');
 	changePasswordSubmitButton.addEventListener('submit', onChangePasswordSumbit);
-
-	const closeNavButton = document.querySelector('.close-btn');
-	const openNavButton = document.querySelector('.menu-btn');
-
-	closeNavButton.addEventListener('click', toggleNav);
-	openNavButton.addEventListener('click', toggleNav);
 }
 
 async function renderHabits() {
@@ -503,6 +497,7 @@ async function renderHabits() {
 }
 
 async function initPageBindings() {
+	validateUser();
 	const path = window.location.pathname;
 	if (path === '/' || path === '/index.html') {
 		bindIndexListeners();
@@ -621,15 +616,18 @@ async function putHabit(data) {
 async function putUserInfo(data) {
 	try {
 		const options = {
-			method: 'PUT',
+			method: 'PATCH',
 			headers: new Headers({
 				Authorization: localStorage.getItem('token'),
 				'Content-Type': 'application/json',
 			}),
 			body: JSON.stringify(data),
 		};
-		const response = await fetch(`${devURL}/user/${data.email}`, options);
+		const email = localStorage.getItem('email');
+		const response = await fetch(`${devURL}/user/${email}`, options);
 		const responseJson = await response.json();
+		localStorage.setItem('name', responseJson.name);
+		return responseJson;
 		if (responseJson.err) {
 			throw Error(err);
 		} else {
@@ -639,7 +637,6 @@ async function putUserInfo(data) {
 	} catch (err) {
 		console.warn(err);
 	}
-	return responseJson;
 }
 
 async function postCompletion(id) {
@@ -727,6 +724,22 @@ function addNameToProfileInput() {
 	nameInput.setAttribute('value', name);
 }
 
+function validateUser() {
+	const name = localStorage.getItem('name');
+	const email = localStorage.getItem('email');
+	const token = localStorage.getItem('token');
+	if (!name || !email || !token) {
+		localStorage.clear();
+		window.location.pathname = '/';
+		return;
+	}
+	//validate token
+	const path = window.location.pathname;
+	if ((path === '/' || path === '/index.html') && name && email && token) {
+		window.location.pathname = '/dashboard.html';
+	}
+}
+
 // function bringUpEditModal(data) {
 // 	//Note this function does not work as it should atm..!
 // 	document.getElementById('submit-habit').remove();
@@ -764,6 +777,7 @@ module.exports = {
 	addNewHabitToDOM,
 	addNameToDashboard,
 	addNameToProfileInput,
+	validateUser,
 };
 
 },{"./dom_elements":3}],10:[function(require,module,exports){

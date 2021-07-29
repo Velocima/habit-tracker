@@ -28,6 +28,22 @@ function addNameToProfileInput() {
 	nameInput.setAttribute('value', name);
 }
 
+function validateUser() {
+	const name = localStorage.getItem('name');
+	const email = localStorage.getItem('email');
+	const token = localStorage.getItem('token');
+	if (!name || !email || !token) {
+		localStorage.clear();
+		window.location.pathname = '/';
+		return;
+	}
+	//validate token
+	const path = window.location.pathname;
+	if ((path === '/' || path === '/index.html') && name && email && token) {
+		window.location.pathname = '/dashboard.html';
+	}
+}
+
 // function bringUpEditModal(data) {
 // 	//Note this function does not work as it should atm..!
 // 	document.getElementById('submit-habit').remove();
@@ -65,4 +81,5 @@ module.exports = {
 	addNewHabitToDOM,
 	addNameToDashboard,
 	addNameToProfileInput,
+	validateUser,
 };
