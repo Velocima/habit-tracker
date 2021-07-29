@@ -4,7 +4,8 @@
 	"description": "LAP 2 project",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon -L index.js",
+		"start": "node index.js",
+		"dev": "nodemon -L index.js",
 		"coverage": "jest --coverage --watchAll",
 		"test": "jest --watchAll"
 	},
