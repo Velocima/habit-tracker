@@ -11,5 +11,5 @@ if (process.env.NODE_ENV === 'production') {
 } else {
 	pool = new Pool();
 }
-client.connect();
+
 module.exports = pool;
