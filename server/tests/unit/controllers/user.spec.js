@@ -1,7 +1,6 @@
 const userController = require('../../../controllers/users') //check the path is correct
 // or is this const router = require('router')??
 
-const Habit = require('../../../models/Habit');
 const User = require('../../../models/User');
 
 const mockSend = jest.fn();
