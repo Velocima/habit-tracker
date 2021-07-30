@@ -31,13 +31,16 @@ async function requestLogin(data) {
 
 async function requestRegistration(data) {
 	try {
+		console.log(data, JSON.stringify(data));
 		const options = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data),
 		};
 		const response = await fetch(`${URL}/register`, options);
+		console.log(respose);
 		const responseJson = await response.json();
+		console.log(resposeJson);
 		if (!responseJson.msg) {
 			throw Error(responseJson);
 		}
