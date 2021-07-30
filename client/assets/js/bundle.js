@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', initPageBindings);
 },{"./lib/handlers":7}],2:[function(require,module,exports){
 const jwt_decode = require('jwt-decode');
 
-
 const URL = window.location.hostname.includes('localhost')
 	? 'http://localhost:3000'
 	: 'https://habitude-app.herokuapp.com';
@@ -18,9 +17,7 @@ async function requestLogin(data) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data),
 		};
-
 		const response = await fetch(`${URL}/auth/login`, options);
-
 		const responseJson = await response.json();
 		if (!responseJson.success) {
 			throw new Error('Login not authorised');
@@ -572,9 +569,9 @@ function bindDashboardListeners() {
 }
 
 function bindNavListeners() {
-	const closeNavButton = document.querySelector('.close-btn');
+	// const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
-	closeNavButton.addEventListener('click', toggleNav);
+	// closeNavButton.addEventListener('click', toggleNav);
 	openNavButton.addEventListener('click', toggleNav);
 
 	const navAddHabitButton = document.getElementById('nav-add-habit');
@@ -595,9 +592,11 @@ function bindProfileListeners() {
 async function renderHabits() {
 	const habitsContainer = document.querySelector('.habits-container');
 	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
-	userHabitData.reverse();
-	let habitSections = userHabitData.map((habit) => createHabit(habit));
-	habitSections.forEach((habit) => habitsContainer.append(habit));
+	if (userHabitData && userHabitData.length > 0) {
+		userHabitData.reverse();
+		let habitSections = userHabitData.map((habit) => createHabit(habit));
+		habitSections.forEach((habit) => habitsContainer.append(habit));
+	}
 }
 
 function openHabitModalFromProfile() {
@@ -843,10 +842,15 @@ const { createHabit } = require('./dom_elements');
 
 function toggleNav() {
 	const nav = document.querySelector('nav');
+	const navButton = document.querySelector('.menu-btn');
 	if (nav.classList.contains('hide-nav')) {
 		nav.classList.remove('hide-nav');
+		navButton.classList.add('times');
+		navButton.innerText = '×';
 	} else {
 		nav.classList.add('hide-nav');
+		navButton.classList.remove('times');
+		navButton.innerText = '☰';
 	}
 }
 

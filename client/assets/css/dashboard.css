@@ -11,15 +11,17 @@ main {
 }
 
 .description {
+	padding: 0;
 	text-align: center;
 	font-weight: bold;
 	color: var(--tertiary);
 }
 
 .habit-modal {
+	display: grid;
+	place-items: center;
 	position: fixed; /* Stay in place */
 	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
 	left: 0;
 	top: 0;
 	width: 100%; /* Full width */
@@ -35,6 +37,32 @@ main {
 	padding: 20px;
 	border: 1px solid #888;
 	width: 80%;
+	max-width: 500px;
+}
+
+.modal-content form {
+	position: static;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.close-modal {
+	position: fixed;
+}
+
+.modal-content h1 {
+	font-size: 38px;
+	margin: 20px 0;
+}
+
+.modal-content input,
+.modal-content select {
+	width: 100%;
+	text-align: center;
+}
+
+.modal-content input:nth-child(7) {
+	width: auto;
 }
 
 .hidden {
@@ -52,6 +80,7 @@ main {
 }
 .habit-card {
 	width: 80%;
+	max-width: 600px;
 	display: flex;
 	justify-content: space-between;
 	margin: 10px 0;
@@ -65,6 +94,15 @@ main {
 	flex-direction: column;
 	align-items: center;
 	flex-wrap: wrap;
+}
+
+.habit-view-container h1 {
+	padding-top: 40px;
+}
+
+.habit-view-container p {
+	padding: 20px 10px;
+	text-align: center;
 }
 
 .habit-view-container button {
@@ -95,12 +133,19 @@ main {
 	z-index: 80;
 	flex-basis: 50%;
 }
+.habit-view-container h2 {
+	margin: 20px 0;
+}
 
 .streaks-container {
 	display: grid;
 	grid-template-rows: auto;
 	grid-template-columns: 1fr 1fr;
 	place-items: center;
+	border-top: 1px solid var(--tertiary);
+	border-bottom: 1px solid var(--tertiary);
+	padding: 10px 0 15px;
+	max-width: 95%;
 }
 .streaks-container p {
 	padding: 10px;
@@ -113,7 +158,9 @@ main {
 .infographic-container {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 	width: 80%;
+	max-width: 250px;
 	margin: 10px auto;
 }
 
@@ -128,4 +175,15 @@ main {
 
 div.habit-instance-complete {
 	background-color: rgb(69, 216, 69);
+}
+
+.habit-view-container button:last-child {
+	margin: 30px 0;
+}
+
+@media only screen and (min-width: 500px) {
+	.modal-content input,
+	.modal-content select {
+		width: 80%;
+	}
 }
