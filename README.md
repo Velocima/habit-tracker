@@ -93,9 +93,13 @@ The simple way to build habits that last.
 ## Bugs
 
 - [ ] Does not authenticate user token ownership
+- [ ] Streaks don't calculate across years correctly
+- [ ] Current streak updates too early
 
 ## Future Features
 
 - Leaderboards
 - More habit infographics
 - Edit existing habits
+- GDPR
+- Google/Facebook login with passport
