@@ -18,7 +18,7 @@ services:
       - type: bind
         source: ./server
         target: /server
-    command: bash -c "npm install && npm dev"
+    command: bash -c "npm install && npm run dev"
   db:
     image: 'postgres:latest'
     expose:
