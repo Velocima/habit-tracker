@@ -67,7 +67,7 @@ function bindProfileListeners() {
 async function renderHabits() {
 	const habitsContainer = document.querySelector('.habits-container');
 	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
-	if (userHabitData.length > 0) {
+	if (userHabitData && userHabitData.length > 0) {
 		userHabitData.reverse();
 		let habitSections = userHabitData.map((habit) => createHabit(habit));
 		habitSections.forEach((habit) => habitsContainer.append(habit));

@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', initPageBindings);
 },{"./lib/handlers":7}],2:[function(require,module,exports){
 const jwt_decode = require('jwt-decode');
 
-
 const URL = window.location.hostname.includes('localhost')
 	? 'http://localhost:3000'
 	: 'https://habitude-app.herokuapp.com';
@@ -18,9 +17,7 @@ async function requestLogin(data) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data),
 		};
-
 		const response = await fetch(`${URL}/auth/login`, options);
-
 		const responseJson = await response.json();
 		if (!responseJson.success) {
 			throw new Error('Login not authorised');
@@ -595,7 +592,7 @@ function bindProfileListeners() {
 async function renderHabits() {
 	const habitsContainer = document.querySelector('.habits-container');
 	const userHabitData = await getAllUserHabits(localStorage.getItem('email'));
-	if (userHabitData.length > 0) {
+	if (userHabitData && userHabitData.length > 0) {
 		userHabitData.reverse();
 		let habitSections = userHabitData.map((habit) => createHabit(habit));
 		habitSections.forEach((habit) => habitsContainer.append(habit));
