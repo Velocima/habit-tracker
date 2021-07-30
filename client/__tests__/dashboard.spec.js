@@ -3,6 +3,7 @@ const path = require('path');
 const html = fs.readFileSync(path.resolve(__dirname, '../dashboard.html'), 'utf8');
 const utils = require('../assets/js/lib/utils');
 const handlers = require('../assets/js/lib/event_handlers/dashboard');
+const indexJS = require('../assets/js/index');
 
 describe('head testing', () => {
     beforeEach(() => {
