@@ -569,9 +569,9 @@ function bindDashboardListeners() {
 }
 
 function bindNavListeners() {
-	const closeNavButton = document.querySelector('.close-btn');
+	// const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
-	closeNavButton.addEventListener('click', toggleNav);
+	// closeNavButton.addEventListener('click', toggleNav);
 	openNavButton.addEventListener('click', toggleNav);
 
 	const navAddHabitButton = document.getElementById('nav-add-habit');
@@ -842,10 +842,15 @@ const { createHabit } = require('./dom_elements');
 
 function toggleNav() {
 	const nav = document.querySelector('nav');
+	const navButton = document.querySelector('.menu-btn');
 	if (nav.classList.contains('hide-nav')) {
 		nav.classList.remove('hide-nav');
+		navButton.classList.add('times');
+		navButton.innerText = '×';
 	} else {
 		nav.classList.add('hide-nav');
+		navButton.classList.remove('times');
+		navButton.innerText = '☰';
 	}
 }
 

@@ -44,9 +44,9 @@ function bindDashboardListeners() {
 }
 
 function bindNavListeners() {
-	const closeNavButton = document.querySelector('.close-btn');
+	// const closeNavButton = document.querySelector('.close-btn');
 	const openNavButton = document.querySelector('.menu-btn');
-	closeNavButton.addEventListener('click', toggleNav);
+	// closeNavButton.addEventListener('click', toggleNav);
 	openNavButton.addEventListener('click', toggleNav);
 
 	const navAddHabitButton = document.getElementById('nav-add-habit');
