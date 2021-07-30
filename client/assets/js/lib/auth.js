@@ -25,25 +25,18 @@ async function requestLogin(data) {
 
 async function requestRegistration(data) {
 	try {
-		console.log(data, JSON.stringify(data));
 		const options = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data),
 		};
-		const response = await fetch(`${URL}/register`, options);
-		console.log(response);
-		const responseJson = await response.json();
-		console.log(resposeJson);
-		if (!responseJson.msg) {
-			throw Error(responseJson);
+		const response = await fetch(`${URL}/auth/register`, options);
+		if (!response.ok) {
+			throw Error(response.statusText);
 		}
 		requestLogin(data);
 	} catch (err) {
-		if (
-			err.message ===
-			'Error creating user: error: duplicate key value violates unique constraint "users_pkey"'
-		) {
+		if (err.message === 'Not Found') {
 			window.alert('Account with this email already exists.');
 		}
 		console.warn(err);
