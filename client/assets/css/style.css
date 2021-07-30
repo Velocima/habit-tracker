@@ -99,6 +99,7 @@ label {
 nav {
 	position: absolute;
 	flex-direction: column;
+	top: 0;
 	width: 75%;
 	height: 100%;
 	background: var(--tertiary);
