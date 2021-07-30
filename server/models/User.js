@@ -15,16 +15,13 @@ class User {
 	static create({ name, email, passwordDigest }) {
 		return new Promise(async (res, rej) => {
 			try {
-				console.log('User.create', name, email, passwordDigest);
 				let result = await db.query(
 					`INSERT INTO users (name, email, password_digest) VALUES ($1, $2, $3) RETURNING *;`,
 					[name, email, passwordDigest]
 				);
-				console.log(result.rows);
 				let user = new User(result.rows[0]);
 				res(user);
 			} catch (err) {
-				console.log(err);
 				rej(`Error creating user: ${err}`);
 			}
 		});

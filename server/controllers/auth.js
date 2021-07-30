@@ -15,11 +15,9 @@ router.post('/register', async (req, res) => {
 	try {
 		const salt = await bcrypt.genSalt();
 		const hashed = await bcrypt.hash(req.body.password, salt);
-		console.log(req.body);
 		await User.create({ ...req.body, passwordDigest: hashed });
 		res.status(201).json({ msg: 'User created' });
 	} catch (err) {
-		console.log(err);
 		res.status(500).json(err);
 	}
 });
@@ -73,7 +71,6 @@ router.post('/login', async (req, res) => {
 			throw new Error('User could not be authenticated');
 		}
 	} catch (err) {
-		console.log(err);
 		res.status(401).json({ err });
 	}
 });
