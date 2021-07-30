@@ -32,7 +32,7 @@ async function requestRegistration(data) {
 			body: JSON.stringify(data),
 		};
 		const response = await fetch(`${URL}/register`, options);
-		console.log(respose);
+		console.log(response);
 		const responseJson = await response.json();
 		console.log(resposeJson);
 		if (!responseJson.msg) {
