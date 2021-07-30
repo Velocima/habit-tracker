@@ -97,7 +97,7 @@ label {
 }
 
 nav {
-	position: absolute;
+	position: fixed;
 	flex-direction: column;
 	top: 0;
 	width: 75%;
