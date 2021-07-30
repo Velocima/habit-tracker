@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 const fs = require('fs');
 
 const request = require('supertest');
-const apiServer = require('../../server');
+const app = require('../../server');
 
 // import reset query
 const reset = fs.readFileSync(__dirname + '/test_seeds.sql').toString();
@@ -22,6 +22,6 @@ const resetTestDB = () => {
 
 // make these things available to test suites
 global.request = request 
-global.app = apiServer
+global.app = app;
 global.resetTestDB = resetTestDB
 global.port = process.env.PORT || 3000

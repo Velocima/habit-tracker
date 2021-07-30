@@ -27,9 +27,9 @@ describe('auth endpoints', () => {
         const res = await request(api).post('/auth/login')
             .send({email: "user1@email.co.uk", name: "User1", password: "1U03lKdhJzMd"})
         let token = res.body.token
-        const res = await request(api).get("/users/user1@email.co.uk")
+        const resa = await request(api).get("/users/user1@email.co.uk")
             .set('authorization', `Bearer ${token}`);
-        expect(res.statusCode).toEqual(200)
+        expect(resa.statusCode).toEqual(200)
     });
 
     it('fails to log in if email is incorrect', async () => {
