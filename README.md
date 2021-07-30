@@ -1,5 +1,7 @@
 # Habitude
 
+[Live site](https://habitudeapp.netlify.app/)
+
 The simple way to build habits that last.
 
 ## Installation & Usage
@@ -24,13 +26,6 @@ The simple way to build habits that last.
 - For a complete teardown run `bash _script/teardown.sh`
 
 ## Technologies
-
-<details>
-  <summary><b>Environment</b></summary>
-
-- [Docker](https://www.docker.com/)
-
-</details>
 
 <details>
   <summary><b>Client</b></summary>
