@@ -1,4 +1,4 @@
-const userController = require('../../../controllers/users') //check the path is correct
+const userController = require('../../../controllers/user') //check the path is correct
 // or is this const router = require('router')??
 
 const User = require('../../../models/User');
