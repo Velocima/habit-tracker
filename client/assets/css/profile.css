@@ -1,10 +1,15 @@
-
 h1 {
-    position: relative;
-    text-align: center;
-    margin-top: 40px;
+	position: relative;
+	text-align: center;
+	margin-top: 40px;
 }
 
 form {
-    width: 70%;
+	width: 70%;
+	z-index: 20;
+}
+
+input,
+label {
+	z-index: inherit;
 }
