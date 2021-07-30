@@ -5,28 +5,28 @@ services:
     working_dir: /server
     ports:
       - 3000:3000
-    environment: 
+    environment:
       - PORT=3000
       - PGUSER=simian_army
       - PGHOST=db
       - PGPASSWORD=team_password
       - PGDATABASE=habit_tracker
       - PGPORT=5432
-    depends_on: 
+    depends_on:
       - db
     volumes:
       - type: bind
         source: ./server
         target: /server
-    command: bash -c "npm install && npm start"
+    command: bash -c "npm install && npm run dev"
   db:
     image: 'postgres:latest'
     expose:
-      - "5432"
+      - '5432'
     volumes:
-      - "dbdata:/var/lib/postgresql/data"
-      - "./db/setup/:/docker-entrypoint-initdb.d/:ro"
-    environment: 
+      - 'dbdata:/var/lib/postgresql/data'
+      - './db/setup/:/docker-entrypoint-initdb.d/:ro'
+    environment:
       - POSTGRES_DB=habit_tracker
       - POSTGRES_USER=simian_army
       - POSTGRES_PASSWORD=team_password

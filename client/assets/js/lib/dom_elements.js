@@ -1,4 +1,10 @@
-const { deleteHabit, postCompletion, deleteCompletion } = require('./requests');
+const {
+	deleteHabit,
+	postCompletion,
+	deleteCompletion,
+	getLastestCompletionId,
+	getHabitData,
+} = require('./requests');
 
 function createLoginForm() {
 	const form = document.createElement('form');
@@ -122,9 +128,11 @@ function createHabit(data) {
 
 function createViewHabit(data) {
 	const section = document.createElement('div');
+	section.setAttribute('class', 'habit-view-container');
 
 	const goHomeButton = document.createElement('button');
-	goHomeButton.textContent = 'Return to Dashboard';
+	goHomeButton.setAttribute('class', 'return');
+	goHomeButton.textContent = '⇚';
 	// can change this to be more elegant
 	goHomeButton.addEventListener('click', () => {
 		const main = document.querySelector('main');
@@ -141,51 +149,110 @@ function createViewHabit(data) {
 	markAsComplete.textContent = 'Mark as complete';
 	markAsComplete.addEventListener('click', async () => {
 		const response = await postCompletion(data.id);
+		onUpdateCompletion(data.id);
 	});
 
 	const removeCompletion = document.createElement('button');
 	removeCompletion.textContent = 'Remove completion';
 	removeCompletion.addEventListener('click', async () => {
-		const response = await deleteCompletion(data.id, 1);
+		const completions = document.querySelectorAll('.habit-instance-complete').length;
+		if (completions === 0) {
+			return;
+		}
+		const id = await getLastestCompletionId(data.id);
+		const response = await deleteCompletion(data.id, id);
+		onUpdateCompletion(data.id);
 	});
 
 	const habitTitle = document.createElement('h1');
 	habitTitle.textContent = data.habitName;
 
+	const streaksContainer = document.createElement('div');
+	streaksContainer.setAttribute('class', 'streaks-container');
+
+	const currentStreak = document.createElement('p');
+	currentStreak.textContent = 'Current streak';
+	const bestStreak = document.createElement('p');
+	bestStreak.textContent = 'Best streak';
+	const bestStreakSpan = document.createElement('span');
+	bestStreakSpan.textContent = data.bestStreak;
+	const currentStreakSpan = document.createElement('span');
+	currentStreakSpan.textContent = data.currentStreak;
+
+	streaksContainer.append(currentStreak);
+	streaksContainer.append(bestStreak);
+	streaksContainer.append(currentStreakSpan);
+	streaksContainer.append(bestStreakSpan);
+
 	const description = document.createElement('p');
 	description.textContent = data.description;
-
-	const editButton = document.createElement('button');
-	editButton.textContent = 'Edit';
-	editButton.addEventListener('click', () => console.log('edit functionality'));
-	// editButton.addEventListener('click', () => bringUpEditModal(data));
 
 	const deleteButton = document.createElement('button');
 	deleteButton.textContent = 'Delete';
 	deleteButton.addEventListener('click', async () => {
 		const response = await deleteHabit(data.id);
-		const responseJson = await response.json();
+		window.location.pathname = '/dashboard.html';
 	});
 
-	const chartContainer1 = document.createElement('div');
-	chartContainer1.setAttribute('id', 'chart1');
+	const infographicContainer = document.createElement('div');
+	infographicContainer.setAttribute('class', 'infographic-container');
 
-	const chartContainer2 = document.createElement('div');
-	chartContainer2.setAttribute('id', 'chart2');
+	for (let i = 0; i < data.frequencyTarget; i++) {
+		const div = document.createElement('div');
+		if (data.currentCompletions > i) {
+			div.setAttribute('class', 'habit-instance-complete');
+		}
+		infographicContainer.append(div);
+	}
 
-	//add in chart generation and streaks
+	const infographicTitle = document.createElement('h2');
+	infographicTitle.innerText = 'Progress';
 
 	section.append(goHomeButton);
 	section.append(habitTitle);
 	section.append(description);
 	section.append(markAsComplete);
 	section.append(removeCompletion);
-	section.append(chartContainer1);
-	section.append(chartContainer2);
-	section.append(editButton);
+	section.append(infographicTitle);
+	section.append(infographicContainer);
+	section.append(streaksContainer);
 	section.append(deleteButton);
 
 	return section;
+}
+
+async function onUpdateCompletion(id) {
+	try {
+		const { habit } = await getHabitData(id);
+		const infographicContainer = document.querySelector('.infographic-container');
+		const streaksContainer = document.querySelector('.streaks-container');
+		infographicContainer.textContent = '';
+		streaksContainer.textContent = '';
+
+		const currentStreak = document.createElement('p');
+		currentStreak.textContent = 'Current streak';
+		const bestStreak = document.createElement('p');
+		bestStreak.textContent = 'Best streak';
+		const bestStreakSpan = document.createElement('span');
+		bestStreakSpan.textContent = habit.bestStreak;
+		const currentStreakSpan = document.createElement('span');
+		currentStreakSpan.textContent = habit.currentStreak;
+
+		streaksContainer.append(currentStreak);
+		streaksContainer.append(bestStreak);
+		streaksContainer.append(currentStreakSpan);
+		streaksContainer.append(bestStreakSpan);
+
+		for (let i = 0; i < habit.frequencyTarget; i++) {
+			const div = document.createElement('div');
+			if (habit.currentCompletions > i) {
+				div.setAttribute('class', 'habit-instance-complete');
+			}
+			infographicContainer.append(div);
+		}
+	} catch (err) {
+		console.warn(err);
+	}
 }
 
 module.exports = { createLoginForm, createRegistrationForm, createHabit, createViewHabit };

@@ -1,6 +1,8 @@
 const { logout } = require('./auth');
 
-const devURL = 'http://localhost:3000';
+const devURL = window.location.hostname.includes('localhost')
+	? 'http://localhost:3000'
+	: 'https://habitude-app.herokuapp.com';
 
 async function getAllUserHabits(email) {
 	try {
@@ -11,7 +13,7 @@ async function getAllUserHabits(email) {
 		const data = await response.json();
 		if (data.err) {
 			console.warn(data.err);
-			logout();
+			// logout();
 		}
 		return data;
 	} catch (err) {
@@ -67,8 +69,7 @@ async function deleteHabit(id) {
 		};
 		const email = localStorage.getItem('email');
 		const response = await fetch(`${devURL}/user/${email}/habits/${id}`, options);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
 	} catch (err) {
@@ -159,7 +160,6 @@ async function postCompletion(id) {
 		if (responseJson.err) {
 			throw new Error(err);
 		}
-		console.log(responseJson);
 		return responseJson;
 	} catch (err) {
 		console.warn(err);
@@ -177,10 +177,18 @@ async function deleteCompletion(id, completionId) {
 			`${devURL}/user/${email}/habits/${id}/complete/${completionId}`,
 			options
 		);
-		const responseJson = await response.json();
-		if (responseJson.err) {
+		if (response.err) {
 			throw Error(err);
 		}
+	} catch (err) {
+		console.warn(err);
+	}
+}
+
+async function getLastestCompletionId(id) {
+	try {
+		const { habit } = await getHabitData(id);
+		return habit.completionDates[habit.completionDates.length - 1].id;
 	} catch (err) {
 		console.warn(err);
 	}
@@ -196,4 +204,5 @@ module.exports = {
 	postCompletion,
 	deleteCompletion,
 	changePassword,
+	getLastestCompletionId,
 };

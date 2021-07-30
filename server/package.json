@@ -4,7 +4,8 @@
 	"description": "LAP 2 project",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon -L index.js",
+		"start": "node index.js",
+		"dev": "nodemon -L index.js",
 		"coverage": "jest --coverage --watchAll",
 		"test": "jest --watchAll"
 	},
@@ -18,13 +19,14 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"bcrypt": "^5.0.1",
+		"bcrypt": "^5.0.1", 
 		"cors": "^2.8.5",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
 		"jsonwebtoken": "^8.5.1",
 		"morgan": "^1.10.0",
-		"pg": "^8.6.0"
+		"pg": "^8.6.0",
+		"dayjs": "^1.10.6"
 	},
 	"devDependencies": {
 		"jest": "^27.0.6",
